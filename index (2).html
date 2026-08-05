@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestão Empresarial - APSAN, LDA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body data-theme="light">
+
+    <!-- Toast Notification -->
+    <div id="toastNotification">
+        <i class="fas fa-check-circle" style="font-size: 20px;"></i>
+        <div>
+            <strong id="toastTitle">Sucesso!</strong>
+            <p id="toastMessage" style="font-size: 13px; margin: 0;"></p>
+        </div>
+    </div>
+
+    <!-- TELA 1: LOGIN POR E-MAIL -->
+    <div id="loginScreen" class="app-screen screen active">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="logo.png" alt="APSAN, LDA" onerror="this.src='https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=100&q=80'">
+                <h2>APSAN, <span style="color: var(--accent-color);">LDA</span></h2>
+                <p>Sistema de Gestão Integrada</p>
+            </div>
+            <form onsubmit="handleLogin(event); return false;">
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> Endereço de E-mail Corporativo</label>
+                    <input type="email" id="userEmail" placeholder="exemplo@apsanlda.com" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Palavra-passe</label>
+                    <input type="password" id="userPassword" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary-custom">Entrar no Sistema</button>
+            </form>
+            <div class="login-footer">
+                <p>Sede: Namacunde, Cunene &bull; NIF: 5002085011</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA 2: SELEÇÃO DE DEPARTAMENTO (GRELHA) -->
+    <div id="departmentScreen" class="app-screen screen">
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 40px 20px; width: 100%;">
+            <div class="header-top-dash">
+                <div>
+                    <h2>Selecione o seu Departamento</h2>
+                    <p>Escolha a área correspondente às suas funções operacionais na APSAN, LDA.</p>
+                </div>
+                <div class="user-badge">
+                    <span id="loggedUserDisplay">utilizador@apsanlda.com</span>
+                    <button onclick="logout()" class="btn-logout" title="Terminar Sessão"><i class="fas fa-sign-out-alt"></i></button>
+                </div>
+            </div>
+
+            <div class="department-grid">
+                <!-- Finanças e Contabilidade - Redirecionamento Direto para Ficheiro Separado -->
+                <div class="dept-card" onclick="window.location.href='financas.html'">
+                    <div class="dept-icon"><i class="fas fa-wallet"></i></div>
+                    <h3>Finanças & Contabilidade</h3>
+                    <p>Tesouraria, faturas, balancete e controlo BFA/AGT.</p>
+                    <span class="dept-code-hint">Aceder a financas.html</span>
+                </div>
+
+                <!-- 1. Limpeza Institucional - Redirecionamento Direto para Ficheiro Separado -->
+                <div class="dept-card" onclick="window.location.href='limpeza.html'">
+                    <div class="dept-icon"><i class="fas fa-broom"></i></div>
+                    <h3>Limpeza Institucional</h3>
+                    <p>Gestão de equipas, escalas e insumos de limpeza.</p>
+                    <span class="dept-code-hint">Aceder a limpeza.html</span>
+                </div>
+                <!-- 2. Material e Logística -->
+                <div class="dept-card" onclick="selectDept('Material de Escritório e Logística', 'MAT-2026')">
+                    <div class="dept-icon"><i class="fas fa-boxes"></i></div>
+                    <h3>Material & Logística</h3>
+                    <p>Controlo de stock, papelaria e aprovisionamento.</p>
+                    <span class="dept-code-hint">Código: MAT-2026</span>
+                </div>
+                <!-- 3. Catering -->
+                <div class="dept-card" onclick="selectDept('Catering e Eventos Corporativos', 'CAT-2026')">
+                    <div class="dept-icon"><i class="fas fa-utensils"></i></div>
+                    <h3>Catering & Eventos</h3>
+                    <p>Menus, planeamento de eventos e coordenação.</p>
+                    <span class="dept-code-hint">Código: CAT-2026</span>
+                </div>
+                <!-- 4. TI e Software -->
+                <div class="dept-card" onclick="selectDept('Tecnologia, Redes e Software', 'TEC-2026')">
+                    <div class="dept-icon"><i class="fas fa-laptop-code"></i></div>
+                    <h3>TI & Software</h3>
+                    <p>Sistemas de gestão, redes e suporte técnico.</p>
+                    <span class="dept-code-hint">Código: TEC-2026</span>
+                </div>
+                <!-- 5. Transportes -->
+                <div class="dept-card" onclick="selectDept('Transportes e Aluguer de Viaturas', 'TRA-2026')">
+                    <div class="dept-icon"><i class="fas fa-car"></i></div>
+                    <h3>Transportes & Frota</h3>
+                    <p>Gestão de frotas, missões e aluguer de carros.</p>
+                    <span class="dept-code-hint">Código: TRA-2026</span>
+                </div>
+                <!-- 6. Importação -->
+                <div class="dept-card" onclick="selectDept('Importação, Exportação e Namíbia', 'IMP-2026')">
+                    <div class="dept-icon"><i class="fas fa-globe"></i></div>
+                    <h3>Importação & Namíbia</h3>
+                    <p>Trâmites aduaneiros, encomendas e transfronteiriços.</p>
+                    <span class="dept-code-hint">Código: IMP-2026</span>
+                </div>
+                <!-- 7. Recursos Humanos (RH) - Redirecionamento Direto para Ficheiro Separado -->
+                <div class="dept-card" onclick="window.location.href='rh.html'">
+                    <div class="dept-icon"><i class="fas fa-users"></i></div>
+                    <h3>Recursos Humanos (RH)</h3>
+                    <p>Gestão de pessoal, colaboradores, assiduidade e folhas.</p>
+                    <span class="dept-code-hint">Aceder a rh.html</span>
+                </div>
+                <!-- 8. Acompanhamento Hospitalar - Redirecionamento Direto para Ficheiro Separado -->
+                <div class="dept-card" onclick="window.location.href='hospitalar.html'">
+                    <div class="dept-icon"><i class="fas fa-user-nurse"></i></div>
+                    <h3>Acompanhamento Hospitalar</h3>
+                    <p>Assistência, cuidados e suporte a pacientes e familiares.</p>
+                    <span class="dept-code-hint">Aceder a hospitalar.html</span>
+                </div>
+                <!-- 9. Tradução Oficial Juramentada - Redirecionamento Direto para Ficheiro Separado -->
+                <div class="dept-card" onclick="window.location.href='traducao.html'">
+                    <div class="dept-icon"><i class="fas fa-language"></i></div>
+                    <h3>Tradução Juramentada</h3>
+                    <p>Traduções oficiais de documentos e validações legais.</p>
+                    <span class="dept-code-hint">Aceder a traducao.html</span>
+                </div>
+                <!-- 10. Envio e Recepção de Encomenda -->
+                <div class="dept-card" onclick="selectDept('Envio e Recepção de Encomenda', 'ENC-2026')">
+                    <div class="dept-icon"><i class="fas fa-shipping-fast"></i></div>
+                    <h3>Envio & Recepção de Encomendas</h3>
+                    <p>Logística de pacotes, expedições e entregas locais/externas.</p>
+                    <span class="dept-code-hint">Código: ENC-2026</span>
+                </div>
+                <!-- 11. Administração Geral -->
+                <div class="dept-card" onclick="selectDept('Administração Geral', 'ADM-2026')">
+                    <div class="dept-icon"><i class="fas fa-building"></i></div>
+                    <h3>Administração Geral</h3>
+                    <p>Gestão corporativa global, finanças e NIF 5002085011.</p>
+                    <span class="dept-code-hint">Código: ADM-2026</span>
+                </div>
+                <!-- 12. Auditoria e Denúncias -->
+                <div class="dept-card" onclick="selectDept('Canal de Denúncias e Auditoria', 'DEN-2026')">
+                    <div class="dept-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3>Auditoria & Denúncias</h3>
+                    <p>Gestão segura de relatos, ética e conformidade.</p>
+                    <span class="dept-code-hint">Código: DEN-2026</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TELA 3: MODAL DE INSERÇÃO DE CÓDIGO -->
+    <div id="codeModal" class="modal-overlay">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeCodeModal()">&times;</button>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div style="font-size: 32px; color: var(--primary-color); margin-bottom: 10px;"><i class="fas fa-key"></i></div>
+                <h3 id="modalDeptTitle">Segurança do Departamento</h3>
+                <p style="font-size: 13px; color: var(--text-muted);">Insira o código de acesso atribuído ao departamento selecionado.</p>
+            </div>
+            <form onsubmit="verifyDeptCode(event); return false;">
+                <div class="form-group">
+                    <label>Código de Acesso</label>
+                    <input type="text" id="deptCodeInput" placeholder="Ex: LIM-2026" required style="text-transform: uppercase; text-align: center; font-size: 18px; letter-spacing: 2px; font-weight: bold;">
+                </div>
+                <button type="submit" class="btn-primary-custom">Validar e Entrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- TELA 4: DASHBOARD DO DEPARTAMENTO -->
+    <div id="dashboardScreen" class="app-screen screen">
+        <nav class="dash-nav">
+            <div class="container" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 12px 20px; width: 100%;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <img src="logo.png" alt="Logo" style="width: 36px; height: 36px; object-fit: contain; border-radius: 4px;" onerror="this.style.display='none'">
+                    <div>
+                        <h4 style="color: #fff; margin: 0; font-size: 16px;">APSAN, LDA - Gestão</h4>
+                        <span id="activeDeptNameIndicator" style="font-size: 12px; color: var(--accent-color);">Departamento</span>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <button onclick="toggleTheme()" class="theme-btn" title="Alternar Tema"><i class="fas fa-moon" id="themeIcon"></i></button>
+                    <button onclick="backToDepartments()" class="btn-secondary-custom"><i class="fas fa-th"></i> Mudar Departamento</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container" style="max-width: 1200px; margin: 30px auto; padding: 0 20px; width: 100%;">
+            <div class="stats-grid-dash">
+                <div class="stat-box">
+                    <h4>Tarefas Ativas</h4>
+                    <h2 id="statTasks">14</h2>
+                    <p><i class="fas fa-arrow-up" style="color: #28a745;"></i> +3 hoje</p>
+                </div>
+                <div class="stat-box">
+                    <h4>Solicitações Clientes</h4>
+                    <h2 id="statRequests">28</h2>
+                    <p><i class="fas fa-check-circle" style="color: #28a745;"></i> 98% Concluídas</p>
+                </div>
+                <div class="stat-box">
+                    <h4>NIF Empresa</h4>
+                    <h2>5002085011</h2>
+                    <p>Namacunde / Ondjiva</p>
+                </div>
+                <div class="stat-box">
+                    <h4>Estado do Sistema</h4>
+                    <h2 style="color: #28a745;">ONLINE</h2>
+                    <p>Sincronizado com Firebase</p>
+                </div>
+            </div>
+
+            <div class="management-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <h3 id="currentDeptMainTitle"><i class="fas fa-tasks"></i> Gestão Operacional do Departamento</h3>
+                    <button onclick="openNewTaskModal()" class="btn-primary-custom" style="width: auto; padding: 8px 16px; font-size: 13px;"><i class="fas fa-plus"></i> Novo Registo / Tarefa</button>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead id="departmentTableHead">
+                            <tr>
+                                <th>ID</th>
+                                <th>Título / Descrição</th>
+                                <th>Responsável</th>
+                                <th>Data Limite</th>
+                                <th>Prioridade</th>
+                                <th>Estado</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="departmentTableBody">
+                            <tr>
+                                <td>#AP-801</td>
+                                <td>Registo inicial e auditoria do departamento</td>
+                                <td>Eduardo Gabriel</td>
+                                <td>30/07/2026</td>
+                                <td><span class="badge high">Alta</span></td>
+                                <td><span class="badge in-progress">Em Curso</span></td>
+                                <td><button onclick="completeTask(this)" class="btn-action">Concluir</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Novo Registo -->
+    <div id="taskModal" class="modal-overlay">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeNewTaskModal()">&times;</button>
+            <h3>Adicionar Novo Registo</h3>
+            <form onsubmit="addNewTask(event); return false;" style="margin-top: 15px;">
+                <div id="modalDynamicFormFields">
+                    <div class="form-group" style="text-align: left;">
+                        <label>Título da Tarefa</label>
+                        <input type="text" id="taskTitle" placeholder="Ex: Processo operacional..." required style="text-align: left; font-size: 14px; letter-spacing: normal;">
+                    </div>
+                    <div class="form-group" style="text-align: left;">
+                        <label>Responsável</label>
+                        <input type="text" id="taskOwner" placeholder="Nome do colaborador..." required style="text-align: left; font-size: 14px; letter-spacing: normal;">
+                    </div>
+                    <div class="form-group" style="text-align: left;">
+                        <label>Prioridade</label>
+                        <select id="taskPriority" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
+                            <option value="Alta">Alta</option>
+                            <option value="Média" selected>Média</option>
+                            <option value="Baixa">Baixa</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary-custom">Guardar Registo</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
