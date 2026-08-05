@@ -1,0 +1,380 @@
+body.setAttribute('data-theme', 'light');
+                themeIcon.className = 'fas fa-moon';
+            }
+        }
+
+        function filterServices(gridId, inputId) {
+            const input = document.getElementById(inputId);
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById(gridId);
+            const cards = grid.getElementsByClassName('service-card');
+
+            for (let i = 0; i < cards.length; i++) {
+                const title = cards[i].getElementsByTagName('h3')[0];
+                const text = cards[i].getElementsByTagName('p')[0];
+                const txtValue = (title.textContent || title.innerText) + " " + (text.textContent || text.innerText);
+                if (txtValue.toLowerCase().indexOf(filter) > -1) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+
+        function openServiceDetail(title, desc, items) {
+            const modal = document.getElementById('serviceModal');
+            const content = document.getElementById('modalBodyContent');
+            
+            let listHtml = items.map(item => `<li style="margin-bottom: 8px;"><i class="fas fa-check-circle" style="color: var(--primary-color);"></i> ${item}</li>`).join('');
+
+            content.innerHTML = `
+                <div style="margin-bottom: 20px;">
+                    <span style="background: var(--accent-color); color: #000; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase;">Serviço APSAN, LDA</span>
+                    <h2 style="color: var(--primary-color); font-size: 22px; margin-top: 8px;">${title}</h2>
+                </div>
+                <p style="font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px;">${desc}</p>
+                
+                <div style="background: rgba(0,64,128,0.05); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+                    <h4 style="font-size: 15px; color: var(--primary-color); margin-bottom: 12px;"><i class="fas fa-list-ul"></i> Principais Vantagens e Características:</h4>
+                    <ul style="padding-left: 20px; font-size: 14px; color: var(--text-muted);">
+                        ${listHtml}
+                    </ul>
+                </div>
+
+                <div style="border-top: 1px solid var(--border-color); padding-top: 20px;">
+                    <h4 style="font-size: 16px; margin-bottom: 15px; color: var(--primary-color);"><i class="fas fa-paper-plane"></i> Solicitar Orçamento / Informações para este Serviço</h4>
+                    <form action="https://formspree.io/f/xqerwzjq" method="POST" onsubmit="handleModalServiceSubmit(event, '${title}')">
+                        <input type="hidden" name="_subject" value="Solicitação de Serviço: ${title} - APSAN, LDA">
+                        <input type="hidden" name="servico_solicitado" value="${title}">
+                        
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
+                            <div class="modal-form-group">
+                                <label>O seu Nome / Empresa</label>
+                                <input type="text" name="nome_cliente_servico" placeholder="Nome completo..." required>
+                            </div>
+                            <div class="modal-form-group">
+                                <label>Telemóvel / WhatsApp</label>
+                                <input type="tel" name="telemovel_cliente_servico" placeholder="+244..." required>
+                            </div>
+                        </div>
+                        <div class="modal-form-group">
+                            <label>E-mail de Contacto</label>
+                            <input type="email" name="email_cliente_servico" placeholder="exemplo@dominio.com" required>
+                        </div>
+                        <div class="modal-form-group">
+                            <label>Detalhes Específicos do Pedido (Opcional)</label>
+                            <textarea name="detalhes_pedido" rows="3" placeholder="Descreva prazos, quantidades ou especificações..."></textarea>
+                        </div>
+                        <button type="submit" id="modalSubmitBtn" style="width: 100%; padding: 12px; background-color: var(--primary-color); color: #fff; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; transition: transform 0.2s;"><i class="fas fa-check"></i> Enviar Pedido de Serviço</button>
+                    </form>
+                </div>
+            `;
+            modal.classList.add('active');
+        }
+
+        function closeServiceModal() {
+            document.getElementById('serviceModal').classList.remove('active');
+        }
+
+        function closeServiceDetail(event) {
+            if (event.target.id === 'serviceModal') {
+                closeServiceModal();
+            }
+        }
+
+        function toggleDenunciaModal() {
+            document.getElementById('denunciaModal').classList.add('active');
+        }
+
+        function openDenunciaModal() {
+            toggleDenunciaModal();
+        }
+
+        function closeDenunciaModal() {
+            document.getElementById('denunciaModal').classList.remove('active');
+        }
+
+        function closeDenunciaModalOnClick(event) {
+            if (event.target.id === 'denunciaModal') {
+                closeDenunciaModal();
+            }
+        }
+
+        function showToast(title, message) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastTitle').textContent = title;
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            const btn = document.getElementById('contactSubmitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> A enviar...';
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    showToast('Mensagem Enviada!', 'Entraremos em contacto brevemente.');
+                    form.reset();
+                } else {
+                    showToast('Erro!', 'Ocorreu um erro ao enviar. Tente novamente.');
+                }
+                btn.disabled = false;
+                btn.innerHTML = 'Enviar Pedido para Empresa';
+            }).catch(error => {
+                showToast('Erro de Conexão!', 'Verifique a sua rede e tente novamente.');
+                btn.disabled = false;
+                btn.innerHTML = 'Enviar Pedido para Empresa';
+            });
+        }
+
+        function handleModalServiceSubmit(event, serviceName) {
+            event.preventDefault();
+            const btn = document.getElementById('modalSubmitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> A enviar pedido...';
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    showToast('Pedido Registado!', `A sua solicitação para "${serviceName}" foi enviada com sucesso.`);
+                    form.reset();
+                    closeServiceModal();
+                } else {
+                    showToast('Erro!', 'Não foi possível enviar o pedido. Tente novamente.');
+                }
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check"></i> Enviar Pedido de Serviço';
+            }).catch(error => {
+                showToast('Erro!', 'Falha na ligação com o servidor.');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check"></i> Enviar Pedido de Serviço';
+            });
+        }
+
+        function handleDenunciaSubmit(event) {
+            event.preventDefault();
+            const btn = document.getElementById('denunciaModalSubmitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> A submeter...';
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    showToast('Denúncia Submetida', 'O seu relato foi enviado com total sigilo.');
+                    form.reset();
+                    closeDenunciaModal();
+                } else {
+                    showToast('Erro!', 'Falha ao submeter denúncia.');
+                }
+                btn.disabled = false;
+                btn.innerHTML = 'Submeter Denúncia com Segurança';
+            }).catch(error => {
+                showToast('Erro!', 'Falha de rede.');
+                btn.disabled = false;
+                btn.innerHTML = 'Submeter Denúncia com Segurança';
+            });
+        }
+
+        function handleParceriaSubmit(event) {
+            event.preventDefault();
+            const btn = document.getElementById('parceriaSubmitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> A submeter proposta...';
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    showToast('Proposta Enviada!', 'Agradecemos o seu interesse em ser nosso parceiro.');
+                    form.reset();
+                } else {
+                    showToast('Erro!', 'Não foi possível enviar a proposta.');
+                }
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-handshake"></i> Submeter Proposta de Parceria';
+            }).catch(error => {
+                showToast('Erro!', 'Falha de rede.');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-handshake"></i> Submeter Proposta de Parceria';
+            });
+        }
+
+        function handleRecrutamentoSubmit(event) {
+            event.preventDefault();
+            const btn = document.getElementById('recrutamentoSubmitBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> A submeter currículo...';
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            }).then(response => {
+                if (response.ok) {
+                    showToast('Currículo Submetido!', 'Obrigado por se juntar à nossa base de talentos.');
+                    form.reset();
+                } else {
+                    showToast('Erro!', 'Não foi possível enviar o currículo.');
+                }
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submeter Currículo Diretamente';
+            }).catch(error => {
+                showToast('Erro!', 'Falha de rede.');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-paper-plane"></i> Submeter Currículo Diretamente';
+            });
+        }
+
+        function toggleTestimonialForm() {
+            const container = document.getElementById('testimonialFormContainer');
+            const btn = document.getElementById('btnToggleTestimonialForm');
+            if (container.style.display === 'none' || container.style.display === '') {
+                container.style.display = 'block';
+                btn.innerHTML = '<i class="fas fa-times"></i> Fechar Formulário';
+            } else {
+                container.style.display = 'none';
+                btn.innerHTML = '<i class="fas fa-pen"></i> Publicar Testemunho';
+            }
+        }
+
+        function handleExperienciaSubmit(event) {
+            event.preventDefault();
+            const nome = document.getElementById('expNome').value;
+            const cargo = document.getElementById('expCargo').value || 'Cliente / Parceiro';
+            const mensagem = document.getElementById('expMensagem').value;
+
+            const initials = nome.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase();
+
+            const grid = document.getElementById('publicTestimonialsGrid');
+            const newCard = document.createElement('div');
+            newCard.className = 'testimonial-card';
+            newCard.innerHTML = `
+                <div>
+                    <div class="stars" style="color: #ffc107;"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p style="font-size: 14px; font-style: italic; color: var(--text-muted);">"${mensagem}"</p>
+                </div>
+                <div class="client-info">
+                    <div class="client-avatar">${initials}</div>
+                    <div><h4 style="font-size: 14px; margin: 0;">${nome}</h4><span style="font-size: 12px; color: var(--text-muted);">${cargo}</span></div>
+                </div>
+            `;
+            grid.prepend(newCard);
+            showToast('Testemunho Publicado!', 'Obrigado por partilhar a sua experiência.');
+            event.target.reset();
+            toggleTestimonialForm();
+        }
+
+        function toggleFaq(card) {
+            card.classList.toggle('active');
+            const icon = card.querySelector('.fa-chevron-down');
+            if (card.classList.contains('active')) {
+                icon.className = 'fas fa-chevron-up';
+            } else {
+                icon.className = 'fas fa-chevron-down';
+            }
+        }
+
+        function handleClientLogin(event) {
+            event.preventDefault();
+            const user = document.getElementById('clientUser').value;
+            if(user) {
+                document.getElementById('clientAuthCard').style.display = 'none';
+                document.getElementById('clientDashboardCard').style.display = 'block';
+                showToast('Sessão Iniciada', 'Bem-vindo à sua Área do Cliente.');
+            }
+        }
+
+        function handleClientLogout() {
+            document.getElementById('clientDashboardCard').style.display = 'none';
+            document.getElementById('clientAuthCard').style.display = 'block';
+            showToast('Sessão Terminada', 'Saiu da sua conta com segurança.');
+        }
+
+        function toggleAssistant() {
+            const win = document.getElementById('assistantWindow');
+            win.classList.toggle('active');
+        }
+
+        function sendQuickQuery(query) {
+            const input = document.getElementById('assistantInput');
+            input.value = query;
+            sendAssistantMessage();
+        }
+
+        function handleAssistantKey(event) {
+            if (event.key === 'Enter') {
+                sendAssistantMessage();
+            }
+        }
+
+        function sendAssistantMessage() {
+            const input = document.getElementById('assistantInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const body = document.getElementById('assistantBody');
+            
+            const userMsg = document.createElement('div');
+            userMsg.className = 'assistant-message user';
+            userMsg.textContent = text;
+            body.appendChild(userMsg);
+            
+            input.value = '';
+            body.scrollTop = body.scrollHeight;
+
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'assistant-message';
+                
+                const lower = text.toLowerCase();
+                if (lower.includes('nif') || lower.includes('fiscal')) {
+                    botMsg.innerHTML = "O NIF oficial da <strong>APSAN, LDA</strong> é <strong>5002085011</strong>";
+                } else if (lower.includes('serviço') || lower.includes('servicos') || lower.includes('o que fazem')) {
+                    botMsg.innerHTML = "Oferecemos limpeza institucional, material de escritório, catering, IT/cabling, software, transportes e importação/exportação entre Angola e Namíbia[cite: 1]!";
+                } else if (lower.includes('contacto') || lower.includes('telefone') || lower.includes('email')) {
+                    botMsg.innerHTML = "Pode contactar-nos através dos telemóveis <strong>946195402 / 931 057 760 / 934 437 739</strong> ou pelo email <strong>apsanlda1@gmail.com</strong>.";
+                } else if (lower.includes('local') || lower.includes('sede') || lower.includes('onde')) {
+                    botMsg.innerHTML = "A nossa sede oficial fica em <strong>Namacunde, Província do Cunene</strong>, com representações em <strong>Ondjiva</strong>[cite: 1].";
+                } else {
+                    botMsg.innerHTML = `Obrigada pela sua questão! Para assuntos específicos sobre "${text}", recomendo preencher o formulário na secção de contactos ou solicitar diretamente no nosso portfólio.`;
+                }
+
+                body.appendChild(botMsg);
+                body.scrollTop = body.scrollHeight;
+            }, 600);
+        }
+    </script>
+</body>
+</html>

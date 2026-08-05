@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recursos Humanos - APSAN, LDA</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body data-theme="light">
+
+    <!-- Toast Notification -->
+    <div id="toastNotification">
+        <i class="fas fa-check-circle" style="font-size: 20px;"></i>
+        <div>
+            <strong id="toastTitle">Sucesso!</strong>
+            <p id="toastMessage" style="font-size: 13px; margin: 0;"></p>
+        </div>
+    </div>
+
+    <!-- NAVBAR DO DEPARTAMENTO -->
+    <nav class="dash-nav">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 12px 20px; width: 100%;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <img src="logo.png" alt="Logo" style="width: 36px; height: 36px; object-fit: contain; border-radius: 4px;" onerror="this.style.display='none'">
+                <div>
+                    <h4 style="color: #fff; margin: 0; font-size: 16px;">APSAN, LDA - Gestão</h4>
+                    <span style="font-size: 12px; color: var(--accent-color);">Recursos Humanos (RH)</span>
+                </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <button onclick="toggleTheme()" class="theme-btn" title="Alternar Tema"><i class="fas fa-moon" id="themeIcon"></i></button>
+                <a href="index.html" class="btn-secondary-custom" style="text-decoration: none; display: inline-flex; align-items: center; gap: 8px;"><i class="fas fa-th"></i> Mudar Departamento</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="container" style="max-width: 1200px; margin: 30px auto; padding: 0 20px; width: 100%;">
+        <div class="stats-grid-dash">
+            <div class="stat-box">
+                <h4>Total Colaboradores</h4>
+                <h2>24</h2>
+                <p><i class="fas fa-user-check" style="color: #28a745;"></i> Ativos na empresa</p>
+            </div>
+            <div class="stat-box">
+                <h4>Assiduidade</h4>
+                <h2>100%</h2>
+                <p><i class="fas fa-arrow-up" style="color: #28a745;"></i> Sem faltas hoje</p>
+            </div>
+            <div class="stat-box">
+                <h4>NIF Empresa</h4>
+                <h2>5002085011</h2>
+                <p>Namacunde / Cunene</p>
+            </div>
+            <div class="stat-box">
+                <h4>Estado do Sistema</h4>
+                <h2 style="color: #28a745;">ONLINE</h2>
+                <p>Seguro e Sincronizado</p>
+            </div>
+        </div>
+
+        <div class="management-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                <h3><i class="fas fa-users"></i> Gestão de Pessoal e Colaboradores</h3>
+                <button onclick="openNewTaskModal()" class="btn-primary-custom" style="width: auto; padding: 8px 16px; font-size: 13px;"><i class="fas fa-plus"></i> Novo Colaborador</button>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID Colaborador</th>
+                            <th>Nome Completo</th>
+                            <th>Cargo / Função</th>
+                            <th>Tipo de Contrato</th>
+                            <th>Estado</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rhTableBody">
+                        <tr>
+                            <td>#RH-001</td>
+                            <td>Eduardo Gabriel</td>
+                            <td>Gestor de TI & Software</td>
+                            <td>Efetivo</td>
+                            <td><span class="badge in-progress">Ativo</span></td>
+                            <td><button onclick="completeTask(this)" class="btn-action">Atualizar</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Novo Colaborador -->
+    <div id="taskModal" class="modal-overlay">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeNewTaskModal()">&times;</button>
+            <h3>Adicionar Novo Colaborador</h3>
+            <form onsubmit="addNewCollab(event); return false;" style="margin-top: 15px;">
+                <div class="form-group" style="text-align: left;">
+                    <label>Nome Completo</label>
+                    <input type="text" id="collabName" placeholder="Nome do funcionário..." required style="text-align: left; font-size: 14px;">
+                </div>
+                <div class="form-group" style="text-align: left;">
+                    <label>Cargo / Função</label>
+                    <input type="text" id="collabRole" placeholder="Ex: Assistente, Gestor..." required style="text-align: left; font-size: 14px;">
+                </div>
+                <div class="form-group" style="text-align: left;">
+                    <label>Tipo de Contrato</label>
+                    <select id="collabContract" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
+                        <option value="Efetivo">Efetivo</option>
+                        <option value="Prestação de Serviços">Prestação de Serviços</option>
+                        <option value="Estágio">Estágio</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary-custom">Guardar Colaborador</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            if (body.getAttribute('data-theme') === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                if (themeIcon) themeIcon.className = 'fas fa-sun';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                if (themeIcon) themeIcon.className = 'fas fa-moon';
+            }
+        }
+        function openNewTaskModal() { document.getElementById('taskModal').classList.add('active'); }
+        function closeNewTaskModal() { document.getElementById('taskModal').classList.remove('active'); }
+        function addNewCollab(event) {
+            if (event) event.preventDefault();
+            const name = document.getElementById('collabName').value;
+            const role = document.getElementById('collabRole').value;
+            const contract = document.getElementById('collabContract').value;
+            const tbody = document.getElementById('rhTableBody');
+            const rowCount = tbody.rows.length + 10;
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>#RH-0${rowCount}</td><td>${name}</td><td>${role}</td><td>${contract}</td><td><span class="badge in-progress">Ativo</span></td><td><button onclick="completeTask(this)" class="btn-action">Atualizar</button></td>`;
+            tbody.insertBefore(tr, tbody.firstChild);
+            closeNewTaskModal();
+            showToast("Sucesso", "Novo colaborador registado.");
+            document.getElementById('collabName').value = '';
+            document.getElementById('collabRole').value = '';
+        }
+        function completeTask(btn) {
+            const row = btn.closest('tr');
+            const statusBadge = row.querySelector('.badge');
+            if (statusBadge) { statusBadge.className = 'badge'; statusBadge.style.background = '#d4edda'; statusBadge.style.color = '#155724'; statusBadge.textContent = 'Atualizado'; }
+            btn.remove();
+            showToast("Atualizado", "Registo atualizado com sucesso.");
+        }
+        function showToast(title, message) {
+            const toast = document.getElementById('toastNotification');
+            if (!toast) return;
+            document.getElementById('toastTitle').textContent = title;
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 4000);
+        }
+    </script>
+</body>
+</html>
