@@ -50,7 +50,7 @@ body {
 }
 
 /* ==========================================================
-   ESTILO DE LOGIN COM VÍDEO BEM VISÍVEL & LOGO NO CANTO SUPERIOR
+   TELA DE LOGIN: VÍDEO CLARO E LIMPO, LOGO FIXO E CENTRAÇÃO PERFEITA
    ================================================---------- */
 .cyber-login-screen {
     position: relative;
@@ -66,7 +66,7 @@ body {
     display: flex;
 }
 
-/* Configuração do Vídeo de Fundo */
+/* Vídeo de fundo limpo, sem escurecimentos por cima */
 .bg-video {
     position: absolute;
     top: 50%;
@@ -80,20 +80,9 @@ body {
     object-fit: cover;
 }
 
-/* Camada de sobreposição mais leve para deixar o vídeo bem visível */
-.cyber-login-screen::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(2, 12, 27, 0.45);
-    z-index: 2;
-    pointer-events: none;
-}
+/* Sem camada escura (overlay removido para deixar o vídeo totalmente claro) */
 
-/* Logo e Nome fixos no canto superior esquerdo */
+/* Logo e Nome fixos no canto superior esquerdo com alto z-index */
 .cyber-top-brand {
     position: absolute;
     top: 25px;
@@ -101,7 +90,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    z-index: 4;
+    z-index: 10;
 }
 
 .cyber-top-brand img {
@@ -109,7 +98,7 @@ body {
     height: 42px;
     object-fit: contain;
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     padding: 4px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
@@ -119,26 +108,26 @@ body {
     font-size: 20px;
     font-weight: 700;
     letter-spacing: 1px;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 6px rgba(0,0,0,0.8);
 }
 
-/* Container do formulário posicionado mais abaixo */
+/* Container do formulário perfeitamente centralizado sem excesso de margem superior */
 .cyber-login-container {
     position: relative;
     width: 100%;
     max-width: 450px;
-    z-index: 3;
-    margin-top: 80px; /* Desloca o formulário mais para baixo */
+    z-index: 5;
+    margin-top: 40px; /* Ajustado para não tapar a cabeça da jovem */
     padding: 0 20px;
 }
 
 .cyber-form-box {
-    background: rgba(15, 23, 42, 0.65);
+    background: rgba(15, 23, 42, 0.75);
     padding: 30px;
     border-radius: 8px;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.4);
 }
 
 /* Campos em Glassmorphism */
@@ -206,10 +195,10 @@ body {
     text-decoration: underline;
 }
 
-/* Botões translúcidos robustos */
+/* Botões */
 .cyber-btn-login {
     width: 100%;
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.9);
     color: #0b1329;
     border: none;
     padding: 16px;
@@ -219,7 +208,7 @@ body {
     letter-spacing: 1px;
     cursor: pointer;
     margin-bottom: 15px;
-    transition: background 0.2s, transform 0.1s;
+    transition: background 0.2s;
 }
 
 .cyber-btn-login:hover {
@@ -230,7 +219,7 @@ body {
     width: 100%;
     background: transparent;
     color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     padding: 16px;
     border-radius: 4px;
     font-weight: bold;
@@ -251,7 +240,7 @@ body {
         left: 20px;
     }
     .cyber-login-container {
-        margin-top: 60px;
+        margin-top: 50px;
     }
 }
 
