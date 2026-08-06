@@ -1,0 +1,13 @@
+{
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "APSAN, LDA",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "APSAN, LDA",
+  "start_url": "/",
+  "theme_color": "#ffffff",
+  "id": "apsan-gestao-empresarial",
+  "description": "Sistema de Gestão Empresarial APSAN, LDA"
+}
