@@ -10,7 +10,7 @@
 <body data-theme="light">
 
     <!-- Toast Notification -->
-    <div id="toastNotification">
+    <div id="toastNotification" class="toast-notification">
         <i class="fas fa-check-circle" style="font-size: 20px;"></i>
         <div>
             <strong id="toastTitle">Sucesso!</strong>
@@ -58,7 +58,7 @@
             </div>
 
             <div class="department-grid">
-                <!-- Finanças e Contabilidade - Redirecionamento Direto para Ficheiro Separado -->
+                <!-- Finanças e Contabilidade -->
                 <div class="dept-card" onclick="window.location.href='financas.html'">
                     <div class="dept-icon"><i class="fas fa-wallet"></i></div>
                     <h3>Finanças & Contabilidade</h3>
@@ -66,84 +66,95 @@
                     <span class="dept-code-hint">Aceder a financas.html</span>
                 </div>
 
-                <!-- 1. Limpeza Institucional - Redirecionamento Direto para Ficheiro Separado -->
+                <!-- Limpeza Institucional -->
                 <div class="dept-card" onclick="window.location.href='limpeza.html'">
                     <div class="dept-icon"><i class="fas fa-broom"></i></div>
                     <h3>Limpeza Institucional</h3>
                     <p>Gestão de equipas, escalas e insumos de limpeza.</p>
                     <span class="dept-code-hint">Aceder a limpeza.html</span>
                 </div>
-                <!-- 2. Material e Logística -->
+
+                <!-- Material e Logística -->
                 <div class="dept-card" onclick="selectDept('Material de Escritório e Logística', 'MAT-2026')">
                     <div class="dept-icon"><i class="fas fa-boxes"></i></div>
                     <h3>Material & Logística</h3>
                     <p>Controlo de stock, papelaria e aprovisionamento.</p>
                     <span class="dept-code-hint">Código: MAT-2026</span>
                 </div>
-                <!-- 3. Catering -->
+
+                <!-- Catering -->
                 <div class="dept-card" onclick="selectDept('Catering e Eventos Corporativos', 'CAT-2026')">
                     <div class="dept-icon"><i class="fas fa-utensils"></i></div>
                     <h3>Catering & Eventos</h3>
                     <p>Menus, planeamento de eventos e coordenação.</p>
                     <span class="dept-code-hint">Código: CAT-2026</span>
                 </div>
-                <!-- 4. TI e Software -->
+
+                <!-- TI e Software -->
                 <div class="dept-card" onclick="selectDept('Tecnologia, Redes e Software', 'TEC-2026')">
                     <div class="dept-icon"><i class="fas fa-laptop-code"></i></div>
                     <h3>TI & Software</h3>
                     <p>Sistemas de gestão, redes e suporte técnico.</p>
                     <span class="dept-code-hint">Código: TEC-2026</span>
                 </div>
-                <!-- 5. Transportes -->
+
+                <!-- Transportes -->
                 <div class="dept-card" onclick="selectDept('Transportes e Aluguer de Viaturas', 'TRA-2026')">
                     <div class="dept-icon"><i class="fas fa-car"></i></div>
                     <h3>Transportes & Frota</h3>
                     <p>Gestão de frotas, missões e aluguer de carros.</p>
                     <span class="dept-code-hint">Código: TRA-2026</span>
                 </div>
-                <!-- 6. Importação -->
+
+                <!-- Importação -->
                 <div class="dept-card" onclick="selectDept('Importação, Exportação e Namíbia', 'IMP-2026')">
                     <div class="dept-icon"><i class="fas fa-globe"></i></div>
                     <h3>Importação & Namíbia</h3>
                     <p>Trâmites aduaneiros, encomendas e transfronteiriços.</p>
                     <span class="dept-code-hint">Código: IMP-2026</span>
                 </div>
-                <!-- 7. Recursos Humanos (RH) - Redirecionamento Direto para Ficheiro Separado -->
+
+                <!-- Recursos Humanos (RH) -->
                 <div class="dept-card" onclick="window.location.href='rh.html'">
                     <div class="dept-icon"><i class="fas fa-users"></i></div>
                     <h3>Recursos Humanos (RH)</h3>
                     <p>Gestão de pessoal, colaboradores, assiduidade e folhas.</p>
                     <span class="dept-code-hint">Aceder a rh.html</span>
                 </div>
-                <!-- 8. Acompanhamento Hospitalar - Redirecionamento Direto para Ficheiro Separado -->
+
+                <!-- Acompanhamento Hospitalar -->
                 <div class="dept-card" onclick="window.location.href='hospitalar.html'">
                     <div class="dept-icon"><i class="fas fa-user-nurse"></i></div>
                     <h3>Acompanhamento Hospitalar</h3>
                     <p>Assistência, cuidados e suporte a pacientes e familiares.</p>
                     <span class="dept-code-hint">Aceder a hospitalar.html</span>
                 </div>
-                <!-- 9. Tradução Oficial Juramentada - Redirecionamento Direto para Ficheiro Separado -->
+
+                <!-- Tradução Oficial Juramentada -->
                 <div class="dept-card" onclick="window.location.href='traducao.html'">
                     <div class="dept-icon"><i class="fas fa-language"></i></div>
                     <h3>Tradução Juramentada</h3>
                     <p>Traduções oficiais de documentos e validações legais.</p>
                     <span class="dept-code-hint">Aceder a traducao.html</span>
                 </div>
-                <!-- 10. Envio e Recepção de Encomenda -->
+
+                <!-- Envio e Recepção de Encomenda -->
                 <div class="dept-card" onclick="selectDept('Envio e Recepção de Encomenda', 'ENC-2026')">
                     <div class="dept-icon"><i class="fas fa-shipping-fast"></i></div>
                     <h3>Envio & Recepção de Encomendas</h3>
                     <p>Logística de pacotes, expedições e entregas locais/externas.</p>
                     <span class="dept-code-hint">Código: ENC-2026</span>
                 </div>
-                <!-- 11. Administração Geral -->
+
+                <!-- Administração Geral -->
                 <div class="dept-card" onclick="selectDept('Administração Geral', 'ADM-2026')">
                     <div class="dept-icon"><i class="fas fa-building"></i></div>
                     <h3>Administração Geral</h3>
                     <p>Gestão corporativa global, finanças e NIF 5002085011.</p>
                     <span class="dept-code-hint">Código: ADM-2026</span>
                 </div>
-                <!-- 12. Auditoria e Denúncias -->
+
+                <!-- Auditoria e Denúncias -->
                 <div class="dept-card" onclick="selectDept('Canal de Denúncias e Auditoria', 'DEN-2026')">
                     <div class="dept-icon"><i class="fas fa-shield-alt"></i></div>
                     <h3>Auditoria & Denúncias</h3>
@@ -211,7 +222,7 @@
                 <div class="stat-box">
                     <h4>Estado do Sistema</h4>
                     <h2 style="color: #28a745;">ONLINE</h2>
-                    <p>Sincronizado com Firebase</p>
+                    <p>Sincronizado</p>
                 </div>
             </div>
 
@@ -223,7 +234,7 @@
 
                 <div style="overflow-x: auto;">
                     <table class="data-table">
-                        <thead id="departmentTableHead">
+                        <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Título / Descrição</th>
@@ -257,29 +268,27 @@
             <button class="modal-close" onclick="closeNewTaskModal()">&times;</button>
             <h3>Adicionar Novo Registo</h3>
             <form onsubmit="addNewTask(event); return false;" style="margin-top: 15px;">
-                <div id="modalDynamicFormFields">
-                    <div class="form-group" style="text-align: left;">
-                        <label>Título da Tarefa</label>
-                        <input type="text" id="taskTitle" placeholder="Ex: Processo operacional..." required style="text-align: left; font-size: 14px; letter-spacing: normal;">
-                    </div>
-                    <div class="form-group" style="text-align: left;">
-                        <label>Responsável</label>
-                        <input type="text" id="taskOwner" placeholder="Nome do colaborador..." required style="text-align: left; font-size: 14px; letter-spacing: normal;">
-                    </div>
-                    <div class="form-group" style="text-align: left;">
-                        <label>Prioridade</label>
-                        <select id="taskPriority" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
-                            <option value="Alta">Alta</option>
-                            <option value="Média" selected>Média</option>
-                            <option value="Baixa">Baixa</option>
-                        </select>
-                    </div>
+                <div class="form-group" style="text-align: left;">
+                    <label>Título da Tarefa</label>
+                    <input type="text" id="taskTitle" placeholder="Ex: Processo operacional..." required style="text-align: left; font-size: 14px; letter-spacing: normal;">
+                </div>
+                <div class="form-group" style="text-align: left;">
+                    <label>Responsável</label>
+                    <input type="text" id="taskOwner" placeholder="Nome do colaborador..." required style="text-align: left; font-size: 14px; letter-spacing: normal;">
+                </div>
+                <div class="form-group" style="text-align: left;">
+                    <label>Prioridade</label>
+                    <select id="taskPriority" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
+                        <option value="Alta">Alta</option>
+                        <option value="Média" selected>Média</option>
+                        <option value="Baixa">Baixa</option>
+                    </select>
                 </div>
                 <button type="submit" class="btn-primary-custom">Guardar Registo</button>
             </form>
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
