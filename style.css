@@ -50,27 +50,55 @@ body {
 }
 
 /* ==========================================================
-   ESTILO DE LOGIN CIBERNÉTICO (IDÊNTICO À REFERÊNCIA)
+   ESTILO DE LOGIN COM VÍDEO DE FUNDO & GLASSMORPHISM
    ================================================---------- */
 .cyber-login-screen {
+    position: relative;
     width: 100vw;
     height: 100vh;
     display: none;
-    /* Imagem de fundo tecnológica com sobreposição em tom azul/escuro */
-    background: linear-gradient(135deg, rgba(10, 25, 47, 0.85) 0%, rgba(2, 12, 27, 0.92) 100%), 
-                url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
     justify-content: flex-start;
     align-items: center;
     padding-left: 10%;
+    overflow: hidden;
 }
 
 .cyber-login-screen.active {
     display: flex;
 }
 
+/* Configuração do Vídeo de Fundo */
+.bg-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    object-fit: cover;
+}
+
+/* Camada de sobreposição escura/azulada para legibilidade perfeita */
+.cyber-login-screen::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(10, 25, 47, 0.75) 0%, rgba(2, 12, 27, 0.85) 100%);
+    z-index: 2;
+    pointer-events: none;
+}
+
 .cyber-login-container {
+    position: relative;
     width: 100%;
     max-width: 450px;
+    z-index: 3;
 }
 
 .cyber-logo-area {
@@ -200,7 +228,6 @@ body {
     border-color: rgba(255, 255, 255, 0.9);
 }
 
-/* Responsividade para telemóveis */
 @media (max-width: 768px) {
     .cyber-login-screen {
         padding-left: 5%;
@@ -304,7 +331,7 @@ body {
     display: inline-block;
 }
 
-/* Modais de Código e Tarefas */
+/* Modais */
 .modal-overlay {
     display: none;
     position: fixed;
