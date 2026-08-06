@@ -50,16 +50,15 @@ body {
 }
 
 /* ==========================================================
-   ESTILO DE LOGIN COM VÍDEO DE FUNDO (vidgestao.mp4) & GLASSMORPHISM
+   ESTILO DE LOGIN COM VÍDEO BEM VISÍVEL & LOGO NO CANTO SUPERIOR
    ================================================---------- */
 .cyber-login-screen {
     position: relative;
     width: 100vw;
     height: 100vh;
     display: none;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    padding-left: 10%;
     overflow: hidden;
 }
 
@@ -81,7 +80,7 @@ body {
     object-fit: cover;
 }
 
-/* Camada de sobreposição escura/azulada para legibilidade perfeita */
+/* Camada de sobreposição mais leve para deixar o vídeo bem visível */
 .cyber-login-screen::after {
     content: '';
     position: absolute;
@@ -89,42 +88,60 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(10, 25, 47, 0.75) 0%, rgba(2, 12, 27, 0.85) 100%);
+    background: rgba(2, 12, 27, 0.45);
     z-index: 2;
     pointer-events: none;
 }
 
+/* Logo e Nome fixos no canto superior esquerdo */
+.cyber-top-brand {
+    position: absolute;
+    top: 25px;
+    left: 35px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 4;
+}
+
+.cyber-top-brand img {
+    width: 42px;
+    height: 42px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 4px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.cyber-top-brand span {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+/* Container do formulário posicionado mais abaixo */
 .cyber-login-container {
     position: relative;
     width: 100%;
     max-width: 450px;
     z-index: 3;
+    margin-top: 80px; /* Desloca o formulário mais para baixo */
+    padding: 0 20px;
 }
 
-.cyber-logo-area {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 25px;
+.cyber-form-box {
+    background: rgba(15, 23, 42, 0.65);
+    padding: 30px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
 }
 
-.cyber-logo-area img {
-    width: 45px;
-    height: 45px;
-    object-fit: contain;
-    border-radius: 6px;
-    background: #fff;
-    padding: 4px;
-}
-
-.cyber-logo-area span {
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-/* Campos em Glassmorphism alinhados à esquerda */
+/* Campos em Glassmorphism */
 .cyber-input-group {
     display: flex;
     align-items: center;
@@ -229,10 +246,12 @@ body {
 }
 
 @media (max-width: 768px) {
-    .cyber-login-screen {
-        padding-left: 5%;
-        padding-right: 5%;
-        justify-content: center;
+    .cyber-top-brand {
+        top: 15px;
+        left: 20px;
+    }
+    .cyber-login-container {
+        margin-top: 60px;
     }
 }
 
