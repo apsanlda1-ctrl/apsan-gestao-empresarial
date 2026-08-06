@@ -18,20 +18,21 @@
         </div>
     </div>
 
-    <!-- TELA 1: LOGIN COM VÍDEO DE FUNDO (vidgestao.mp4) -->
+    <!-- TELA 1: LOGIN COM VÍDEO DE FUNDO -->
     <div id="loginScreen" class="app-screen screen active cyber-login-screen">
         <video autoplay muted loop playsinline class="bg-video">
             <source src="vidgestao.mp4" type="video/mp4">
             O seu navegador não suporta vídeos de fundo.
         </video>
 
+        <!-- Logo e Nome no Canto Superior Esquerdo -->
+        <div class="cyber-top-brand">
+            <img src="logo.png" alt="APSAN, LDA" onerror="this.style.display='none'">
+            <span>APSAN, LDA</span>
+        </div>
+
         <div class="cyber-login-container">
             <div class="cyber-form-box">
-                <div class="cyber-logo-area">
-                    <img src="logo.png" alt="APSAN, LDA" onerror="this.style.display='none'">
-                    <span>APSAN, LDA</span>
-                </div>
-
                 <form onsubmit="handleLogin(event); return false;">
                     <!-- Campo Username / E-mail -->
                     <div class="cyber-input-group">
