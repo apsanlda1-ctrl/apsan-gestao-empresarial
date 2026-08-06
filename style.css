@@ -50,7 +50,7 @@ body {
 }
 
 /* ==========================================================
-   TELA DE LOGIN: VÍDEO CLARO, SEM ZOOM E SEM CORTES
+   TELA DE LOGIN: VÍDEO, POSIÇÃO DO FORMULÁRIO E AZUL ESCURO
    ================================================---------- */
 .cyber-login-screen {
     position: relative;
@@ -108,17 +108,19 @@ body {
     text-shadow: 0 2px 6px rgba(0,0,0,0.8);
 }
 
-/* Container do formulário centralizado e posicionado confortavelmente */
+/* Container do formulário: deslocado para a direita e ligeiramente para baixo */
 .cyber-login-container {
     position: relative;
     width: 100%;
     max-width: 430px;
     z-index: 5;
     padding: 0 20px;
+    margin-left: 90px; /* Puxa o formulário para a direita */
+    margin-top: 45px;  /* Baixa um pouco o formulário */
 }
 
 .cyber-form-box {
-    background: rgba(15, 23, 42, 0.75);
+    background: rgba(11, 43, 92, 0.85); /* Fundo em azul escuro translúcido */
     padding: 30px;
     border-radius: 8px;
     backdrop-filter: blur(12px);
@@ -234,6 +236,10 @@ body {
     .cyber-top-brand {
         top: 15px;
         left: 20px;
+    }
+    .cyber-login-container {
+        margin-left: 0;
+        margin-top: 0;
     }
 }
 
