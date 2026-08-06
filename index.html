@@ -18,27 +18,44 @@
         </div>
     </div>
 
-    <!-- TELA 1: LOGIN POR E-MAIL -->
-    <div id="loginScreen" class="app-screen screen active">
-        <div class="login-card">
-            <div class="login-header">
-                <img src="logo.png" alt="APSAN, LDA" onerror="this.src='https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=100&q=80'">
-                <h2>APSAN, <span style="color: var(--accent-color);">LDA</span></h2>
-                <p>Sistema de Gestão Integrada</p>
+    <!-- TELA 1: LOGIN CORPORATIVO EM ECRÃ COMPLETO -->
+    <div id="loginScreen" class="app-screen screen active full-screen-login">
+        <div class="login-split-container">
+            <!-- Lado Esquerdo: Identidade Institucional -->
+            <div class="login-brand-side">
+                <div class="brand-content">
+                    <img src="logo.png" alt="APSAN, LDA" onerror="this.src='https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=100&q=80'">
+                    <h1>APSAN, <span style="color: var(--accent-color);">LDA</span></h1>
+                    <p class="tagline">Prestadora de Serviços & Gestão Integrada</p>
+                    <div class="corporate-info-badge">
+                        <span><i class="fas fa-map-marker-alt"></i> Sede: Namacunde, Cunene</span>
+                        <span><i class="fas fa-id-card"></i> NIF: 5002085011</span>
+                    </div>
+                </div>
             </div>
-            <form onsubmit="handleLogin(event); return false;">
-                <div class="form-group">
-                    <label><i class="fas fa-envelope"></i> Endereço de E-mail Corporativo</label>
-                    <input type="email" id="userEmail" placeholder="exemplo@apsanlda.com" required>
+
+            <!-- Lado Direito: Formulário de Autenticação -->
+            <div class="login-form-side">
+                <div class="login-form-wrapper">
+                    <div class="form-header-modern">
+                        <h2>Bem-vindo de volta</h2>
+                        <p>Introduza as suas credenciais corporativas para aceder ao sistema.</p>
+                    </div>
+                    <form onsubmit="handleLogin(event); return false;">
+                        <div class="form-group">
+                            <label><i class="fas fa-envelope"></i> E-mail Corporativo</label>
+                            <input type="email" id="userEmail" placeholder="utilizador@apsanlda.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-lock"></i> Palavra-passe</label>
+                            <input type="password" id="userPassword" placeholder="••••••••" required>
+                        </div>
+                        <button type="submit" class="btn-primary-custom">Entrar no Sistema <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></button>
+                    </form>
+                    <div class="login-footer-modern">
+                        <p>&copy; 2026 APSAN, LDA &bull; Todos os direitos reservados</p>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label><i class="fas fa-lock"></i> Palavra-passe</label>
-                    <input type="password" id="userPassword" placeholder="••••••••" required>
-                </div>
-                <button type="submit" class="btn-primary-custom">Entrar no Sistema</button>
-            </form>
-            <div class="login-footer">
-                <p>Sede: Namacunde, Cunene &bull; NIF: 5002085011</p>
             </div>
         </div>
     </div>
@@ -58,108 +75,77 @@
             </div>
 
             <div class="department-grid">
-                <!-- Finanças e Contabilidade -->
                 <div class="dept-card" onclick="window.location.href='financas.html'">
                     <div class="dept-icon"><i class="fas fa-wallet"></i></div>
                     <h3>Finanças & Contabilidade</h3>
                     <p>Tesouraria, faturas, balancete e controlo BFA/AGT.</p>
                     <span class="dept-code-hint">Aceder a financas.html</span>
                 </div>
-
-                <!-- Limpeza Institucional -->
                 <div class="dept-card" onclick="window.location.href='limpeza.html'">
                     <div class="dept-icon"><i class="fas fa-broom"></i></div>
                     <h3>Limpeza Institucional</h3>
                     <p>Gestão de equipas, escalas e insumos de limpeza.</p>
                     <span class="dept-code-hint">Aceder a limpeza.html</span>
                 </div>
-
-                <!-- Material e Logística -->
                 <div class="dept-card" onclick="selectDept('Material de Escritório e Logística', 'MAT-2026')">
                     <div class="dept-icon"><i class="fas fa-boxes"></i></div>
                     <h3>Material & Logística</h3>
                     <p>Controlo de stock, papelaria e aprovisionamento.</p>
                     <span class="dept-code-hint">Código: MAT-2026</span>
                 </div>
-
-                <!-- Catering -->
                 <div class="dept-card" onclick="selectDept('Catering e Eventos Corporativos', 'CAT-2026')">
                     <div class="dept-icon"><i class="fas fa-utensils"></i></div>
                     <h3>Catering & Eventos</h3>
                     <p>Menus, planeamento de eventos e coordenação.</p>
                     <span class="dept-code-hint">Código: CAT-2026</span>
                 </div>
-
-                <!-- TI e Software -->
                 <div class="dept-card" onclick="selectDept('Tecnologia, Redes e Software', 'TEC-2026')">
                     <div class="dept-icon"><i class="fas fa-laptop-code"></i></div>
                     <h3>TI & Software</h3>
                     <p>Sistemas de gestão, redes e suporte técnico.</p>
                     <span class="dept-code-hint">Código: TEC-2026</span>
                 </div>
-
-                <!-- Transportes -->
                 <div class="dept-card" onclick="selectDept('Transportes e Aluguer de Viaturas', 'TRA-2026')">
                     <div class="dept-icon"><i class="fas fa-car"></i></div>
                     <h3>Transportes & Frota</h3>
                     <p>Gestão de frotas, missões e aluguer de carros.</p>
                     <span class="dept-code-hint">Código: TRA-2026</span>
                 </div>
-
-                <!-- Importação -->
                 <div class="dept-card" onclick="selectDept('Importação, Exportação e Namíbia', 'IMP-2026')">
                     <div class="dept-icon"><i class="fas fa-globe"></i></div>
                     <h3>Importação & Namíbia</h3>
                     <p>Trâmites aduaneiros, encomendas e transfronteiriços.</p>
                     <span class="dept-code-hint">Código: IMP-2026</span>
                 </div>
-
-                <!-- Recursos Humanos (RH) -->
                 <div class="dept-card" onclick="window.location.href='rh.html'">
                     <div class="dept-icon"><i class="fas fa-users"></i></div>
                     <h3>Recursos Humanos (RH)</h3>
                     <p>Gestão de pessoal, colaboradores, assiduidade e folhas.</p>
                     <span class="dept-code-hint">Aceder a rh.html</span>
                 </div>
-
-                <!-- Acompanhamento Hospitalar -->
                 <div class="dept-card" onclick="window.location.href='hospitalar.html'">
                     <div class="dept-icon"><i class="fas fa-user-nurse"></i></div>
                     <h3>Acompanhamento Hospitalar</h3>
                     <p>Assistência, cuidados e suporte a pacientes e familiares.</p>
                     <span class="dept-code-hint">Aceder a hospitalar.html</span>
                 </div>
-
-                <!-- Tradução Oficial Juramentada -->
                 <div class="dept-card" onclick="window.location.href='traducao.html'">
                     <div class="dept-icon"><i class="fas fa-language"></i></div>
                     <h3>Tradução Juramentada</h3>
                     <p>Traduções oficiais de documentos e validações legais.</p>
                     <span class="dept-code-hint">Aceder a traducao.html</span>
                 </div>
-
-                <!-- Envio e Recepção de Encomenda -->
                 <div class="dept-card" onclick="selectDept('Envio e Recepção de Encomenda', 'ENC-2026')">
                     <div class="dept-icon"><i class="fas fa-shipping-fast"></i></div>
                     <h3>Envio & Recepção de Encomendas</h3>
                     <p>Logística de pacotes, expedições e entregas locais/externas.</p>
                     <span class="dept-code-hint">Código: ENC-2026</span>
                 </div>
-
-                <!-- Administração Geral -->
                 <div class="dept-card" onclick="selectDept('Administração Geral', 'ADM-2026')">
                     <div class="dept-icon"><i class="fas fa-building"></i></div>
                     <h3>Administração Geral</h3>
                     <p>Gestão corporativa global, finanças e NIF 5002085011.</p>
                     <span class="dept-code-hint">Código: ADM-2026</span>
-                </div>
-
-                <!-- Auditoria e Denúncias -->
-                <div class="dept-card" onclick="selectDept('Canal de Denúncias e Auditoria', 'DEN-2026')">
-                    <div class="dept-icon"><i class="fas fa-shield-alt"></i></div>
-                    <h3>Auditoria & Denúncias</h3>
-                    <p>Gestão segura de relatos, ética e conformidade.</p>
-                    <span class="dept-code-hint">Código: DEN-2026</span>
                 </div>
             </div>
         </div>
@@ -206,18 +192,18 @@
             <div class="stats-grid-dash">
                 <div class="stat-box">
                     <h4>Tarefas Ativas</h4>
-                    <h2 id="statTasks">14</h2>
+                    <h2>14</h2>
                     <p><i class="fas fa-arrow-up" style="color: #28a745;"></i> +3 hoje</p>
                 </div>
                 <div class="stat-box">
                     <h4>Solicitações Clientes</h4>
-                    <h2 id="statRequests">28</h2>
+                    <h2>28</h2>
                     <p><i class="fas fa-check-circle" style="color: #28a745;"></i> 98% Concluídas</p>
                 </div>
                 <div class="stat-box">
                     <h4>NIF Empresa</h4>
                     <h2>5002085011</h2>
-                    <p>Namacunde / Ondjiva</p>
+                    <p>Namacunde / Cunene</p>
                 </div>
                 <div class="stat-box">
                     <h4>Estado do Sistema</h4>
