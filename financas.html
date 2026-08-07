@@ -100,7 +100,7 @@
       <div class="hub-avatar">AF</div>
       <div class="hub-title">
         <h2>Departamento Financeiro e Contabilidade</h2>
-        <p>Painel de Controlo Master — Módulos Funcionais e Integrações Ativas.</p>
+        <p>Painel de Controlo Master — Módulos Funcionais e Integrações Ativas[cite: 2].</p>
       </div>
     </div>
     <div class="hub-status-badge">
@@ -331,13 +331,39 @@
   &copy; 2026 APSAN, LDA — Todos os direitos reservados. Módulo de Controlo Financeiro Executivo Master.
 </footer>
 
+<!-- SDK DO FIREBASE E LÓGICA DE INTEGRAÇÃO -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // SUBSTITUA COM AS SUAS CREDENCIAIS REAIS DO FIREBASE
+  const firebaseConfig = {
+      apiKey: "SUA_API_KEY",
+      authDomain: "SEU_AUTHDOMAIN.firebaseapp.com",
+      projectId: "SEU_PROJECT_ID",
+      storageBucket: "SEU_STORAGE_BUCKET",
+      messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+      appId: "SEU_APP_ID"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // Disponibilizar globalmente para as funções do painel
+  window.dbFirestore = db;
+  window.firebaseCollection = collection;
+  window.firebaseAddDoc = addDoc;
+</script>
+
 <script>
+  let moduloAtualAtivo = '';
+
   function abrirModulo(tipo, nome) {
+    moduloAtualAtivo = nome;
     document.getElementById('modalTitle').innerHTML = `<i class="fas fa-check-circle" style="color: var(--primary);"></i> ${nome} <span style="font-size: 11px; background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 10px; margin-left: 10px;">${tipo === 'modulo' ? 'Módulo Operacional' : 'Integração Ativa'}</span>`;
     
     let htmlContent = '';
 
-    // FORMULÁRIOS ESPECÍFICOS POR CADA MÓDULO/INTEGRAÇÃO
     switch(nome) {
       case 'Tesouraria & Bancos':
         htmlContent = `
@@ -349,8 +375,7 @@
           <div class="form-row">
             <div class="form-group"><label>Descrição do Movimento</label><input type="text" class="form-control" placeholder="Ex: Pagamento de serviços..."></div>
             <div class="form-group"><label>Montante</label><input type="number" class="form-control" placeholder="0.00"></div>
-          </div>
-          <table class="data-table"><thead><tr><th>Data</th><th>Ref</th><th>Descrição</th><th>Montante</th><th>Estado</th></tr></thead><tbody><tr><td>07/08/2026</td><td>#TR-901</td><td>Depósito de Clientes</td><td>+ 450.000,00 AOA</td><td><span style="color:var(--primary);">Confirmado</span></td></tr></tbody></table>`;
+          </div>`;
         break;
 
       case 'Partidas Dobradas & PGC':
@@ -459,8 +484,7 @@
           <div class="form-row">
             <div class="form-group"><label>Módulo a Auditar</label><select class="form-control"><option>Todos os Módulos</option><option>Módulo de Faturação</option><option>Tesouraria & Bancos</option></select></div>
             <div class="form-group"><label>Nível de Severidade de Alerta</label><select class="form-control"><option>Normal / Informativo</option><option>Atenção</option><option>Crítico</option></select></div>
-          </div>
-          <table class="data-table"><thead><tr><th>Timestamp</th><th>Utilizador</th><th>Ação Registada</th><th>Estado</th></tr></thead><tbody><tr><td>07/08/2026 16:30</td><td>Admin</td><td>Modificação de Registo Contabilístico</td><td><span style="color:var(--primary);">Verificado</span></td></tr></tbody></table>`;
+          </div>`;
         break;
 
       case 'Stocks & Armazém':
@@ -511,7 +535,7 @@
         htmlContent = `
           <p style="font-size: 13px; color: var(--secondary);">Importação automática de ficheiros MT940 e cruzamento inteligente com faturas.</p>
           <div class="form-row">
-            <div class="form-group"><label>Ficheiro de Extrato (MT940 / CAMT.053)</label><input type="file" class="form-control"></div>
+            <div class="form-group"><label>Referência do Extrato / Lote</label><input type="text" class="form-control" placeholder="Ex: Lote BFA 08-2026"></div>
             <div class="form-group"><label>Banco de Destino</label><select class="form-control"><option>Banco BFA</option></select></div>
           </div>`;
         break;
@@ -521,10 +545,9 @@
           <p style="font-size: 13px; color: var(--secondary);">Controlo de ajudas de custo, despesas operacionais e caixa menor.</p>
           <div class="form-row">
             <div class="form-group"><label>Colaborador Requerente</label><input type="text" class="form-control" placeholder="Nome..."></div>
-            <div class="form-group"><label>Comprovativo / Recibo</label><input type="file" class="form-control"></div>
+            <div class="form-group"><label>Valor da Despesa</label><input type="number" class="form-control" placeholder="0.00"></div>
           </div>
           <div class="form-row">
-            <div class="form-group"><label>Valor da Despesa</label><input type="number" class="form-control" placeholder="0.00"></div>
             <div class="form-group"><label>Categoria</label><select class="form-control"><option>Deslocação / Transporte</option><option>Material de Escritório</option><option>Outras Despesas</option></select></div>
           </div>`;
         break;
@@ -565,7 +588,7 @@
           <p style="font-size: 13px; color: var(--secondary);">Repositório seguro de comprovativos, recibos e certidões fiscais.</p>
           <div class="form-row">
             <div class="form-group"><label>Título do Documento</label><input type="text" class="form-control" placeholder="Nome do documento..."></div>
-            <div class="form-group"><label>Ficheiro Digitalizado (PDF)</label><input type="file" class="form-control"></div>
+            <div class="form-group"><label>Descrição / Referência</label><input type="text" class="form-control" placeholder="Detalhes do documento..."></div>
           </div>`;
         break;
 
@@ -606,14 +629,10 @@
         break;
 
       default:
-        // Tratamento para as Integrações da Barra Superior
         htmlContent = `
           <p style="font-size: 13px; color: var(--secondary);">Painel de controlo e sincronização direta com a integração: <strong>${nome}</strong>.</p>
           <div class="form-row">
             <div class="form-group"><label>Estado da Ligação API</label><input type="text" class="form-control" value="Ativo e Sincronizado (200 OK)" disabled></div>
-            <div class="form-group"><label>Última Sincronização</label><input type="text" class="form-control" value="Hoje, 17:55" disabled></div>
-          </div>
-          <div class="form-row">
             <div class="form-group"><label>Parâmetro de Configuração</label><input type="text" class="form-control" placeholder="Insira o parâmetro ou token..."></div>
           </div>`;
         break;
@@ -627,9 +646,30 @@
     document.getElementById('modalOverlay').style.display = 'none';
   }
 
-  function executarAcaoModulo() {
-    alert('Operação executada, validada e gravada com sucesso no sistema!');
-    fecharPainel();
+  // Função Real ligada ao Firestore para Gravar Dados na Nuvem
+  async function executarAcaoModulo() {
+    try {
+      const inputs = document.querySelectorAll('#modalBodyContent .form-control');
+      let dadosFormulario = {};
+      
+      inputs.forEach((input, index) => {
+        let labelText = input.previousElementSibling ? input.previousElementSibling.innerText : `campo_${index}`;
+        dadosFormulario[labelText] = input.value;
+      });
+
+      // Grava dinamicamente na coleção correspondente no Firebase Firestore
+      await window.firebaseAddDoc(window.firebaseCollection(window.dbFirestore, "apsan_erp_registros"), {
+        modulo: moduloAtualAtivo,
+        dataRegisto: new Date().toISOString(),
+        detalhes: dadosFormulario
+      });
+
+      alert('Operação executada e gravada com sucesso no Firebase Firestore!');
+      fecharPainel();
+    } catch (erro) {
+      console.error("Erro ao gravar no Firebase: ", erro);
+      alert('Erro ao gravar dados na nuvem. Verifique a consola.');
+    }
   }
 
   // Gráficos do Topo
