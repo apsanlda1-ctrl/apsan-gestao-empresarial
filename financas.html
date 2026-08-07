@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>APSAN, LDA - Hub do Departamento Financeiro</title>
+  <title>APSAN, LDA - Hub Executivo do Departamento Financeiro & Contabilidade</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
@@ -20,7 +20,7 @@
 
     body { background: var(--bg-app); color: var(--dark); min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 32px; }
     
-    .hub-container { max-width: 1400px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; }
+    .hub-container { max-width: 1440px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; }
 
     /* TOPO / CABEÇALHO DO HUB */
     .hub-header { background: var(--white); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); flex-wrap: wrap; gap: 20px; }
@@ -31,7 +31,7 @@
     
     .hub-status-badge { background: #d1fae5; color: #047857; padding: 8px 16px; border-radius: 30px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px; border: 1px solid #a7f3d0; }
 
-    /* GRELHA DO MENU RECHEADA */
+    /* GRELHA DO MENU RECHEADA (12 MÓDULOS) */
     .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
 
     .menu-card { background: var(--white); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; gap: 20px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; text-decoration: none; color: inherit; }
@@ -65,15 +65,15 @@
       <div class="hub-avatar">AF</div>
       <div class="hub-title">
         <h2>Departamento Financeiro e Contabilidade</h2>
-        <p>Selecione abaixo o subsistema ou módulo de trabalho pretendido para iniciar a sessão operacional.</p>
+        <p>Selecione abaixo o subsistema, módulo operacional ou ferramenta analítica pretendida.</p>
       </div>
     </div>
     <div class="hub-status-badge">
-      <i class="fas fa-shield-alt" style="color: var(--primary);"></i> Sistema Integrado PGC-LE / AGT
+      <i class="fas fa-shield-alt" style="color: var(--primary);"></i> Sistema ERP Integrado PGC-LE / AGT
     </div>
   </header>
 
-  <!-- GRELHA DE ACESSO RÁPIDO (MENU RECHEADO) -->
+  <!-- GRELHA DE ACESSO RÁPIDO (12 MÓDULOS RECHEADOS) -->
   <div class="menu-grid">
 
     <!-- 1. Tesouraria & Bancos -->
@@ -172,6 +172,102 @@
       </div>
     </a>
 
+    <!-- 7. Recursos Humanos & Salários (Novo) -->
+    <a href="#" class="menu-card" style="--card-color: #4f46e5;" onclick="abrirModulo('RH')">
+      <div class="menu-card-header">
+        <div class="menu-icon-box" style="background: #4f46e5;"><i class="fas fa-users-cog"></i></div>
+        <span class="menu-counter">Módulo 07</span>
+      </div>
+      <div class="menu-card-body">
+        <h3>Recursos Humanos & Salários</h3>
+        <p>Processamento de folhas de vencimentos, deduções de Segurança Social, subsídios, gestão de pessoal e encargos com o capital humano.</p>
+      </div>
+      <div class="menu-card-footer" style="color: #4f46e5;">
+        <span>Aceder ao Módulo</span>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    </a>
+
+    <!-- 8. Gestão de Ativos & Imobilizado (Novo) -->
+    <a href="#" class="menu-card" style="--card-color: #be185d;" onclick="abrirModulo('Ativos')">
+      <div class="menu-card-header">
+        <div class="menu-icon-box" style="background: #be185d;"><i class="fas fa-building"></i></div>
+        <span class="menu-counter">Módulo 08</span>
+      </div>
+      <div class="menu-card-body">
+        <h3>Ativos & Imobilizado</h3>
+        <p>Registo de inventário de ativos fixos tangíveis e intangíveis, cálculo automático de depreciações, amortizações e reavaliações patrimoniais.</p>
+      </div>
+      <div class="menu-card-footer" style="color: #be185d;">
+        <span>Aceder ao Módulo</span>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    </a>
+
+    <!-- 9. Contratos & Fornecedores (Novo) -->
+    <a href="#" class="menu-card" style="--card-color: #ea580c;" onclick="abrirModulo('Fornecedores')">
+      <div class="menu-card-header">
+        <div class="menu-icon-box" style="background: #ea580c;"><i class="fas fa-handshake"></i></div>
+        <span class="menu-counter">Módulo 09</span>
+      </div>
+      <div class="menu-card-body">
+        <h3>Contratos & Fornecedores</h3>
+        <p>Gestão de contas a pagar (Passivos), prazos de vencimento de fornecedores terceirizados, contratos de serviços e histórico de compras.</p>
+      </div>
+      <div class="menu-card-footer" style="color: #ea580c;">
+        <span>Aceder ao Módulo</span>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    </a>
+
+    <!-- 10. Auditoria Interna & Conformidade (Novo) -->
+    <a href="#" class="menu-card" style="--card-color: #0284c7;" onclick="abrirModulo('Auditoria')">
+      <div class="menu-card-header">
+        <div class="menu-icon-box" style="background: #0284c7;"><i class="fas fa-user-shield"></i></div>
+        <span class="menu-counter">Módulo 10</span>
+      </div>
+      <div class="menu-card-body">
+        <h3>Auditoria & Conformidade</h3>
+        <p>Monitorização de logs de transações, verificação de consistência fiscal, prevenção de riscos de fraude e conformidade regulamentar.</p>
+      </div>
+      <div class="menu-card-footer" style="color: #0284c7;">
+        <span>Aceder ao Módulo</span>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    </a>
+
+    <!-- 11. Controlo de Stocks & Materiais (Novo) -->
+    <a href="#" class="menu-card" style="--card-color: #16a34a;" onclick="abrirModulo('Stocks')">
+      <div class="menu-card-header">
+        <div class="menu-icon-box" style="background: #16a34a;"><i class="fas fa-boxes-stacked"></i></div>
+        <span class="menu-counter">Módulo 11</span>
+      </div>
+      <div class="menu-card-body">
+        <h3>Stocks & Armazém</h3>
+        <p>Valoração de inventários de mercadorias e consumíveis, custos médios ponderados e integração direta com o custo das vendas (CPV).</p>
+      </div>
+      <div class="menu-card-footer" style="color: #16a34a;">
+        <span>Aceder ao Módulo</span>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    </a>
+
+    <!-- 12. Gestão Multimoeda & Câmbios (Novo) -->
+    <a href="#" class="menu-card" style="--card-color: #9333ea;" onclick="abrirModulo('Cambios')">
+      <div class="menu-card-header">
+        <div class="menu-icon-box" style="background: #9333ea;"><i class="fas fa-coins"></i></div>
+        <span class="menu-counter">Módulo 12</span>
+      </div>
+      <div class="menu-card-body">
+        <h3>Multimoeda & Câmbios</h3>
+        <p>Gestão de taxas de câmbio para transações internacionais, reavaliação de saldos em moeda estrangeira e conversões contabilísticas.</p>
+      </div>
+      <div class="menu-card-footer" style="color: #9333ea;">
+        <span>Aceder ao Módulo</span>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    </a>
+
   </div>
 
 </div>
@@ -182,8 +278,7 @@
 
 <script>
   function abrirModulo(nomeModulo) {
-    // Aqui podes redirecionar para a vista interna do painel correspondente
-    alert('A carregar o ambiente de trabalho: ' + nomeModulo + '...');
+    alert('A carregar o ambiente avançado do módulo: ' + nomeModulo + '...');
   }
 </script>
 
