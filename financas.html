@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>APSAN, LDA - Hub Executivo Completo do Departamento Financeiro</title>
+  <title>APSAN, LDA - Hub Executivo & Dashboards Financeiros</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js para os Gráficos em Tempo Real -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -30,6 +32,19 @@
     .hub-title p { font-size: 13px; color: var(--secondary); margin-top: 4px; font-weight: 500; }
     
     .hub-status-badge { background: #d1fae5; color: #047857; padding: 8px 16px; border-radius: 30px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px; border: 1px solid #a7f3d0; }
+
+    /* SECÇÃO DE DASHBOARDS & GRÁFICOS NO TOPO */
+    .dashboard-analytics { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; }
+    .analytics-card { background: var(--white); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; flex-direction: column; gap: 16px; }
+    .analytics-card-header { display: flex; justify-content: space-between; align-items: center; }
+    .analytics-card-header h4 { font-size: 16px; font-weight: 700; color: var(--dark); }
+    .analytics-card-header span { font-size: 12px; font-weight: 600; color: var(--primary); background: var(--primary-light); padding: 4px 10px; border-radius: 20px; }
+    .chart-container { position: relative; height: 220px; width: 100%; }
+
+    /* SEPARADOR DE SECÇÃO */
+    .section-divider { display: flex; align-items: center; gap: 16px; margin-top: 10px; }
+    .section-divider h3 { font-size: 18px; font-weight: 700; color: var(--dark); white-space: nowrap; }
+    .section-divider hr { flex: 1; border: none; height: 1px; background: var(--border); }
 
     /* GRELHA DO MENU RECHEADA (24 MÓDULOS) */
     .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
@@ -65,13 +80,42 @@
       <div class="hub-avatar">AF</div>
       <div class="hub-title">
         <h2>Departamento Financeiro e Contabilidade</h2>
-        <p>Painel de Controlo Master — 24 Subsistemas Operacionais Integrados.</p>
+        <p>Painel de Controlo Master — Com Dashboards e Gráficos de Desempenho em Tempo Real.</p>
       </div>
     </div>
     <div class="hub-status-badge">
       <i class="fas fa-shield-alt" style="color: var(--primary);"></i> Sistema ERP Integrado PGC-LE / AGT
     </div>
   </header>
+
+  <!-- PAINEL DE GRÁFICOS E ANALYTICS (DASHBOARD VISUAL) -->
+  <div class="dashboard-analytics">
+    <div class="analytics-card">
+      <div class="analytics-card-header">
+        <h4>Fluxo de Caixa (Entradas vs Saídas)</h4>
+        <span>Mensal</span>
+      </div>
+      <div class="chart-container">
+        <canvas id="cashFlowChart"></canvas>
+      </div>
+    </div>
+
+    <div class="analytics-card">
+      <div class="analytics-card-header">
+        <h4>Distribuição de Gastos por Centro</h4>
+        <span>Ano Atual</span>
+      </div>
+      <div class="chart-container">
+        <canvas id="expensesChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEPARADOR PARA OS 24 MÓDULOS -->
+  <div class="section-divider">
+    <h3>Acesso Direto aos 24 Módulos Operacionais</h3>
+    <hr>
+  </div>
 
   <!-- GRELHA DE ACESSO RÁPIDO (24 MÓDULOS) -->
   <div class="menu-grid">
@@ -160,84 +204,84 @@
       <div class="menu-card-footer" style="color: #9333ea;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
 
-    <!-- 13: Planeamento Orçamental (Novo) -->
+    <!-- 13 -->
     <a href="#" class="menu-card" style="--card-color: #0d9488;" onclick="abrirModulo('Planeamento')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #0d9488;"><i class="fas fa-bullseye"></i></div><span class="menu-counter">Módulo 13</span></div>
       <div class="menu-card-body"><h3>Planeamento Orçamental</h3><p>Definição e controlo de budgets por departamentos, desvios orçamentais e metas anuais.</p></div>
       <div class="menu-card-footer" style="color: #0d9488;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
 
-    <!-- 14: Gestão de Projetos & Capex (Novo) -->
+    <!-- 14 -->
     <a href="#" class="menu-card" style="--card-color: #c026d3;" onclick="abrirModulo('Capex')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #c026d3;"><i class="fas fa-project-diagram"></i></div><span class="menu-counter">Módulo 14</span></div>
       <div class="menu-card-body"><h3>Projetos & CAPEX</h3><p>Acompanhamento financeiro de investimentos de capital, retornos esperados e custos de obra.</p></div>
       <div class="menu-card-footer" style="color: #c026d3;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
 
-    <!-- 15: Conciliação Bancária Avançada (Novo) -->
+    <!-- 15 -->
     <a href="#" class="menu-card" style="--card-color: #2563eb;" onclick="abrirModulo('Conciliacao')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #2563eb;"><i class="fas fa-network-wired"></i></div><span class="menu-counter">Módulo 15</span></div>
       <div class="menu-card-body"><h3>Conciliação Bancária IA</h3><p>Importação automática de ficheiros MT940/CAMT.053 e cruzamento inteligente de extratos.</p></div>
       <div class="menu-card-footer" style="color: #2563eb;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
 
-    <!-- 16: Gestão de Reembolsos & Despesas (Novo) -->
+    <!-- 16 -->
     <a href="#" class="menu-card" style="--card-color: #e11d48;" onclick="abrirModulo('Reembolsos')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #e11d48;"><i class="fas fa-receipt"></i></div><span class="menu-counter">Módulo 16</span></div>
       <div class="menu-card-body"><h3>Reembolsos & Despesas</h3><p>Controlo de ajudas de custo, despesas operacionais de campo e vales de caixa menor.</p></div>
       <div class="menu-card-footer" style="color: #e11d48;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
 
-    <!-- 17: Relatórios para a Administração (Novo) -->
+    <!-- 17 -->
     <a href="#" class="menu-card" style="--card-color: #ca8a04;" onclick="abrirModulo('Board')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #ca8a04;"><i class="fas fa-chess-board"></i></div><span class="menu-counter">Módulo 17</span></div>
       <div class="menu-card-body"><h3>Dashboard Executivo Board</h3><p>KPIs de alta performance, rácios de liquidez, solvabilidade e margens de lucro agregadas.</p></div>
       <div class="menu-card-footer" style="color: #ca8a04;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
 
-    <!-- 18: Gestão de Seguros & Riscos (Novo) -->
+    <!-- 18 -->
     <a href="#" class="menu-card" style="--card-color: #0284c7;" onclick="abrirModulo('Seguros')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #0284c7;"><i class="fas fa-shield-heart"></i></div><span class="menu-counter">Módulo 18</span></div>
       <div class="menu-card-body"><h3>Seguros & Apólices</h3><p>Controlo de apólices de seguro de frota, edifícios, acidentes de trabalho e respetivos prémios.</p></div>
       <div class="menu-card-footer" style="color: #0284c7;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
 
-    <!-- 19: Gestão de Tesouraria Global & Cash Flow (Novo) -->
+    <!-- 19 -->
     <a href="#" class="menu-card" style="--card-color: #16a34a;" onclick="abrirModulo('CashFlow')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #16a34a;"><i class="fas fa-chart-area"></i></div><span class="menu-counter">Módulo 19</span></div>
       <div class="menu-card-body"><h3>Previsão de Cash Flow</h3><p>Projeção de entradas e saídas de caixa a 30, 60 e 90 dias com análise de desfasamentos.</p></div>
       <div class="menu-card-footer" style="color: #16a34a;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
 
-    <!-- 20: Gestão Documental & Arquivo Digital (Novo) -->
+    <!-- 20 -->
     <a href="#" class="menu-card" style="--card-color: #52525b;" onclick="abrirModulo('GED')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #52525b;"><i class="fas fa-folder-open"></i></div><span class="menu-counter">Módulo 20</span></div>
       <div class="menu-card-body"><h3>Arquivo Digital (GED)</h3><p>Repositório seguro de comprovativos, recibos, certidões fiscais e extratos digitalizados.</p></div>
       <div class="menu-card-footer" style="color: #52525b;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
 
-    <!-- 21: Gestão de Crédito & Cobranças (Novo) -->
+    <!-- 21 -->
     <a href="#" class="menu-card" style="--card-color: #9333ea;" onclick="abrirModulo('Cobrancas')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #9333ea;"><i class="fas fa-hand-holding-usd"></i></div><span class="menu-counter">Módulo 21</span></div>
       <div class="menu-card-body"><h3>Crédito & Cobranças</h3><p>Aging report de clientes, gestão de faturas vencidas, alertas de incumprimento e renegociação.</p></div>
       <div class="menu-card-footer" style="color: #9333ea;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
 
-    <!-- 22: Relatórios Legais & Saf-T (Novo) -->
+    <!-- 22 -->
     <a href="#" class="menu-card" style="--card-color: #4f46e5;" onclick="abrirModulo('Saft')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #4f46e5;"><i class="fas fa-file-code"></i></div><span class="menu-counter">Módulo 22</span></div>
       <div class="menu-card-body"><h3>Ficheiros SAF-T & Legais</h3><p>Geração e validação de ficheiros SAF-T de contabilidade e faturação para auditoria externa.</p></div>
       <div class="menu-card-footer" style="color: #4f46e5;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
 
-    <!-- 23: Contabilidade Analítica & Centros de Custo (Novo) -->
+    <!-- 23 -->
     <a href="#" class="menu-card" style="--card-color: #0284c7;" onclick="abrirModulo('Analitica')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #0284c7;"><i class="fas fa-sitemap"></i></div><span class="menu-counter">Módulo 23</span></div>
       <div class="menu-card-body"><h3>Contabilidade Analítica</h3><p>Apuramento de custos por secção, projeto ou linha de negócio de forma segmentada.</p></div>
       <div class="menu-card-footer" style="color: #0284c7;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
 
-    <!-- 24: Configurações & Parâmetros do Sistema (Novo) -->
+    <!-- 24 -->
     <a href="#" class="menu-card" style="--card-color: #334155;" onclick="abrirModulo('Config')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #334155;"><i class="fas fa-cogs"></i></div><span class="menu-counter">Módulo 24</span></div>
       <div class="menu-card-body"><h3>Parâmetros & Permissões</h3><p>Gestão de perfis de utilizador, níveis de acesso, exercícios fiscais e tabelas gerais do ERP.</p></div>
@@ -256,6 +300,53 @@
   function abrirModulo(nomeModulo) {
     alert('A carregar o módulo avançado: ' + nomeModulo + '...');
   }
+
+  // Configuração dos Gráficos com Chart.js
+  const ctxCash = document.getElementById('cashFlowChart').getContext('2d');
+  new Chart(ctxCash, {
+    type: 'line',
+    data: {
+      labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago'],
+      datasets: [{
+        label: 'Entradas',
+        data: [12000, 19000, 15000, 25000, 22000, 30000, 28000, 35000],
+        borderColor: '#059669',
+        backgroundColor: 'rgba(5, 150, 105, 0.1)',
+        fill: true,
+        tension: 0.4
+      }, {
+        label: 'Saídas',
+        data: [8000, 14000, 12000, 18000, 16000, 21000, 19000, 24000],
+        borderColor: '#e11d48',
+        backgroundColor: 'rgba(225, 29, 72, 0.0)',
+        borderDash: [5, 5],
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Plus Jakarta Sans', size: 11 } } } },
+      scales: { y: { grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }
+    }
+  });
+
+  const ctxExp = document.getElementById('expensesChart').getContext('2d');
+  new Chart(ctxExp, {
+    type: 'doughnut',
+    data: {
+      labels: ['Operacional', 'RH & Salários', 'Impostos (AGT)', 'Fornecedores', 'Outros'],
+      datasets: [{
+        data: [35, 25, 20, 15, 5],
+        backgroundColor: ['#059669', '#4f46e5', '#d97706', '#ea580c', '#64748b']
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Plus Jakarta Sans', size: 11 } } } }
+    }
+  });
 </script>
 
 </body>
