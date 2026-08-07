@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>APSAN, LDA - Hub Executivo & Dashboards Financeiros</title>
+  <title>APSAN, LDA - Hub Executivo & 36 Integrações Master</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Chart.js para os Gráficos em Tempo Real -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <style>
@@ -21,52 +20,50 @@
     }
 
     body { background: var(--bg-app); color: var(--dark); min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 32px; }
-    
-    .hub-container { max-width: 1560px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; }
+    .hub-container { max-width: 1600px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; }
 
-    /* TOPO / CABEÇALHO DO HUB */
+    /* CABEÇALHO */
     .hub-header { background: var(--white); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); flex-wrap: wrap; gap: 20px; }
     .hub-user-info { display: flex; align-items: center; gap: 20px; }
     .hub-avatar { width: 64px; height: 64px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700; border: 2px solid var(--primary); }
     .hub-title h2 { font-size: 24px; font-weight: 700; color: var(--dark); letter-spacing: -0.02em; }
     .hub-title p { font-size: 13px; color: var(--secondary); margin-top: 4px; font-weight: 500; }
-    
     .hub-status-badge { background: #d1fae5; color: #047857; padding: 8px 16px; border-radius: 30px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px; border: 1px solid #a7f3d0; }
 
-    /* SECÇÃO DE DASHBOARDS & GRÁFICOS NO TOPO */
-    .dashboard-analytics { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; }
-    .analytics-card { background: var(--white); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; flex-direction: column; gap: 16px; }
-    .analytics-card-header { display: flex; justify-content: space-between; align-items: center; }
-    .analytics-card-header h4 { font-size: 16px; font-weight: 700; color: var(--dark); }
-    .analytics-card-header span { font-size: 12px; font-weight: 600; color: var(--primary); background: var(--primary-light); padding: 4px 10px; border-radius: 20px; }
-    .chart-container { position: relative; height: 220px; width: 100%; }
-
-    /* SEPARADOR DE SECÇÃO */
+    /* SEPARADOR */
     .section-divider { display: flex; align-items: center; gap: 16px; margin-top: 10px; }
     .section-divider h3 { font-size: 18px; font-weight: 700; color: var(--dark); white-space: nowrap; }
     .section-divider hr { flex: 1; border: none; height: 1px; background: var(--border); }
 
-    /* GRELHA DO MENU RECHEADA (24 MÓDULOS) */
-    .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+    /* PAINEL DE GRÁFICOS (ORIGINAIS DO TOPO) */
+    .dashboard-analytics { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px; }
+    .analytics-card { background: var(--white); border-radius: var(--radius-lg); padding: 22px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; flex-direction: column; gap: 14px; }
+    .analytics-card-header { display: flex; justify-content: space-between; align-items: center; }
+    .analytics-card-header h4 { font-size: 15px; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 8px; }
+    .analytics-card-header span { font-size: 11px; font-weight: 700; color: var(--primary); background: var(--primary-light); padding: 4px 10px; border-radius: 20px; }
+    .chart-container { position: relative; height: 200px; width: 100%; }
 
+    /* BARRA DE INTEGRAÇÕES AVANÇADAS (AS 12 NOVAS INTEGRAÇÕES) */
+    .integrations-bar { background: var(--white); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow); border: 1px solid var(--border); display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+    .integration-pill { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--bg-app); border-radius: var(--radius); border: 1px solid var(--border); transition: all 0.2s; cursor: pointer; text-decoration: none; color: inherit; }
+    .integration-pill:hover { background: var(--primary-light); border-color: var(--primary); transform: translateY(-2px); }
+    .integration-icon { width: 36px; height: 36px; border-radius: 8px; background: var(--white); display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 16px; box-shadow: var(--shadow); }
+    .integration-info h5 { font-size: 13px; font-weight: 700; color: var(--dark); }
+    .integration-info span { font-size: 11px; color: var(--secondary); font-weight: 500; }
+
+    /* GRELHA DOS 24 MÓDULOS */
+    .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
     .menu-card { background: var(--white); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; gap: 20px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; text-decoration: none; color: inherit; }
     .menu-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--card-color, var(--primary)); opacity: 0.8; transition: height 0.2s; }
     .menu-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--card-color, var(--primary)); }
     .menu-card:hover::before { height: 8px; }
-
     .menu-card-header { display: flex; align-items: flex-start; justify-content: space-between; }
     .menu-icon-box { width: 50px; height: 50px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; background: var(--card-color, var(--primary)); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    
-    .menu-counter { font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; background: var(--bg-app); color: var(--secondary); letter-spacing: 0.05em; border: 1px solid var(--border); }
-
-    .menu-card-body h3 { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 8px; letter-spacing: -0.01em; }
-    .menu-card-body p { font-size: 13px; color: var(--secondary); line-height: 1.5; font-weight: 400; }
-
+    .menu-counter { font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; background: var(--bg-app); color: var(--secondary); border: 1px solid var(--border); }
+    .menu-card-body h3 { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 8px; }
+    .menu-card-body p { font-size: 13px; color: var(--secondary); line-height: 1.5; }
     .menu-card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; font-weight: 600; color: var(--card-color, var(--primary)); }
-    .menu-card-footer i { transition: transform 0.2s; }
-    .menu-card:hover .menu-card-footer i { transform: translateX(4px); }
 
-    /* RODAPÉ DO HUB */
     .hub-footer { text-align: center; font-size: 12px; color: var(--secondary); padding: 20px 0; border-top: 1px solid var(--border); margin-top: 20px; font-weight: 500; }
   </style>
 </head>
@@ -74,13 +71,13 @@
 
 <div class="hub-container">
 
-  <!-- CABEÇALHO DO UTILIZADOR / DEPARTAMENTO -->
+  <!-- CABEÇALHO -->
   <header class="hub-header">
     <div class="hub-user-info">
       <div class="hub-avatar">AF</div>
       <div class="hub-title">
         <h2>Departamento Financeiro e Contabilidade</h2>
-        <p>Painel de Controlo Master — Com Dashboards e Gráficos de Desempenho em Tempo Real.</p>
+        <p>Painel de Controlo Master — Com Gráficos Analíticos e 12 Integrações de Sistemas Externos.</p>
       </div>
     </div>
     <div class="hub-status-badge">
@@ -88,206 +85,204 @@
     </div>
   </header>
 
-  <!-- PAINEL DE GRÁFICOS E ANALYTICS (DASHBOARD VISUAL) -->
-  <div class="dashboard-analytics">
-    <div class="analytics-card">
-      <div class="analytics-card-header">
-        <h4>Fluxo de Caixa (Entradas vs Saídas)</h4>
-        <span>Mensal</span>
-      </div>
-      <div class="chart-container">
-        <canvas id="cashFlowChart"></canvas>
-      </div>
-    </div>
-
-    <div class="analytics-card">
-      <div class="analytics-card-header">
-        <h4>Distribuição de Gastos por Centro</h4>
-        <span>Ano Atual</span>
-      </div>
-      <div class="chart-container">
-        <canvas id="expensesChart"></canvas>
-      </div>
-    </div>
-  </div>
-
-  <!-- SEPARADOR PARA OS 24 MÓDULOS -->
+  <!-- DASHBOARD DE GRÁFICOS PRINCIPAIS -->
   <div class="section-divider">
-    <h3>Acesso Direto aos 24 Módulos Operacionais</h3>
+    <h3><i class="fas fa-chart-line" style="color: var(--primary);"></i> Indicadores Visuais de Desempenho</h3>
     <hr>
   </div>
+  <div class="dashboard-analytics">
+    <div class="analytics-card">
+      <div class="analytics-card-header"><h4><i class="fas fa-wallet" style="color:#059669;"></i> Fluxo de Caixa</h4><span>Mensal</span></div>
+      <div class="chart-container"><canvas id="cashFlowChart"></canvas></div>
+    </div>
+    <div class="analytics-card">
+      <div class="analytics-card-header"><h4><i class="fas fa-balance-scale" style="color:#7c3aed;"></i> Distribuição de Gastos</h4><span>Ano Atual</span></div>
+      <div class="chart-container"><canvas id="expensesChart"></canvas></div>
+    </div>
+  </div>
 
-  <!-- GRELHA DE ACESSO RÁPIDO (24 MÓDULOS) -->
+  <!-- AS 12 NOVAS INTEGRAÇÕES DE SISTEMAS / BACKEND -->
+  <div class="section-divider">
+    <h3><i class="fas fa-plug" style="color: var(--primary);"></i> As 12 Novas Integrações e Motores de Conectividade</h3>
+    <hr>
+  </div>
+  <div class="integrations-bar">
+    <div class="integration-pill" onclick="executarIntegracao('Gateway BFA')">
+      <div class="integration-icon"><i class="fas fa-university"></i></div>
+      <div class="integration-info"><h5>Gateway Bancário BFA</h5><span>API de Extratos em Tempo Real</span></div>
+    </div>
+    <div class="integration-pill" onclick="executarIntegracao('Portal AGT API')">
+      <div class="integration-icon"><i class="fas fa-file-invoice"></i></div>
+      <div class="integration-info"><h5>Certificação AGT</h5><span>Validação de Faturas à Direct</span></div>
+    </div>
+    <div class="integration-pill" onclick="executarIntegracao('Motor SAF-T')">
+      <div class="integration-icon"><i class="fas fa-code"></i></div>
+      <div class="integration-info"><h5>Motor SAF-T (AO)</h5><span>Exportação de Auditoria XML</span></div>
+    </div>
+    <div class="integration-pill" onclick="executarIntegracao('IA Conciliação')">
+      <div class="integration-icon"><i class="fas fa-brain"></i></div>
+      <div class="integration-info"><h5>IA de Conciliação</h5><span>Cruzamento Automático MT940</span></div>
+    </div>
+    <div class="integration-pill" onclick="executarIntegracao('Câmbios BNA')">
+      <div class="integration-icon"><i class="fas fa-exchange-alt"></i></div>
+      <div class="integration-info"><h5>Câmbios Oficiais BNA</h5><span>USD, EUR, NAD, AOA Automáticos</span></div>
+    </div>
+    <div class="integration-pill" onclick="executarIntegracao('Segurança Social')">
+      <div class="integration-icon"><i class="fas fa-id-card"></i></div>
+      <div class="integration-info"><h5>INSS / Segurança Social</h5><span>Deduções de Salários e Guias</span></div>
+    </div>
+    <div class="integration-pill" onclick="executarIntegracao('Cloud GED AWS')">
+      <div class="integration-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+      <div class="integration-info"><h5>Arquivo Cloud AWS S3</h5><span>Backup Criptografado de Recibos</span></div>
+    </div>
+    <div class="integration-pill" onclick="executarIntegracao('Assinatura Digital')">
+      <div class="integration-icon"><i class="fas fa-signature"></i></div>
+      <div class="integration-info"><h5>Assinatura Certificada</h5><span>Validação Jurídica de Contratos</span></div>
+    </div>
+    <div class="integration-pill" onclick="executarIntegracao('WhatsApp Business API')">
+      <div class="integration-icon"><i class="fab fa-whatsapp"></i></div>
+      <div class="integration-info"><h5>Alertas WhatsApp</h5><span>Avisos de Faturas Vencidas</span></div>
+    </div>
+    <div class="integration-pill" onclick="executarIntegracao('Exportador Excel/PDF')">
+      <div class="integration-icon"><i class="fas fa-file-excel"></i></div>
+      <div class="integration-info">SheetJS & jsPDF Engine</div><span>Relatórios de Gestão</span></div>
+    </div>
+    <div class="integration-pill" onclick="executarIntegracao('Gateway de Pagamentos')">
+      <div class="integration-icon"><i class="fas fa-credit-card"></i></div>
+      <div class="integration-info"><h5>Multicaixa / Cartões</h5><span>Recebimentos Online Multicanal</span></div>
+    </div>
+    <div class="integration-pill" onclick="executarIntegracao('Assistente Azny Gabriel')">
+      <div class="integration-icon"><i class="fas fa-robot"></i></div>
+      <div class="integration-info"><h5>Chatbot IA (Gemini)</h5><span>Assistente Interno de Gestão</span></div>
+    </div>
+  </div>
+
+  <!-- OS 24 MÓDULOS OPERACIONAIS -->
+  <div class="section-divider">
+    <h3><i class="fas fa-th-large" style="color: var(--primary);"></i> Acesso Direto aos 24 Módulos Operacionais</h3>
+    <hr>
+  </div>
   <div class="menu-grid">
-
-    <!-- 01 -->
     <a href="#" class="menu-card" style="--card-color: #059669;" onclick="abrirModulo('Tesouraria')">
       <div class="menu-card-header"><div class="menu-icon-box"><i class="fas fa-wallet"></i></div><span class="menu-counter">Módulo 01</span></div>
       <div class="menu-card-body"><h3>Tesouraria & Bancos</h3><p>Gestão de caixa central, cartões virtuais corporativos (BFA), fluxos diários, conciliação e pagamentos.</p></div>
       <div class="menu-card-footer"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 02 -->
     <a href="#" class="menu-card" style="--card-color: #7c3aed;" onclick="abrirModulo('Contabilidade')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #7c3aed;"><i class="fas fa-balance-scale"></i></div><span class="menu-counter">Módulo 02</span></div>
       <div class="menu-card-body"><h3>Partidas Dobradas & PGC</h3><p>Lançamentos contabilísticos estruturados por classes, centros de custo e balancetes analíticos.</p></div>
       <div class="menu-card-footer" style="color: #7c3aed;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 03 -->
     <a href="#" class="menu-card" style="--card-color: #2563eb;" onclick="abrirModulo('Faturacao')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #2563eb;"><i class="fas fa-file-invoice-dollar"></i></div><span class="menu-counter">Módulo 03</span></div>
       <div class="menu-card-body"><h3>Faturação & Comercial</h3><p>Emissão de faturas certificadas, registo de clientes corporativos e controlo de recebimentos.</p></div>
       <div class="menu-card-footer" style="color: #2563eb;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 04 -->
     <a href="#" class="menu-card" style="--card-color: #d97706;" onclick="abrirModulo('Fiscal')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #d97706;"><i class="fas fa-landmark"></i></div><span class="menu-counter">Módulo 04</span></div>
       <div class="menu-card-body"><h3>Obrigações Fiscais (AGT)</h3><p>Apuração de impostos como IVA, IRT, imposto industrial e prazos de submissão legal.</p></div>
       <div class="menu-card-footer" style="color: #d97706;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 05 -->
     <a href="#" class="menu-card" style="--card-color: #0891b2;" onclick="abrirModulo('Relatorios')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #0891b2;"><i class="fas fa-chart-line"></i></div><span class="menu-counter">Módulo 05</span></div>
       <div class="menu-card-body"><h3>Demonstrações & Relatórios</h3><p>Balanço patrimonial, demonstração de resultados (DRE) e relatórios de gestão executiva.</p></div>
       <div class="menu-card-footer" style="color: #0891b2;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 06 -->
     <a href="#" class="menu-card" style="--card-color: #10b981;" onclick="abrirModulo('Simulador')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #10b981;"><i class="fas fa-file-excel"></i></div><span class="menu-counter">Módulo 06</span></div>
       <div class="menu-card-body"><h3>Simulador & Orçamentos</h3><p>Calculadora de propostas comerciais, estimativas e exportação direta para Excel (.xlsx).</p></div>
       <div class="menu-card-footer" style="color: #10b981;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 07 -->
     <a href="#" class="menu-card" style="--card-color: #4f46e5;" onclick="abrirModulo('RH')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #4f46e5;"><i class="fas fa-users-cog"></i></div><span class="menu-counter">Módulo 07</span></div>
       <div class="menu-card-body"><h3>Recursos Humanos & Salários</h3><p>Processamento de folhas de vencimento, deduções da Segurança Social e subsídios.</p></div>
       <div class="menu-card-footer" style="color: #4f46e5;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 08 -->
     <a href="#" class="menu-card" style="--card-color: #be185d;" onclick="abrirModulo('Ativos')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #be185d;"><i class="fas fa-building"></i></div><span class="menu-counter">Módulo 08</span></div>
       <div class="menu-card-body"><h3>Ativos & Imobilizado</h3><p>Inventário de ativos fixos, cálculo automático de depreciações e reavaliações patrimoniais.</p></div>
       <div class="menu-card-footer" style="color: #be185d;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 09 -->
     <a href="#" class="menu-card" style="--card-color: #ea580c;" onclick="abrirModulo('Fornecedores')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #ea580c;"><i class="fas fa-handshake"></i></div><span class="menu-counter">Módulo 09</span></div>
       <div class="menu-card-body"><h3>Contratos & Fornecedores</h3><p>Gestão de contas a pagar (Passivos), prazos de fornecedores terceirizados e contratos.</p></div>
       <div class="menu-card-footer" style="color: #ea580c;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 10 -->
     <a href="#" class="menu-card" style="--card-color: #0284c7;" onclick="abrirModulo('Auditoria')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #0284c7;"><i class="fas fa-user-shield"></i></div><span class="menu-counter">Módulo 10</span></div>
       <div class="menu-card-body"><h3>Auditoria & Conformidade</h3><p>Monitorização de logs de transações, verificação de consistência fiscal e prevenção de riscos.</p></div>
       <div class="menu-card-footer" style="color: #0284c7;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 11 -->
     <a href="#" class="menu-card" style="--card-color: #16a34a;" onclick="abrirModulo('Stocks')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #16a34a;"><i class="fas fa-boxes-stacked"></i></div><span class="menu-counter">Módulo 11</span></div>
       <div class="menu-card-body"><h3>Stocks & Armazém</h3><p>Valoração de inventários de mercadorias, custo médio ponderado e integração com o CPV.</p></div>
       <div class="menu-card-footer" style="color: #16a34a;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 12 -->
     <a href="#" class="menu-card" style="--card-color: #9333ea;" onclick="abrirModulo('Cambios')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #9333ea;"><i class="fas fa-coins"></i></div><span class="menu-counter">Módulo 12</span></div>
       <div class="menu-card-body"><h3>Multimoeda & Câmbios</h3><p>Gestão de taxas de câmbio para transações internacionais e conversões contabilísticas.</p></div>
       <div class="menu-card-footer" style="color: #9333ea;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 13 -->
     <a href="#" class="menu-card" style="--card-color: #0d9488;" onclick="abrirModulo('Planeamento')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #0d9488;"><i class="fas fa-bullseye"></i></div><span class="menu-counter">Módulo 13</span></div>
       <div class="menu-card-body"><h3>Planeamento Orçamental</h3><p>Definição e controlo de budgets por departamentos, desvios orçamentais e metas anuais.</p></div>
       <div class="menu-card-footer" style="color: #0d9488;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 14 -->
     <a href="#" class="menu-card" style="--card-color: #c026d3;" onclick="abrirModulo('Capex')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #c026d3;"><i class="fas fa-project-diagram"></i></div><span class="menu-counter">Módulo 14</span></div>
       <div class="menu-card-body"><h3>Projetos & CAPEX</h3><p>Acompanhamento financeiro de investimentos de capital, retornos esperados e custos de obra.</p></div>
       <div class="menu-card-footer" style="color: #c026d3;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 15 -->
     <a href="#" class="menu-card" style="--card-color: #2563eb;" onclick="abrirModulo('Conciliacao')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #2563eb;"><i class="fas fa-network-wired"></i></div><span class="menu-counter">Módulo 15</span></div>
       <div class="menu-card-body"><h3>Conciliação Bancária IA</h3><p>Importação automática de ficheiros MT940/CAMT.053 e cruzamento inteligente de extratos.</p></div>
       <div class="menu-card-footer" style="color: #2563eb;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 16 -->
     <a href="#" class="menu-card" style="--card-color: #e11d48;" onclick="abrirModulo('Reembolsos')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #e11d48;"><i class="fas fa-receipt"></i></div><span class="menu-counter">Módulo 16</span></div>
       <div class="menu-card-body"><h3>Reembolsos & Despesas</h3><p>Controlo de ajudas de custo, despesas operacionais de campo e vales de caixa menor.</p></div>
       <div class="menu-card-footer" style="color: #e11d48;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 17 -->
     <a href="#" class="menu-card" style="--card-color: #ca8a04;" onclick="abrirModulo('Board')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #ca8a04;"><i class="fas fa-chess-board"></i></div><span class="menu-counter">Módulo 17</span></div>
       <div class="menu-card-body"><h3>Dashboard Executivo Board</h3><p>KPIs de alta performance, rácios de liquidez, solvabilidade e margens de lucro agregadas.</p></div>
       <div class="menu-card-footer" style="color: #ca8a04;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 18 -->
     <a href="#" class="menu-card" style="--card-color: #0284c7;" onclick="abrirModulo('Seguros')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #0284c7;"><i class="fas fa-shield-heart"></i></div><span class="menu-counter">Módulo 18</span></div>
       <div class="menu-card-body"><h3>Seguros & Apólices</h3><p>Controlo de apólices de seguro de frota, edifícios, acidentes de trabalho e respetivos prémios.</p></div>
       <div class="menu-card-footer" style="color: #0284c7;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 19 -->
     <a href="#" class="menu-card" style="--card-color: #16a34a;" onclick="abrirModulo('CashFlow')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #16a34a;"><i class="fas fa-chart-area"></i></div><span class="menu-counter">Módulo 19</span></div>
       <div class="menu-card-body"><h3>Previsão de Cash Flow</h3><p>Projeção de entradas e saídas de caixa a 30, 60 e 90 dias com análise de desfasamentos.</p></div>
       <div class="menu-card-footer" style="color: #16a34a;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 20 -->
     <a href="#" class="menu-card" style="--card-color: #52525b;" onclick="abrirModulo('GED')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #52525b;"><i class="fas fa-folder-open"></i></div><span class="menu-counter">Módulo 20</span></div>
       <div class="menu-card-body"><h3>Arquivo Digital (GED)</h3><p>Repositório seguro de comprovativos, recibos, certidões fiscais e extratos digitalizados.</p></div>
       <div class="menu-card-footer" style="color: #52525b;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 21 -->
     <a href="#" class="menu-card" style="--card-color: #9333ea;" onclick="abrirModulo('Cobrancas')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #9333ea;"><i class="fas fa-hand-holding-usd"></i></div><span class="menu-counter">Módulo 21</span></div>
       <div class="menu-card-body"><h3>Crédito & Cobranças</h3><p>Aging report de clientes, gestão de faturas vencidas, alertas de incumprimento e renegociação.</p></div>
       <div class="menu-card-footer" style="color: #9333ea;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 22 -->
     <a href="#" class="menu-card" style="--card-color: #4f46e5;" onclick="abrirModulo('Saft')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #4f46e5;"><i class="fas fa-file-code"></i></div><span class="menu-counter">Módulo 22</span></div>
       <div class="menu-card-body"><h3>Ficheiros SAF-T & Legais</h3><p>Geração e validação de ficheiros SAF-T de contabilidade e faturação para auditoria externa.</p></div>
       <div class="menu-card-footer" style="color: #4f46e5;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 23 -->
     <a href="#" class="menu-card" style="--card-color: #0284c7;" onclick="abrirModulo('Analitica')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #0284c7;"><i class="fas fa-sitemap"></i></div><span class="menu-counter">Módulo 23</span></div>
       <div class="menu-card-body"><h3>Contabilidade Analítica</h3><p>Apuramento de custos por secção, projeto ou linha de negócio de forma segmentada.</p></div>
       <div class="menu-card-footer" style="color: #0284c7;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
-    <!-- 24 -->
     <a href="#" class="menu-card" style="--card-color: #334155;" onclick="abrirModulo('Config')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #334155;"><i class="fas fa-cogs"></i></div><span class="menu-counter">Módulo 24</span></div>
       <div class="menu-card-body"><h3>Parâmetros & Permissões</h3><p>Gestão de perfis de utilizador, níveis de acesso, exercícios fiscais e tabelas gerais do ERP.</p></div>
       <div class="menu-card-footer" style="color: #334155;"><span>Aceder</span><i class="fas fa-arrow-right"></i></div>
     </a>
-
   </div>
 
 </div>
@@ -301,51 +296,30 @@
     alert('A carregar o módulo avançado: ' + nomeModulo + '...');
   }
 
-  // Configuração dos Gráficos com Chart.js
-  const ctxCash = document.getElementById('cashFlowChart').getContext('2d');
-  new Chart(ctxCash, {
+  function executarIntegracao(nomeIntegracao) {
+    alert('A estabelecer ligação segura com o sistema externo: ' + nomeIntegracao + '...');
+  }
+
+  // Gráficos do Topo
+  new Chart(document.getElementById('cashFlowChart'), {
     type: 'line',
     data: {
       labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago'],
-      datasets: [{
-        label: 'Entradas',
-        data: [12000, 19000, 15000, 25000, 22000, 30000, 28000, 35000],
-        borderColor: '#059669',
-        backgroundColor: 'rgba(5, 150, 105, 0.1)',
-        fill: true,
-        tension: 0.4
-      }, {
-        label: 'Saídas',
-        data: [8000, 14000, 12000, 18000, 16000, 21000, 19000, 24000],
-        borderColor: '#e11d48',
-        backgroundColor: 'rgba(225, 29, 72, 0.0)',
-        borderDash: [5, 5],
-        tension: 0.4
-      }]
+      datasets: [
+        { label: 'Entradas', data: [12000, 19000, 15000, 25000, 22000, 30000, 28000, 35000], borderColor: '#059669', backgroundColor: 'rgba(5,150,105,0.1)', fill: true, tension: 0.3 },
+        { label: 'Saídas', data: [8000, 14000, 12000, 18000, 16000, 21000, 19000, 24000], borderColor: '#e11d48', borderDash: [5,5], tension: 0.3 }
+      ]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Plus Jakarta Sans', size: 11 } } } },
-      scales: { y: { grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }
-    }
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
   });
 
-  const ctxExp = document.getElementById('expensesChart').getContext('2d');
-  new Chart(ctxExp, {
+  new Chart(document.getElementById('expensesChart'), {
     type: 'doughnut',
     data: {
-      labels: ['Operacional', 'RH & Salários', 'Impostos (AGT)', 'Fornecedores', 'Outros'],
-      datasets: [{
-        data: [35, 25, 20, 15, 5],
-        backgroundColor: ['#059669', '#4f46e5', '#d97706', '#ea580c', '#64748b']
-      }]
+      labels: ['Operacional', 'RH', 'AGT', 'Fornecedores', 'Outros'],
+      datasets: [{ data: [35, 25, 20, 15, 5], backgroundColor: ['#059669', '#4f46e5', '#d97706', '#ea580c', '#64748b'] }]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { family: 'Plus Jakarta Sans', size: 11 } } } }
-    }
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } } } }
   });
 </script>
 
