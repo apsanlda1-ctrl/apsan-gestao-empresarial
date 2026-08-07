@@ -136,7 +136,7 @@
     </div>
   </header>
 
-  <!-- TICKER DE CÂMBIO GLOBAL EM TEMPO REAL (AUTOMÁTICO E ANIMADO) -->
+  <!-- TICKER DE CÂMBIO GLOBAL EM TEMPO REAL -->
   <div class="exchange-ticker" id="exchangeTickerBar">
     <div class="ticker-item"><i class="fas fa-chart-line fa-fade" style="color: #34d399;"></i> Câmbio ao Vivo (BNA/Global):</div>
     <div class="ticker-item">USD/AOA: <span id="rateUSD">A carregar...</span></div>
@@ -444,7 +444,7 @@
     moduloAtualAtivo = nome;
     document.getElementById('modalTitle').innerHTML = `<i class="fas fa-check-circle" style="color: var(--primary);"></i> ${nome} <span style="font-size: 11px; background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 10px; margin-left: 10px;">${tipo}</span>`;
     
-    gerarFormularioDetalhado(nome);
+    gerarFormularioEspecifico(nome);
     mudarAbaModal('form');
     carregarRegistosModulo();
     document.getElementById('modalOverlay').style.display = 'flex';
@@ -468,44 +468,304 @@
     }
   }
 
-  function gerarFormularioDetalhado(nome) {
+  // GERADOR DE FORMULÁRIOS ESPECÍFICOS PARA CADA UM DOS 24 MÓDULOS
+  function gerarFormularioEspecifico(nome) {
     let htmlContent = '';
     document.getElementById('editRecordId').value = '';
     document.getElementById('btnSaveText').innerText = 'Guardar Registo';
 
-    if(nome === 'Recursos Humanos & Salários') {
-      htmlContent = `
-        <div class="form-row">
-          <div class="form-group"><label>Nome do Colaborador</label><input type="text" class="form-control" id="f_colab" placeholder="Nome completo..."></div>
-          <div class="form-group"><label>Cargo / Departamento</label><input type="text" class="form-control" id="f_cargo" placeholder="Cargo..."></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Salário Base (AOA)</label><input type="number" class="form-control" id="f_salario" placeholder="0.00"></div>
-          <div class="form-group"><label>Subsídios (AOA)</label><input type="number" class="form-control" id="f_subsidios" placeholder="0.00"></div>
-        </div>`;
-    } else if(nome === 'Multimoeda & Câmbios') {
-      htmlContent = `
-        <div class="form-row">
-          <div class="form-group"><label>Moeda</label><select class="form-control" id="f_moeda"><option>USD</option><option>EUR</option><option>NAD</option><option>AOA</option></select></div>
-          <div class="form-group"><label>Montante</label><input type="number" class="form-control" id="f_montante" placeholder="0.00"></div>
-        </div>`;
-    } else if(nome === 'Faturação & Comercial') {
-      htmlContent = `
-        <div class="form-row">
-          <div class="form-group"><label>Cliente Corporativo</label><input type="text" class="form-control" id="f_cliente" placeholder="Nome do Cliente / NIF"></div>
-          <div class="form-group"><label>Tipo de Documento</label><select class="form-control" id="f_doc"><option>Fatura (FT)</option><option>Fatura-Recibo (FR)</option><option>Proforma (PR)</option></select></div>
-        </div>
-        <div class="form-row">
-          <div class="form-group"><label>Descrição dos Serviços</label><input type="text" class="form-control" id="f_servico" placeholder="Detalhe..."></div>
-          <div class="form-group"><label>Valor Líquido (AOA)</label><input type="number" class="form-control" id="f_liquido" placeholder="0.00"></div>
-        </div>`;
-    } else {
-      htmlContent = `
-        <div class="form-row">
-          <div class="form-group"><label>Descrição da Operação</label><input type="text" class="form-control" id="f_desc" placeholder="Detalhes..."></div>
-          <div class="form-group"><label>Montante (AOA)</label><input type="number" class="form-control" id="f_valor" placeholder="0.00"></div>
-        </div>`;
+    switch(nome) {
+      case 'Tesouraria & Bancos':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Banco / Conta</label><select class="form-control" id="f_banco"><option>BFA - Conta Corrente</option><option>BAI - Operacional</option><option>Caixa Central Física</option><option>Cartão Multicaixa Corp.</option></select></div>
+            <div class="form-group"><label>Tipo de Transação</label><select class="form-control" id="f_tipo"><option>Entrada / Recebimento</option><option>Saída / Pagamento</option><option>Transferência Interna</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Descrição / Histórico</label><input type="text" class="form-control" id="f_desc" placeholder="Ex: Pagamento de fornecedor..."></div>
+            <div class="form-group"><label>Montante (AOA)</label><input type="number" class="form-control" id="f_valor" placeholder="0.00"></div>
+          </div>`;
+        break;
+
+      case 'Partidas Dobradas & PGC':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Conta Débito (PGC)</label><input type="text" class="form-control" id="f_debito" placeholder="Ex: 31 - Clientes / 41 - Caixa"></div>
+            <div class="form-group"><label>Conta Crédito (PGC)</label><input type="text" class="form-control" id="f_credito" placeholder="Ex: 71 - Vendas / 12 - Bancos"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Histórico do Lançamento</label><input type="text" class="form-control" id="f_historico" placeholder="Detalhes do lançamento..."></div>
+            <div class="form-group"><label>Valor (AOA)</label><input type="number" class="form-control" id="f_valor" placeholder="0.00"></div>
+          </div>`;
+        break;
+
+      case 'Faturação & Comercial':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Cliente Corporativo</label><input type="text" class="form-control" id="f_cliente" placeholder="Nome do Cliente / NIF"></div>
+            <div class="form-group"><label>Tipo de Documento</label><select class="form-control" id="f_doc"><option>Fatura (FT)</option><option>Fatura-Recibo (FR)</option><option>Proforma (PR)</option><option>Nota de Crédito (NC)</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Descrição dos Artigos / Serviços</label><input type="text" class="form-control" id="f_servico" placeholder="Serviços prestados..."></div>
+            <div class="form-group"><label>Valor Total (AOA)</label><input type="number" class="form-control" id="f_valor" placeholder="0.00"></div>
+          </div>`;
+        break;
+
+      case 'Obrigações Fiscais (AGT)':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Imposto Apurado</label><select class="form-control" id="f_imposto"><option>IVA (Imposto sobre o Valor Acrescentado)</option><option>IRT (Imposto sobre o Rendimento do Trabalho)</option><option>Imposto Industrial</option><option>Retenção na Fonte</option></select></div>
+            <div class="form-group"><label>Período Fiscal (Mês/Ano)</label><input type="text" class="form-control" id="f_periodo" placeholder="Ex: Julho 2026"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Estado de Submissão</label><select class="form-control" id="f_estado"><option>Pendente de Pagamento</option><option>Liquidado / Submetido na AGT</option></select></div>
+            <div class="form-group"><label>Montante do Imposto (AOA)</label><input type="number" class="form-control" id="f_valor" placeholder="0.00"></div>
+          </div>`;
+        break;
+
+      case 'Demonstrações & Relatórios':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Tipo de Relatório</label><select class="form-control" id="f_relatorio"><option>Balanço Patrimonial</option><option>Demonstração de Resultados (DRE)</option><option>Demonstração de Fluxos de Caixa</option></select></div>
+            <div class="form-group"><label>Exercício / Data de Fecho</label><input type="date" class="form-control" id="f_data"></div>
+          </div>
+          <div class="form-group"><label>Notas e Comentários da Gerência</label><input type="text" class="form-control" id="f_notas" placeholder="Observações do relatório executivo..."></div>`;
+        break;
+
+      case 'Simulador & Orçamentos':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Título da Proposta / Orçamento</label><input type="text" class="form-control" id="f_titulo" placeholder="Proposta comercial para..."></div>
+            <div class="form-group"><label>Cliente Alvo</label><input type="text" class="form-control" id="f_cliente" placeholder="Nome do cliente..."></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Custo Estimado (AOA)</label><input type="number" class="form-control" id="f_custo" placeholder="0.00"></div>
+            <div class="form-group"><label>Margem de Lucro Pretendida (%)</label><input type="number" class="form-control" id="f_margem" placeholder="Ex: 25"></div>
+          </div>`;
+        break;
+
+      case 'Recursos Humanos & Salários':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Nome do Colaborador</label><input type="text" class="form-control" id="f_colab" placeholder="Nome completo..."></div>
+            <div class="form-group"><label>Cargo / Departamento</label><input type="text" class="form-control" id="f_cargo" placeholder="Cargo..."></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Salário Base (AOA)</label><input type="number" class="form-control" id="f_salario" placeholder="0.00"></div>
+            <div class="form-group"><label>Subsídios & Bónus (AOA)</label><input type="number" class="form-control" id="f_subsidios" placeholder="0.00"></div>
+          </div>`;
+        break;
+
+      case 'Ativos & Imobilizado':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Designação do Ativo</label><input type="text" class="form-control" id="f_ativo" placeholder="Ex: Servidor AWS / Equipamento Escritório"></div>
+            <div class="form-group"><label>Categoria</label><select class="form-control" id="f_cat"><option>Tangível / Imobilizado Corpóreo</option><option>Intangível (Software/Licenças)</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Data de Aquisição</label><input type="date" class="form-control" id="f_aquisicao"></div>
+            <div class="form-group"><label>Valor de Aquisição (AOA)</label><input type="number" class="form-control" id="f_valor" placeholder="0.00"></div>
+          </div>`;
+        break;
+
+      case 'Contratos & Fornecedores':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Nome do Fornecedor / Terceiro</label><input type="text" class="form-control" id="f_fornecedor" placeholder="Fornecedor..."></div>
+            <div class="form-group"><label>Objeto do Contrato</label><input type="text" class="form-control" id="f_objeto" placeholder="Descrição do contrato..."></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Data de Validade</label><input type="date" class="form-control" id="f_validade"></div>
+            <div class="form-group"><label>Valor do Contrato (AOA)</label><input type="number" class="form-control" id="f_valor" placeholder="0.00"></div>
+          </div>`;
+        break;
+
+      case 'Auditoria & Conformidade':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Área Auditada</label><input type="text" class="form-control" id="f_area" placeholder="Ex: Faturação, Caixas, Segurança..."></div>
+            <div class="form-group"><label>Nível de Risco Identificado</label><select class="form-control" id="f_risco"><option>Baixo</option><option>Moderado</option><option>Crítico / Atenção</option></select></div>
+          </div>
+          <div class="form-group"><label>Recomendações e Parecer do Auditor</label><input type="text" class="form-control" id="f_parecer" placeholder="Detalhes da auditoria..."></div>`;
+        break;
+
+      case 'Stocks & Armazém':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Artigo / Mercadoria</label><input type="text" class="form-control" id="f_artigo" placeholder="Nome do produto..."></div>
+            <div class="form-group"><label>Quantidade em Armazém</label><input type="number" class="form-control" id="f_qtd" placeholder="0"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Custo Unitário Médio (AOA)</label><input type="number" class="form-control" id="f_custo" placeholder="0.00"></div>
+            <div class="form-group"><label>Armazém / Localização</label><input type="text" class="form-control" id="f_local" placeholder="Ex: Armazém Central Luanda"></div>
+          </div>`;
+        break;
+
+      case 'Multimoeda & Câmbios':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Moeda Estrangeira</label><select class="form-control" id="f_moeda"><option>USD (Dólar Americano)</option><option>EUR (Euro)</option><option>NAD (Dólar Namibiano)</option><option>AOA (Kwanza)</option></select></div>
+            <div class="form-group"><label>Montante na Moeda</label><input type="number" class="form-control" id="f_montante" placeholder="0.00"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Taxa de Câmbio Aplicada</label><input type="number" class="form-control" id="f_taxa" placeholder="0.00"></div>
+            <div class="form-group"><label>Finalidade da Conversão</label><input type="text" class="form-control" id="f_finalidade" placeholder="Ex: Pagamento internacional..."></div>
+          </div>`;
+        break;
+
+      case 'Planeamento Orçamental':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Departamento / Secção</label><input type="text" class="form-control" id="f_dept" placeholder="Ex: TI, Comercial, Administração..."></div>
+            <div class="form-group"><label>Ano Orçamental</label><input type="number" class="form-control" id="f_ano" value="2026"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Budget Alocado (AOA)</label><input type="number" class="form-control" id="f_budget" placeholder="0.00"></div>
+            <div class="form-group"><label>Gasto Real Acumulado (AOA)</label><input type="number" class="form-control" id="f_gasto" placeholder="0.00"></div>
+          </div>`;
+        break;
+
+      case 'Projetos & CAPEX':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Nome do Projeto / CAPEX</label><input type="text" class="form-control" id="f_projeto" placeholder="Ex: Expansão de Sistemas..."></div>
+            <div class="form-group"><label>Fase Atual</label><select class="form-control" id="f_fase"><option>Planeamento</option><option>Execução em Curso</option><option>Concluído</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Investimento Previsto (AOA)</label><input type="number" class="form-control" id="f_investimento" placeholder="0.00"></div>
+            <div class="form-group"><label>Responsável Técnico</label><input type="text" class="form-control" id="f_resp" placeholder="Nome do gestor..."></div>
+          </div>`;
+        break;
+
+      case 'Conciliação Bancária IA':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Conta Bancária a Conciliar</label><input type="text" class="form-control" id="f_banco" placeholder="Ex: BFA Extrato MT940"></div>
+            <div class="form-group"><label>Data do Extrato</label><input type="date" class="form-control" id="f_data"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Movimentos Conciliados pela IA</label><input type="number" class="form-control" id="f_mov" placeholder="Número de transações..."></div>
+            <div class="form-group"><label>Desvio Encontrado (AOA)</label><input type="number" class="form-control" id="f_desvio" value="0.00"></div>
+          </div>`;
+        break;
+
+      case 'Reembolsos & Despesas':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Colaborador Requerente</label><input type="text" class="form-control" id="f_solicitante" placeholder="Nome..."></div>
+            <div class="form-group"><label>Categoria da Despesa</label><select class="form-control" id="f_cat"><option>Ajudas de Custo / Deslocação</option><option>Material de Escritório</option><option>Manutenção / Operacional</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Descrição do Comprovativo</label><input type="text" class="form-control" id="f_desc" placeholder="Detalhes do gasto..."></div>
+            <div class="form-group"><label>Montante a Reembolsar (AOA)</label><input type="number" class="form-control" id="f_valor" placeholder="0.00"></div>
+          </div>`;
+        break;
+
+      case 'Dashboard Executivo Board':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Indicador / KPI Monitorizado</label><input type="text" class="form-control" id="f_kpi" placeholder="Ex: Margem Líquida / Liquidez Corrente"></div>
+            <div class="form-group"><label>Meta Estabelecida</label><input type="text" class="form-control" id="f_meta" placeholder="Ex: > 20%"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Valor Atual Atingido</label><input type="text" class="form-control" id="f_atual" placeholder="Ex: 22.4%"></div>
+            <div class="form-group"><label>Estado de Desempenho</label><select class="form-control" id="f_status"><option>Superado / Excelente</option><option>Dentro da Meta</option><option>Abaixo do Esperado</option></select></div>
+          </div>`;
+        break;
+
+      case 'Seguros & Apólices':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Companhia de Seguros</label><input type="text" class="form-control" id="f_seguradora" placeholder="Nome da seguradora..."></div>
+            <div class="form-group"><label>Tipo de Apólice</label><select class="form-control" id="f_apolicetipo"><option>Multirriscos Edifício</option><option>Frota Automóvel</option><option>Acidentes de Trabalho</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Data de Vencimento do Prémio</label><input type="date" class="form-control" id="f_vencimento"></div>
+            <div class="form-group"><label>Valor do Prémio (AOA)</label><input type="number" class="form-control" id="f_valor" placeholder="0.00"></div>
+          </div>`;
+        break;
+
+      case 'Previsão de Cash Flow':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Horizonte de Projeção</label><select class="form-control" id="f_horizonte"><option>30 Dias</option><option>60 Dias</option><option>90 Dias</option></select></div>
+            <div class="form-group"><label>Entradas Esperadas (AOA)</label><input type="number" class="form-control" id="f_entradas" placeholder="0.00"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Saídas Comprometidas (AOA)</label><input type="number" class="form-control" id="f_saidas" placeholder="0.00"></div>
+            <div class="form-group"><label>Saldo Líquido Previsto (AOA)</label><input type="number" class="form-control" id="f_saldo" placeholder="0.00"></div>
+          </div>`;
+        break;
+
+      case 'Arquivo Digital (GED)':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Título do Documento</label><input type="text" class="form-control" id="f_titulodoc" placeholder="Nome do ficheiro ou recibo..."></div>
+            <div class="form-group"><label>Categoria do Arquivo</label><select class="form-control" id="f_catdoc"><option>Certidões e Licenças Fiscais</option><option>Comprovativos Bancários</option><option>Contratos Assinados</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Data de Registo</label><input type="date" class="form-control" id="f_datadoc"></div>
+            <div class="form-group"><label>Referência Cloud AWS S3</label><input type="text" class="form-control" id="f_ref" placeholder="URL ou Hash do documento..."></div>
+          </div>`;
+        break;
+
+      case 'Crédito & Cobranças':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Cliente Devedor</label><input type="text" class="form-control" id="f_devedor" placeholder="Nome do cliente..."></div>
+            <div class="form-group"><label>Aging (Dias de Atraso)</label><select class="form-control" id="f_aging"><option>1 a 30 Dias</option><option>31 a 60 Dias</option><option>Mais de 90 Dias (Crítico)</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Montante em Dívida (AOA)</label><input type="number" class="form-control" id="f_divida" placeholder="0.00"></div>
+            <div class="form-group"><label>Ação de Cobrança</label><input type="text" class="form-control" id="f_acao" placeholder="Ex: Envio de aviso por email/WhatsApp..."></div>
+          </div>`;
+        break;
+
+      case 'Ficheiros SAF-T & Legais':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Tipo de Ficheiro SAF-T</label><select class="form-control" id="f_safttipo"><option>SAF-T de Faturação (AO)</option><option>SAF-T de Contabilidade</option></select></div>
+            <div class="form-group"><label>Mês / Período Reportado</label><input type="text" class="form-control" id="f_periodosaft" placeholder="Ex: Julho 2026"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Estado de Validação</label><select class="form-control" id="f_validadosaft"><option>Validado sem Erros</option><option>Pendente de Verificação AGT</option></select></div>
+            <div class="form-group"><label>Nome do Ficheiro XML Gerado</label><input type="text" class="form-control" id="f_xml" placeholder="SAFT_APSAN_2026.xml"></div>
+          </div>`;
+        break;
+
+      case 'Contabilidade Analítica':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Centro de Custo / Secção</label><input type="text" class="form-control" id="f_centrocusto" placeholder="Ex: Divisão de Software, Infraestruturas..."></div>
+            <div class="form-group"><label>Tipo de Custo</label><select class="form-control" id="f_tipocusto"><option>Custo Direto</option><option>Custo Indireto / Overhead</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Descrição do Lançamento</label><input type="text" class="form-control" id="f_desccusto" placeholder="Detalhe..."></div>
+            <div class="form-group"><label>Valor Alocado (AOA)</label><input type="number" class="form-control" id="f_valorcusto" placeholder="0.00"></div>
+          </div>`;
+        break;
+
+      case 'Parâmetros & Permissões':
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Perfil de Utilizador</label><input type="text" class="form-control" id="f_perfil" placeholder="Ex: Administrador Geral, Tesoureiro..."></div>
+            <div class="form-group"><label>Nível de Acesso</label><select class="form-control" id="f_nivel"><option>Controlo Total (Master)</option><option>Escrita e Edição</option><option>Apenas Leitura / Consulta</option></select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label>Módulos Autorizados</label><input type="text" class="form-control" id="f_modulos" placeholder="Ex: Todos ou específicos..."></div>
+            <div class="form-group"><label>Estado da Conta</label><select class="form-control" id="f_estadoac"><option>Ativo</option><option>Suspenso</option></select></div>
+          </div>`;
+        break;
+
+      default:
+        htmlContent = `
+          <div class="form-row">
+            <div class="form-group"><label>Descrição da Operação</label><input type="text" class="form-control" id="f_desc" placeholder="Detalhes do registo..."></div>
+            <div class="form-group"><label>Montante (AOA)</label><input type="number" class="form-control" id="f_valor" placeholder="0.00"></div>
+          </div>`;
+        break;
     }
+
     document.getElementById('modalFormContainer').innerHTML = htmlContent;
   }
 
