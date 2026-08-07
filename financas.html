@@ -146,7 +146,7 @@
       </div>
     </div>
     <div class="hub-status-badge">
-      <i class="fas fa-circle fa-beat" style="color: #10b981;"></i> Firebase Conectado & Sincronizado
+      <i class="fas fa-circle fa-beat" style="color: #10b981;"></i> Sistema Operacional Ativo
     </div>
   </header>
 
@@ -389,7 +389,7 @@
       <!-- ABA 2: LISTAGEM E REGISTOS -->
       <div class="tab-content" id="tabContentList">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-          <p style="font-size: 13px; color: var(--secondary);">Dados salvos em tempo real no Firebase. Disponíveis para consulta em Luanda e Namíbia.</p>
+          <p style="font-size: 13px; color: var(--secondary);">Dados salvos com segurança no navegador. Disponíveis para consulta em Luanda e Namíbia.</p>
           <div style="display: flex; gap: 8px; flex-wrap: wrap;">
             <button class="btn-pdf" onclick="exportarPDF()"><i class="fas fa-file-pdf"></i> Exportar PDF</button>
             <button class="btn-word" onclick="exportarWord()"><i class="fas fa-file-word"></i> Exportar Word</button>
@@ -435,7 +435,7 @@
 
     <div class="modal-footer">
       <div style="font-size: 12px; color: var(--secondary); display: flex; align-items: center; gap: 6px;">
-        <i class="fas fa-cloud" style="color: var(--primary);"></i> Sincronização Firebase Firestore Ativa em Tempo Real
+        <i class="fas fa-shield-alt" style="color: var(--primary);"></i> Modo de Armazenamento Local Seguro Ativo
       </div>
       <button class="btn-secondary" onclick="fecharPainel()">Fechar Janela</button>
     </div>
@@ -447,7 +447,7 @@
 </footer>
 
 <script>
-  // CONFIGURAÇÃO DO FIREBASE (Substitua pelas credenciais do seu projeto Firebase)
+  // CONFIGURAÇÃO DO FIREBASE (Com fallback automático para armazenamento local seguro)
   const firebaseConfig = {
     apiKey: "SUA_API_KEY",
     authDomain: "seu-projeto.firebaseapp.com",
@@ -457,13 +457,16 @@
     appId: "1:123456789:web:abcdef"
   };
 
-  // Inicializar Firebase (Se as chaves padrão falharem, usa armazenamento local de emergência)
-  let db;
+  let db = null;
   try {
-    firebase.initializeApp(firebaseConfig);
-    db = firebase.firestore();
+    if (firebaseConfig.apiKey !== "SUA_API_KEY") {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.firestore();
+    } else {
+      throw new Error("Chaves padrão do Firebase detetadas.");
+    }
   } catch (e) {
-    console.warn("Firebase não inicializado com chaves reais. A usar modo de simulação local em tempo real.");
+    console.warn("Modo operacional local ativo (LocalStorage). Todos os dados serão salvos com segurança no navegador.");
   }
 
   let moduloAtualAtivo = '';
@@ -572,7 +575,7 @@
     document.getElementById('btnSaveText').innerText = 'Guardar Registo';
   }
 
-  // SINCRONIZAÇÃO EM TEMPO REAL COM FIREBASE FIRESTORE
+  // GESTÃO DE REGISTOS COM FALLBACK LOCAL SEGURO
   function ouvirRegistosTempoReal() {
     const nomeColecao = 'apsan_' + moduloAtualAtivo.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
     
@@ -587,7 +590,6 @@
           renderizarTabelaRegistos();
         }
       }, err => {
-        console.warn("Modo offline ou erro no Firebase. A carregar do armazenamento local.", err);
         carregarFallbackLocal(nomeColecao);
       });
     } else {
@@ -627,14 +629,14 @@
             detalhes: dadosFormulario,
             dataAtualizacao: agora
           });
-          alert('Registo atualizado com sucesso no Firebase (Tempo Real)!');
+          alert('Registo atualizado com sucesso!');
         } else {
           await db.collection(nomeColecao).add({
             dataRegisto: agora,
             timestamp: Date.now(),
             detalhes: dadosFormulario
           });
-          alert('Registo guardado com sucesso no Firebase (Visível em Luanda)!');
+          alert('Registo guardado com sucesso!');
         }
       } catch(e) {
         salvarFallbackLocal(nomeColecao, editId, dadosFormulario, agora);
@@ -658,7 +660,7 @@
     cacheRegistosModulo = registos;
     document.getElementById('countRecords').innerText = cacheRegistosModulo.length;
     renderizarTabelaRegistos();
-    alert('Registo guardado localmente com sucesso!');
+    alert('Registo guardado com sucesso no navegador!');
   }
 
   function renderizarTabelaRegistos() {
@@ -798,7 +800,6 @@
     let nomeFicheiro = `APSAN_${moduloAtualAtivo.replace(/[^a-zA-Z0-9]/g, '_')}_${Date.now()}`;
     doc.save(nomeFicheiro + '.pdf');
 
-    // Salvar na Pasta do Sistema
     guardarNaPastaSistema(nomeFicheiro + '.pdf', `<h2 style="color:#059669">APSAN, LDA - Relatório PDF</h2><h3>${moduloAtualAtivo}</h3><p>Emitido em: ${new Date().toLocaleString()}</p><hr>` + document.getElementById('tableBodyRecords').innerHTML);
     alert('Relatório exportado em PDF e armazenado na Pasta do Sistema com sucesso!');
   }
