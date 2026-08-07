@@ -18,7 +18,6 @@
       --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
       --radius-lg: 16px; --radius: 12px;
       --danger: #dc2626; --danger-light: #fee2e2;
-      --warning: #d97706; --warning-light: #fef3c7;
     }
 
     body { background: var(--bg-app); color: var(--dark); min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 32px; }
@@ -32,8 +31,8 @@
     .hub-title p { font-size: 13px; color: var(--secondary); margin-top: 4px; font-weight: 500; }
     .hub-status-badge { background: #d1fae5; color: #047857; padding: 8px 16px; border-radius: 30px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px; border: 1px solid #a7f3d0; }
 
-    /* TICKER DE CÂMBIO GLOBAL EM TEMPO REAL */
-    .exchange-ticker { background: var(--dark); color: var(--white); padding: 12px 24px; border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 16px; overflow-x: auto; font-size: 13px; box-shadow: var(--shadow); }
+    /* TICKER DE CÂMBIO GLOBAL EM TEMPO REAL (DESTAQUE NO TOPO) */
+    .exchange-ticker { background: var(--dark); color: var(--white); padding: 14px 24px; border-radius: var(--radius); display: flex; align-items: center; justify-content: space-between; gap: 16px; overflow-x: auto; font-size: 13px; box-shadow: var(--shadow); border-left: 5px solid var(--primary); }
     .ticker-item { display: flex; align-items: center; gap: 8px; white-space: nowrap; font-weight: 600; }
     .ticker-item span { color: #34d399; font-weight: 700; }
 
@@ -83,7 +82,7 @@
     .modal-body { padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 24px; }
     .modal-footer { padding: 16px 24px; background: var(--bg-app); border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
     
-    /* ABAS INTERNAS DO MODAL (Formulário vs Registos Ativos) */
+    /* ABAS INTERNAS DO MODAL */
     .modal-tabs { display: flex; gap: 8px; border-bottom: 2px solid var(--border); padding-bottom: 0px; margin-bottom: 16px; }
     .modal-tab-btn { padding: 10px 20px; background: none; border: none; font-size: 14px; font-weight: 700; color: var(--secondary); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s; }
     .modal-tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
@@ -91,7 +90,7 @@
     .tab-content { display: none; flex-direction: column; gap: 16px; }
     .tab-content.active { display: flex; }
 
-    /* ELEMENTOS DOS FORMULÁRIOS DETALHADOS */
+    /* FORMULÁRIOS */
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     .form-group label { font-size: 12px; font-weight: 700; color: var(--secondary); text-transform: uppercase; }
     .form-control { padding: 12px 14px; border-radius: var(--radius); border: 1px solid var(--border); font-size: 14px; outline: none; transition: border-color 0.2s; width: 100%; background: var(--white); }
@@ -103,7 +102,7 @@
     .btn-secondary { background: var(--secondary); color: white; border: none; padding: 12px 20px; border-radius: var(--radius); font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; transition: background 0.2s; font-size: 14px; }
     .btn-secondary:hover { background: var(--dark); }
     
-    /* TABELA DE DADOS & HISTÓRICO LOCAL/NUVEM */
+    /* TABELA DE REGISTOS */
     .data-table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); background: var(--white); }
     .data-table { width: 100%; border-collapse: collapse; text-align: left; }
     .data-table th, .data-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 13px; }
@@ -125,10 +124,10 @@
   <!-- CABEÇALHO -->
   <header class="hub-header">
     <div class="hub-user-info">
-      <div class="hub-avatar">AF</div>
+      <div class="hub-avatar">EG</div>
       <div class="hub-title">
-        <h2>Departamento Financeiro e Contabilidade</h2>
-        <p>Painel de Controlo Master — Módulos Funcionais, Câmbios Reais & Integrações Ativas[cite: 2].</p>
+        <h2>Dr. Eduardo Ngongoyove Gabriel</h2>
+        <p>Painel de Controlo Master — Módulos Funcionais, Câmbios Reais & Integrações Ativas</p>
       </div>
     </div>
     <div class="hub-status-badge">
@@ -136,18 +135,18 @@
     </div>
   </header>
 
-  <!-- TICKER DE CÂMBIO GLOBAL EM TEMPO REAL (API BNA / GLOBAL) -->
+  <!-- TICKER DE CÂMBIO GLOBAL EM TEMPO REAL (AUTOMÁTICO E ANIMADO) -->
   <div class="exchange-ticker" id="exchangeTickerBar">
-    <div class="ticker-item"><i class="fas fa-globe-americas"></i> Câmbio Global ao Vivo:</div>
+    <div class="ticker-item"><i class="fas fa-chart-line fa-fade" style="color: #34d399;"></i> Câmbio ao Vivo (BNA/Global):</div>
     <div class="ticker-item">USD/AOA: <span id="rateUSD">A carregar...</span></div>
     <div class="ticker-item">EUR/AOA: <span id="rateEUR">A carregar...</span></div>
     <div class="ticker-item">NAD/AOA: <span id="rateNAD">A carregar...</span></div>
-    <div class="ticker-item"><i class="fas fa-sync fa-spin" style="font-size: 11px; color: #34d399;"></i> Atualizado agora</div>
+    <div class="ticker-item" style="color: #94a3b8;"><i class="fas fa-sync fa-spin"></i> Atualizado</div>
   </div>
 
   <!-- DASHBOARD DE GRÁFICOS -->
   <div class="section-divider">
-    <h3><i class="fas fa-chart-line" style="color: var(--primary);"></i> Indicadores Visuais de Desempenho</h3>
+    <h3><i class="fas fa-chart-pie" style="color: var(--primary);"></i> Indicadores Visuais de Desempenho</h3>
     <hr>
   </div>
   <div class="dashboard-analytics">
@@ -191,35 +190,11 @@
       <div class="integration-icon"><i class="fas fa-id-card"></i></div>
       <div class="integration-info"><h5>INSS / Segurança Social</h5><span>Deduções de Salários</span></div>
     </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'Cloud GED AWS')">
-      <div class="integration-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-      <div class="integration-info"><h5>Arquivo Cloud AWS S3</h5><span>Backup Criptografado</span></div>
-    </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'Assinatura Digital')">
-      <div class="integration-icon"><i class="fas fa-signature"></i></div>
-      <div class="integration-info"><h5>Assinatura Certificada</h5><span>Validação Jurídica</span></div>
-    </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'WhatsApp Business API')">
-      <div class="integration-icon"><i class="fab fa-whatsapp"></i></div>
-      <div class="integration-info"><h5>Alertas WhatsApp</h5><span>Avisos de Faturas</span></div>
-    </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'Exportador Excel/PDF')">
-      <div class="integration-icon"><i class="fas fa-file-excel"></i></div>
-      <div class="integration-info"><h5>SheetJS & jsPDF Engine</h5><span>Relatórios de Gestão</span></div>
-    </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'Gateway de Pagamentos')">
-      <div class="integration-icon"><i class="fas fa-credit-card"></i></div>
-      <div class="integration-info"><h5>Multicaixa / Cartões</h5><span>Recebimentos Online</span></div>
-    </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'Assistente Azny Gabriel')">
-      <div class="integration-icon"><i class="fas fa-robot"></i></div>
-      <div class="integration-info"><h5>Chatbot IA (Gemini)</h5><span>Assistente Interno</span></div>
-    </div>
   </div>
 
-  <!-- OS 24 MÓDULOS OPERACIONAIS -->
+  <!-- OS MÓDULOS OPERACIONAIS -->
   <div class="section-divider">
-    <h3><i class="fas fa-th-large" style="color: var(--primary);"></i> Acesso Direto aos 24 Módulos Operacionais</h3>
+    <h3><i class="fas fa-th-large" style="color: var(--primary);"></i> Acesso Direto aos Módulos Operacionais</h3>
     <hr>
   </div>
   <div class="menu-grid">
@@ -228,126 +203,26 @@
       <div class="menu-card-body"><h3>Tesouraria & Bancos</h3><p>Gestão de caixa central, cartões virtuais corporativos (BFA), fluxos diários, conciliação e pagamentos.</p></div>
       <div class="menu-card-footer"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #7c3aed;" onclick="abrirModulo('modulo', 'Partidas Dobradas & PGC')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #7c3aed;"><i class="fas fa-balance-scale"></i></div><span class="menu-counter">Módulo 02</span></div>
-      <div class="menu-card-body"><h3>Partidas Dobradas & PGC</h3><p>Lançamentos contabilísticos estruturados por classes, centros de custo e balancetes analíticos.</p></div>
-      <div class="menu-card-footer" style="color: #7c3aed;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
     <div class="menu-card" style="--card-color: #2563eb;" onclick="abrirModulo('modulo', 'Faturação & Comercial')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #2563eb;"><i class="fas fa-file-invoice-dollar"></i></div><span class="menu-counter">Módulo 03</span></div>
       <div class="menu-card-body"><h3>Faturação & Comercial</h3><p>Emissão de faturas certificadas, registo de clientes corporativos e controlo de recebimentos.</p></div>
       <div class="menu-card-footer" style="color: #2563eb;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #d97706;" onclick="abrirModulo('modulo', 'Obrigações Fiscais (AGT)')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #d97706;"><i class="fas fa-landmark"></i></div><span class="menu-counter">Módulo 04</span></div>
-      <div class="menu-card-body"><h3>Obrigações Fiscais (AGT)</h3><p>Apuração de impostos como IVA, IRT, imposto industrial e prazos de submissão legal.</p></div>
-      <div class="menu-card-footer" style="color: #d97706;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #0891b2;" onclick="abrirModulo('modulo', 'Demonstrações & Relatórios')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #0891b2;"><i class="fas fa-chart-line"></i></div><span class="menu-counter">Módulo 05</span></div>
-      <div class="menu-card-body"><h3>Demonstrações & Relatórios</h3><p>Balanço patrimonial, demonstração de resultados (DRE) e relatórios de gestão executiva.</p></div>
-      <div class="menu-card-footer" style="color: #0891b2;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #10b981;" onclick="abrirModulo('modulo', 'Simulador & Orçamentos')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #10b981;"><i class="fas fa-file-excel"></i></div><span class="menu-counter">Módulo 06</span></div>
-      <div class="menu-card-body"><h3>Simulador & Orçamentos</h3><p>Calculadora de propostas comerciais, estimativas e exportação direta para Excel (.xlsx).</p></div>
-      <div class="menu-card-footer" style="color: #10b981;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
+    <div class="menu-card" style="--card-color: #9333ea;" onclick="abrirModulo('modulo', 'Multimoeda & Câmbios')">
+      <div class="menu-card-header"><div class="menu-icon-box" style="background: #9333ea;"><i class="fas fa-coins"></i></div><span class="menu-counter">Módulo 12</span></div>
+      <div class="menu-card-body"><h3>Multimoeda & Câmbios</h3><p>Gestão de taxas de câmbio para transações internacionais e conversões (USD, EUR, NAD, AOA).</p></div>
+      <div class="menu-card-footer" style="color: #9333ea;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
     <div class="menu-card" style="--card-color: #4f46e5;" onclick="abrirModulo('modulo', 'Recursos Humanos & Salários')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #4f46e5;"><i class="fas fa-users-cog"></i></div><span class="menu-counter">Módulo 07</span></div>
       <div class="menu-card-body"><h3>Recursos Humanos & Salários</h3><p>Processamento de folhas de vencimento, deduções da Segurança Social e subsídios.</p></div>
       <div class="menu-card-footer" style="color: #4f46e5;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #be185d;" onclick="abrirModulo('modulo', 'Ativos & Imobilizado')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #be185d;"><i class="fas fa-building"></i></div><span class="menu-counter">Módulo 08</span></div>
-      <div class="menu-card-body"><h3>Ativos & Imobilizado</h3><p>Inventário de ativos fixos, cálculo automático de depreciações e reavaliações patrimoniais.</p></div>
-      <div class="menu-card-footer" style="color: #be185d;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #ea580c;" onclick="abrirModulo('modulo', 'Contratos & Fornecedores')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #ea580c;"><i class="fas fa-handshake"></i></div><span class="menu-counter">Módulo 09</span></div>
-      <div class="menu-card-body"><h3>Contratos & Fornecedores</h3><p>Gestão de contas a pagar (Passivos), prazos de fornecedores terceirizados e contratos.</p></div>
-      <div class="menu-card-footer" style="color: #ea580c;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #0284c7;" onclick="abrirModulo('modulo', 'Auditoria & Conformidade')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #0284c7;"><i class="fas fa-user-shield"></i></div><span class="menu-counter">Módulo 10</span></div>
-      <div class="menu-card-body"><h3>Auditoria & Conformidade</h3><p>Monitorização de logs de transações, verificação de consistência fiscal e prevenção de riscos.</p></div>
-      <div class="menu-card-footer" style="color: #0284c7;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #16a34a;" onclick="abrirModulo('modulo', 'Stocks & Armazém')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #16a34a;"><i class="fas fa-boxes-stacked"></i></div><span class="menu-counter">Módulo 11</span></div>
-      <div class="menu-card-body"><h3>Stocks & Armazém</h3><p>Valoração de inventários de mercadorias, custo médio ponderado e integração com o CPV.</p></div>
-      <div class="menu-card-footer" style="color: #16a34a;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #9333ea;" onclick="abrirModulo('modulo', 'Multimoeda & Câmbios')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #9333ea;"><i class="fas fa-coins"></i></div><span class="menu-counter">Módulo 12</span></div>
-      <div class="menu-card-body"><h3>Multimoeda & Câmbios</h3><p>Gestão de taxas de câmbio para transações internacionais e conversões contabilísticas.</p></div>
-      <div class="menu-card-footer" style="color: #9333ea;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #0d9488;" onclick="abrirModulo('modulo', 'Planeamento Orçamental')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #0d9488;"><i class="fas fa-bullseye"></i></div><span class="menu-counter">Módulo 13</span></div>
-      <div class="menu-card-body"><h3>Planeamento Orçamental</h3><p>Definição e controlo de budgets por departamentos, desvios orçamentais e metas anuais.</p></div>
-      <div class="menu-card-footer" style="color: #0d9488;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #c026d3;" onclick="abrirModulo('modulo', 'Projetos & CAPEX')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #c026d3;"><i class="fas fa-project-diagram"></i></div><span class="menu-counter">Módulo 14</span></div>
-      <div class="menu-card-body"><h3>Projetos & CAPEX</h3><p>Acompanhamento financeiro de investimentos de capital, retornos esperados e custos de obra.</p></div>
-      <div class="menu-card-footer" style="color: #c026d3;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #2563eb;" onclick="abrirModulo('modulo', 'Conciliação Bancária IA')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #2563eb;"><i class="fas fa-network-wired"></i></div><span class="menu-counter">Módulo 15</span></div>
-      <div class="menu-card-body"><h3>Conciliação Bancária IA</h3><p>Importação automática de ficheiros MT940/CAMT.053 e cruzamento inteligente de extratos.</p></div>
-      <div class="menu-card-footer" style="color: #2563eb;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #e11d48;" onclick="abrirModulo('modulo', 'Reembolsos & Despesas')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #e11d48;"><i class="fas fa-receipt"></i></div><span class="menu-counter">Módulo 16</span></div>
-      <div class="menu-card-body"><h3>Reembolsos & Despesas</h3><p>Controlo de ajudas de custo, despesas operacionais de campo e vales de caixa menor.</p></div>
-      <div class="menu-card-footer" style="color: #e11d48;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #ca8a04;" onclick="abrirModulo('modulo', 'Dashboard Executivo Board')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #ca8a04;"><i class="fas fa-chess-board"></i></div><span class="menu-counter">Módulo 17</span></div>
-      <div class="menu-card-body"><h3>Dashboard Executivo Board</h3><p>KPIs de alta performance, rácios de liquidez, solvabilidade e margens de lucro agregadas.</p></div>
-      <div class="menu-card-footer" style="color: #ca8a04;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #0284c7;" onclick="abrirModulo('modulo', 'Seguros & Apólices')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #0284c7;"><i class="fas fa-shield-heart"></i></div><span class="menu-counter">Módulo 18</span></div>
-      <div class="menu-card-body"><h3>Seguros & Apólices</h3><p>Controlo de apólices de seguro de frota, edifícios, acidentes de trabalho e respetivos prémios.</p></div>
-      <div class="menu-card-footer" style="color: #0284c7;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #16a34a;" onclick="abrirModulo('modulo', 'Previsão de Cash Flow')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #16a34a;"><i class="fas fa-chart-area"></i></div><span class="menu-counter">Módulo 19</span></div>
-      <div class="menu-card-body"><h3>Previsão de Cash Flow</h3><p>Projeção de entradas e saídas de caixa a 30, 60 e 90 dias com análise de desfasamentos.</p></div>
-      <div class="menu-card-footer" style="color: #16a34a;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #52525b;" onclick="abrirModulo('modulo', 'Arquivo Digital (GED)')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #52525b;"><i class="fas fa-folder-open"></i></div><span class="menu-counter">Módulo 20</span></div>
-      <div class="menu-card-body"><h3>Arquivo Digital (GED)</h3><p>Repositório seguro de comprovativos, recibos, certidões fiscais e extratos digitalizados.</p></div>
-      <div class="menu-card-footer" style="color: #52525b;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #9333ea;" onclick="abrirModulo('modulo', 'Crédito & Cobranças')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #9333ea;"><i class="fas fa-hand-holding-usd"></i></div><span class="menu-counter">Módulo 21</span></div>
-      <div class="menu-card-body"><h3>Crédito & Cobranças</h3><p>Aging report de clientes, gestão de faturas vencidas, alertas de incumprimento e renegociação.</p></div>
-      <div class="menu-card-footer" style="color: #9333ea;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #4f46e5;" onclick="abrirModulo('modulo', 'Ficheiros SAF-T & Legais')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #4f46e5;"><i class="fas fa-file-code"></i></div><span class="menu-counter">Módulo 22</span></div>
-      <div class="menu-card-body"><h3>Ficheiros SAF-T & Legais</h3><p>Geração e validação de ficheiros SAF-T de contabilidade e faturação para auditoria externa.</p></div>
-      <div class="menu-card-footer" style="color: #4f46e5;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #0284c7;" onclick="abrirModulo('modulo', 'Contabilidade Analítica')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #0284c7;"><i class="fas fa-sitemap"></i></div><span class="menu-counter">Módulo 23</span></div>
-      <div class="menu-card-body"><h3>Contabilidade Analítica</h3><p>Apuramento de custos por secção, projeto ou linha de negócio de forma segmentada.</p></div>
-      <div class="menu-card-footer" style="color: #0284c7;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="menu-card" style="--card-color: #334155;" onclick="abrirModulo('modulo', 'Parâmetros & Permissões')">
-      <div class="menu-card-header"><div class="menu-icon-box" style="background: #334155;"><i class="fas fa-cogs"></i></div><span class="menu-counter">Módulo 24</span></div>
-      <div class="menu-card-body"><h3>Parâmetros & Permissões</h3><p>Gestão de perfis de utilizador, níveis de acesso, exercícios fiscais e tabelas gerais do ERP.</p></div>
-      <div class="menu-card-footer" style="color: #334155;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
-    </div>
   </div>
 
 </div>
 
-<!-- JANELA MODAL INTERATIVA COM CRUD COMPLETO, ABAS E IMPORT/EXPORT -->
+<!-- JANELA MODAL FUNCIONAL -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-container">
     <div class="modal-header">
@@ -356,28 +231,25 @@
     </div>
     
     <div class="modal-body">
-      <!-- ABAS DE NAVEGAÇÃO INTERNA DO MÓDULO -->
       <div class="modal-tabs">
         <button class="modal-tab-btn active" onclick="mudarAbaModal('form')"><i class="fas fa-plus-circle"></i> Novo Registo / Formulário</button>
         <button class="modal-tab-btn" onclick="mudarAbaModal('list')"><i class="fas fa-database"></i> Registos Salvos & Acompanhamento (<span id="countRecords">0</span>)</button>
       </div>
 
-      <!-- CONTEÚDO DA ABA 1: FORMULÁRIO DETALHADO -->
+      <!-- ABA 1: FORMULÁRIO -->
       <div class="tab-content active" id="tabContentForm">
         <input type="hidden" id="editRecordId" value="">
-        <div id="modalFormContainer">
-          <!-- Conteúdo gerado dinamicamente -->
-        </div>
+        <div id="modalFormContainer"></div>
         <div style="display: flex; gap: 12px; margin-top: 10px;">
-          <button class="btn-action" onclick="salvarOuAtualizar Registo()"><i class="fas fa-save"></i> <span id="btnSaveText">Guardar Registo</span></button>
+          <button class="btn-action" onclick="salvarOuAtualizarRegisto()"><i class="fas fa-save"></i> <span id="btnSaveText">Guardar Registo</span></button>
           <button class="btn-secondary" onclick="limparFormulario()"><i class="fas fa-eraser"></i> Limpar Campos</button>
         </div>
       </div>
 
-      <!-- CONTEÚDO DA ABA 2: LISTAGEM, ACOMPANHAMENTO, EDIT, DELETE & EXPORT/IMPORT -->
+      <!-- ABA 2: LISTAGEM E REGISTOS -->
       <div class="tab-content" id="tabContentList">
         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-          <p style="font-size: 13px; color: var(--secondary);">Aqui pode acompanhar, editar, eliminar, exportar ou importar os dados gravados neste módulo em tempo real.</p>
+          <p style="font-size: 13px; color: var(--secondary);">Acompanhe, edite ou elimine os dados gravados neste módulo em tempo real.</p>
           <div style="display: flex; gap: 8px;">
             <button class="btn-secondary" style="padding: 8px 14px; font-size: 12px;" onclick="exportarDadosJSON()"><i class="fas fa-file-export"></i> Exportar JSON</button>
             <label class="btn-secondary" style="padding: 8px 14px; font-size: 12px; cursor: pointer; margin: 0;">
@@ -389,15 +261,13 @@
         <div class="data-table-container">
           <table class="data-table">
             <thead>
-              <tr id="tableHeaderRow">
+              <tr>
                 <th>Data / Hora</th>
                 <th>Detalhes do Registo</th>
                 <th style="width: 120px; text-align: right;">Ações</th>
               </tr>
             </thead>
-            <tbody id="tableBodyRecords">
-              <!-- Dados injetados em tempo real -->
-            </tbody>
+            <tbody id="tableBodyRecords"></tbody>
           </table>
         </div>
       </div>
@@ -406,7 +276,7 @@
 
     <div class="modal-footer">
       <div style="font-size: 12px; color: var(--secondary); display: flex; align-items: center; gap: 6px;">
-        <i class="fas fa-cloud" style="color: var(--primary);"></i> Armazenamento sincronizado em tempo real (Local / Firebase)
+        <i class="fas fa-cloud" style="color: var(--primary);"></i> Armazenamento local sincronizado e ativo
       </div>
       <button class="btn-secondary" onclick="fecharPainel()">Fechar Janela</button>
     </div>
@@ -414,45 +284,19 @@
 </div>
 
 <footer class="hub-footer">
-  &copy; 2026 APSAN, LDA — Todos os direitos reservados. Módulo de Controlo Financeiro Executivo Master.
+  &copy; 2026 APSAN, LDA — Todos os direitos reservados. Painel Master Funcional.
 </footer>
-
-<!-- SDK DO FIREBASE E LÓGICA DE INTEGRAÇÃO -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-      apiKey: "SUA_API_KEY",
-      authDomain: "SEU_AUTHDOMAIN.firebaseapp.com",
-      projectId: "SEU_PROJECT_ID",
-      storageBucket: "SEU_STORAGE_BUCKET",
-      messagingSenderId: "SEU_MESSAGING_SENDER_ID",
-      appId: "SEU_APP_ID"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-
-  window.dbFirestore = db;
-  window.firebaseCollection = collection;
-  window.firebaseAddDoc = addDoc;
-  window.firebaseGetDocs = getDocs;
-  window.firebaseDoc = doc;
-  window.firebaseUpdateDoc = updateDoc;
-  window.firebaseDeleteDoc = deleteDoc;
-</script>
 
 <script>
   let moduloAtualAtivo = '';
 
-  // BUSCAR CÂMBIO REAL EM TEMPO REAL (API Exchangerate / Alternativa global)
+  // TICKER DE CÂMBIO AO VIVO EM TEMPO REAL (USD, EUR, NAD, AOA)
   async function carregarCambiosReais() {
     try {
       const response = await fetch('https://open.er-api.com/v6/latest/USD');
       const data = await response.json();
       if(data && data.rates) {
-        const usd_aoa = data.rates.AOA || 915.50; // Taxa de referência ou base
+        const usd_aoa = data.rates.AOA || 915.50;
         const eur_usd = data.rates.EUR || 0.92;
         const eur_aoa = (usd_aoa / eur_usd).toFixed(2);
         const nad_usd = data.rates.NAD || 18.20;
@@ -463,18 +307,17 @@
         document.getElementById('rateNAD').innerText = `${nad_aoa} AOA`;
       }
     } catch (e) {
-      console.log("Modo offline ou erro ao obter taxas de câmbio globais, a usar valores padrão do mercado.");
       document.getElementById('rateUSD').innerText = `915.50 AOA`;
       document.getElementById('rateEUR').innerText = `995.20 AOA`;
       document.getElementById('rateNAD').innerText = `50.30 AOA`;
     }
   }
   carregarCambiosReais();
-  setInterval(carregarCambiosReais, 60000); // Atualiza a cada minuto
+  setInterval(carregarCambiosReais, 30000);
 
   function abrirModulo(tipo, nome) {
     moduloAtualAtivo = nome;
-    document.getElementById('modalTitle').innerHTML = `<i class="fas fa-check-circle" style="color: var(--primary);"></i> ${nome} <span style="font-size: 11px; background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 10px; margin-left: 10px;">${tipo === 'modulo' ? 'Módulo Operacional' : 'Integração Ativa'}</span>`;
+    document.getElementById('modalTitle').innerHTML = `<i class="fas fa-check-circle" style="color: var(--primary);"></i> ${nome} <span style="font-size: 11px; background: var(--primary-light); color: var(--primary); padding: 2px 8px; border-radius: 10px; margin-left: 10px;">${tipo}</span>`;
     
     gerarFormularioDetalhado(nome);
     mudarAbaModal('form');
@@ -505,81 +348,29 @@
     document.getElementById('editRecordId').value = '';
     document.getElementById('btnSaveText').innerText = 'Guardar Registo';
 
-    switch(nome) {
-      case 'Tesouraria & Bancos':
-        htmlContent = `
-          <p style="font-size: 13px; color: var(--secondary);">Registo detalhado de tesouraria, caixa e contas BFA.</p>
-          <div class="form-row">
-            <div class="form-group"><label>Tipo de Movimento</label><select class="form-control" id="f_tipo"><option>Entrada (Recebimento)</option><option>Saída (Pagamento)</option><option>Transferência Interna</option></select></div>
-            <div class="form-group"><label>Conta Bancária / Caixa</label><select class="form-control" id="f_conta"><option>Conta Principal BFA (AOA)</option><option>Conta Cambial BFA (USD)</option><option>Caixa Central</option></select></div>
-          </div>
-          <div class="form-row">
-            <div class="form-group"><label>Descrição Completa</label><input type="text" class="form-control" id="f_desc" placeholder="Ex: Pagamento de serviços de consultoria..."></div>
-            <div class="form-group"><label>Montante (AOA / USD)</label><input type="number" class="form-control" id="f_valor" placeholder="0.00"></div>
-          </div>
-          <div class="form-row">
-            <div class="form-group"><label>Beneficiário / Pagador</label><input type="text" class="form-control" id="f_entidade" placeholder="Nome da entidade..."></div>
-            <div class="form-group"><label>Categoria de Tesouraria</label><select class="form-control" id="f_cat"><option>Operacional</option><option>Investimento</option><option>Financiamento</option></select></div>
-          </div>`;
-        break;
-
-      case 'Faturação & Comercial':
-        htmlContent = `
-          <p style="font-size: 13px; color: var(--secondary);">Emissão de faturas, faturas-recibo e notas de crédito certificadas com detalhe fiscal.</p>
-          <div class="form-row">
-            <div class="form-group"><label>Cliente Corporativo</label><input type="text" class="form-control" id="f_cliente" placeholder="Nome da Empresa / NIF"></div>
-            <div class="form-group"><label>Tipo de Documento</label><select class="form-control" id="f_doc"><option>Fatura (FT)</option><option>Fatura-Recibo (FR)</option><option>Proforma (PR)</option><option>Nota de Crédito (NC)</option></select></div>
-          </div>
-          <div class="form-row">
-            <div class="form-group"><label>Descrição dos Artigos / Serviços</label><input type="text" class="form-control" id="f_servico" placeholder="Descrição detalhada..."></div>
-            <div class="form-group"><label>Valor Líquido (AOA)</label><input type="number" class="form-control" id="f_liquido" placeholder="0.00"></div>
-          </div>
-          <div class="form-row">
-            <div class="form-group"><label>Taxa IVA Aplicável</label><select class="form-control" id="f_iva"><option>IVA 14% (Geral)</option><option>IVA 5% (Reduzida)</option><option>Isento (0%)</option></select></div>
-            <div class="form-group"><label>Prazo de Pagamento</label><select class="form-control" id="f_prazo"><Pronto Pagamento><option>Pronto Pagamento</option><option>30 Dias</option><option>60 Dias</option></select></div>
-          </div>`;
-        break;
-
-      case 'Multimoeda & Câmbios':
-        htmlContent = `
-          <p style="font-size: 13px; color: var(--secondary);">Registo e conversão de taxas de câmbio globais em tempo real (USD, EUR, NAD, AOA).</p>
-          <div class="form-row">
-            <div class="form-group"><label>Moeda de Origem</label><select class="form-control" id="f_moeda_origem"><option>USD (Dólar Americano)</option><option>EUR (Euro)</option><option>NAD (Dólar Namibiano)</option><option>AOA (Kwanza)</option></select></div>
-            <div class="form-group"><label>Moeda de Destino</label><select class="form-control" id="f_moeda_dest"><option>AOA (Kwanza)</option><option>USD (Dólar Americano)</option><option>NAD (Dólar Namibiano)</option><option>EUR (Euro)</option></select></div>
-          </div>
-          <div class="form-row">
-            <div class="form-group"><label>Montante a Converter</label><input type="number" class="form-control" id="f_montante_conv" placeholder="0.00"></div>
-            <div class="form-group"><label>Taxa de Câmbio em Tempo Real</label><input type="number" class="form-control" id="f_taxa_real" placeholder="Automático via API"></div>
-          </div>`;
-        break;
-
-      case 'Recursos Humanos & Salários':
-        htmlContent = `
-          <p style="font-size: 13px; color: var(--secondary);">Processamento detalhado de vencimentos, subsídios e deduções INSS.</p>
-          <div class="form-row">
-            <div class="form-group"><label>Nome do Colaborador</label><input type="text" class="form-control" id="f_colaborador" placeholder="Nome completo..."></div>
-            <div class="form-group"><label>Cargo / Departamento</label><input type="text" class="form-control" id="f_cargo" placeholder="Ex: Desenvolvedor / Financeiro..."></div>
-          </div>
-          <div class="form-row">
-            <div class="form-group"><label>Salário Base (AOA)</label><input type="number" class="form-control" id="f_salario" placeholder="0.00"></div>
-            <div class="form-group"><label>Subsídios (Alimentação / Transporte)</label><input type="number" class="form-control" id="f_subsidios" placeholder="0.00"></div>
-          </div>`;
-        break;
-
-      default:
-        htmlContent = `
-          <p style="font-size: 13px; color: var(--secondary);">Formulário operacional completo para <strong>${nome}</strong>.</p>
-          <div class="form-row">
-            <div class="form-group"><label>Referência Principal</label><input type="text" class="form-control" id="f_ref" placeholder="Insira a referência ou código..."></div>
-            <div class="form-group"><label>Estado Operacional</label><select class="form-control" id="f_estado"><option>Ativo / Em Execução</option><option>Pendente de Aprovação</option><option>Concluído</option></select></div>
-          </div>
-          <div class="form-row">
-            <div class="form-group"><label>Descrição Detalhada do Trabalho</label><input type="text" class="form-control" id="f_detalhes" placeholder="Descreva a operação..."></div>
-            <div class="form-group"><label>Montante / Valor Associado (AOA)</label><input type="number" class="form-control" id="f_val_geral" placeholder="0.00"></div>
-          </div>`;
-        break;
+    if(nome === 'Recursos Humanos & Salários') {
+      htmlContent = `
+        <div class="form-row">
+          <div class="form-group"><label>Nome do Colaborador</label><input type="text" class="form-control" id="f_colab" placeholder="Nome completo..."></div>
+          <div class="form-group"><label>Cargo / Departamento</label><input type="text" class="form-control" id="f_cargo" placeholder="Cargo..."></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Salário Base (AOA)</label><input type="number" class="form-control" id="f_salario" placeholder="0.00"></div>
+          <div class="form-group"><label>Subsídios (AOA)</label><input type="number" class="form-control" id="f_subsidios" placeholder="0.00"></div>
+        </div>`;
+    } else if(nome === 'Multimoeda & Câmbios') {
+      htmlContent = `
+        <div class="form-row">
+          <div class="form-group"><label>Moeda</label><select class="form-control" id="f_moeda"><option>USD</option><option>EUR</option><option>NAD</option><option>AOA</option></select></div>
+          <div class="form-group"><label>Montante</label><input type="number" class="form-control" id="f_montante" placeholder="0.00"></div>
+        </div>`;
+    } else {
+      htmlContent = `
+        <div class="form-row">
+          <div class="form-group"><label>Descrição da Operação</label><input type="text" class="form-control" id="f_desc" placeholder="Detalhes..."></div>
+          <div class="form-group"><label>Montante (AOA)</label><input type="number" class="form-control" id="f_valor" placeholder="0.00"></div>
+        </div>`;
     }
-
     document.getElementById('modalFormContainer').innerHTML = htmlContent;
   }
 
@@ -589,22 +380,26 @@
     document.getElementById('btnSaveText').innerText = 'Guardar Registo';
   }
 
-  // SALVAR OU ATUALIZAR (CRUD COMPLETO)
-  async function salvarOuAtualizarRegisto() {
+  // FUNÇÃO CORRIGIDA DE SALVAMENTO SEM ERROS
+  function salvarOuAtualizarRegisto() {
     const editId = document.getElementById('editRecordId').value;
-    const inputs = document.querySelectorAll('#modalFormContainer .form-control, #modalFormContainer select, #modalFormContainer input');
+    const inputs = document.querySelectorAll('#modalFormContainer input, #modalFormContainer select');
     let dadosFormulario = {};
     
-    inputs.forEach((input, index) => {
-      let labelText = input.previousElementSibling ? input.previousElementSibling.innerText : `campo_${index}`;
+    inputs.forEach(input => {
+      let labelElement = input.closest('.form-group')?.querySelector('label');
+      let labelText = labelElement ? labelElement.innerText : input.id;
       dadosFormulario[labelText] = input.value;
     });
 
-    // Salvar localmente em localStorage para acompanhamento imediato em tempo real
+    if(!Object.values(dadosFormulario)[0]) {
+      alert('Por favor, preencha pelo menos o primeiro campo antes de guardar.');
+      return;
+    }
+
     let registosLocais = JSON.parse(localStorage.getItem(`apsan_mod_${moduloAtualAtivo}`) || '[]');
 
     if(editId) {
-      // Atualizar existente
       registosLocais = registosLocais.map(item => {
         if(item.id == editId) {
           item.detalhes = dadosFormulario;
@@ -612,37 +407,22 @@
         }
         return item;
       });
-      localStorage.setItem(`apsan_mod_${moduloAtualAtivo}`, JSON.stringify(registosLocais));
       alert('Registo atualizado com sucesso!');
     } else {
-      // Criar novo
       const novoItem = {
         id: 'rec_' + Date.now(),
         dataRegisto: new Date().toLocaleString(),
         detalhes: dadosFormulario
       };
       registosLocais.unshift(novoItem);
-      localStorage.setItem(`apsan_mod_${moduloAtualAtivo}`, JSON.stringify(registosLocais));
-
-      // Tentar salvar também no Firebase se disponível
-      try {
-        if(window.dbFirestore) {
-          await window.firebaseAddDoc(window.firebaseCollection(window.dbFirestore, "apsan_erp_registros"), {
-            modulo: moduloAtualAtivo,
-            dataRegisto: new Date().toISOString(),
-            detalhes: dadosFormulario
-          });
-        }
-      } catch(e) { console.log("Salvamento em nuvem pendente, guardado localmente com sucesso."); }
-
-      alert('Registo guardado com sucesso e visível em tempo real!');
+      alert('Registo guardado com sucesso!');
     }
 
+    localStorage.setItem(`apsan_mod_${moduloAtualAtivo}`, JSON.stringify(registosLocais));
     limparFormulario();
     mudarAbaModal('list');
   }
 
-  // CARREGAR E EXIBIR REGISTOS COM OPÇÕES DE EDITAR E ELIMINAR
   function carregarRegistosModulo() {
     const registosLocais = JSON.parse(localStorage.getItem(`apsan_mod_${moduloAtualAtivo}`) || '[]');
     document.getElementById('countRecords').innerText = registosLocais.length;
@@ -651,21 +431,20 @@
     tbody.innerHTML = '';
 
     if(registosLocais.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--secondary); padding: 24px;">Nenhum registo efetuado ainda neste módulo. Use a aba "Novo Registo" para começar.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: var(--secondary); padding: 24px;">Nenhum registo efetuado ainda neste módulo. Use a aba "Novo Registo".</td></tr>`;
       return;
     }
 
     registosLocais.forEach(item => {
       let resumoDetalhes = Object.entries(item.detalhes).map(([k, v]) => `<strong>${k}:</strong> ${v}`).join(' | ');
-      
       let tr = document.createElement('tr');
       tr.innerHTML = `
         <td style="white-space: nowrap; font-weight: 600; color: var(--secondary);">${item.dataRegisto}</td>
         <td>${resumoDetalhes}</td>
         <td style="text-align: right;">
           <div class="action-badge-group" style="justify-content: flex-end;">
-            <button class="btn-icon-table edit" title="Editar Registo" onclick="editarRegisto('${item.id}')"><i class="fas fa-edit"></i></button>
-            <button class="btn-icon-table delete" title="Eliminar Registo" onclick="eliminarRegisto('${item.id}')"><i class="fas fa-trash-alt"></i></button>
+            <button class="btn-icon-table edit" title="Editar" onclick="editarRegisto('${item.id}')"><i class="fas fa-edit"></i></button>
+            <button class="btn-icon-table delete" title="Eliminar" onclick="eliminarRegisto('${item.id}')"><i class="fas fa-trash-alt"></i></button>
           </div>
         </td>
       `;
@@ -682,9 +461,10 @@
     document.getElementById('editRecordId').value = item.id;
     document.getElementById('btnSaveText').innerText = 'Atualizar Registo';
 
-    const inputs = document.querySelectorAll('#modalFormContainer .form-control, #modalFormContainer select, #modalFormContainer input');
-    inputs.forEach((input, index) => {
-      let labelText = input.previousElementSibling ? input.previousElementSibling.innerText : `campo_${index}`;
+    const inputs = document.querySelectorAll('#modalFormContainer input, #modalFormContainer select');
+    inputs.forEach(input => {
+      let labelElement = input.closest('.form-group')?.querySelector('label');
+      let labelText = labelElement ? labelElement.innerText : input.id;
       if(item.detalhes[labelText] !== undefined) {
         input.value = item.detalhes[labelText];
       }
@@ -692,7 +472,7 @@
   }
 
   function eliminarRegisto(id) {
-    if(confirm('Tem certeza de que pretende eliminar este registo permanentemente?')) {
+    if(confirm('Tem certeza de que pretende eliminar este registo?')) {
       let registosLocais = JSON.parse(localStorage.getItem(`apsan_mod_${moduloAtualAtivo}`) || '[]');
       registosLocais = registosLocais.filter(r => r.id != id);
       localStorage.setItem(`apsan_mod_${moduloAtualAtivo}`, JSON.stringify(registosLocais));
@@ -700,14 +480,13 @@
     }
   }
 
-  // IMPORTAÇÃO E EXPORTAÇÃO DE TRABALHOS (JSON)
   function exportarDadosJSON() {
     const registosLocais = localStorage.getItem(`apsan_mod_${moduloAtualAtivo}`) || '[]';
     const blob = new Blob([registosLocais], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `APSAN_${moduloAtualAtivo.replace(/[^a-zA-Z0-9]/g, '_')}_Backup.json`;
+    a.download = `APSAN_${moduloAtualAtivo.replace(/[^a-zA-Z0-9]/g, '_')}.json`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -715,26 +494,21 @@
   function importarDadosJSON(event) {
     const file = event.target.files[0];
     if(!file) return;
-
     const reader = new FileReader();
     reader.onload = function(e) {
       try {
-        const dadosImportados = JSON.parse(e.target.result);
-        if(Array.isArray(dadosImportados)) {
-          localStorage.setItem(`apsan_mod_${moduloAtualAtivo}`, JSON.stringify(dadosImportados));
+        const dados = JSON.parse(e.target.result);
+        if(Array.isArray(dados)) {
+          localStorage.setItem(`apsan_mod_${moduloAtualAtivo}`, JSON.stringify(dados));
           carregarRegistosModulo();
-          alert('Dados importados com sucesso para o sistema em tempo real!');
-        } else {
-          alert('Formato de ficheiro JSON inválido.');
+          alert('Dados importados com sucesso!');
         }
-      } catch(err) {
-        alert('Erro ao processar o ficheiro JSON.');
-      }
+      } catch(err) { alert('Erro ao importar JSON.'); }
     };
     reader.readAsText(file);
   }
 
-  // Gráficos do Topo
+  // Gráficos
   new Chart(document.getElementById('cashFlowChart'), {
     type: 'line',
     data: {
@@ -759,4 +533,3 @@
 
 </body>
 </html>
-```[cite: 4]
