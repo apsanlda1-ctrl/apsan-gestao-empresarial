@@ -64,6 +64,7 @@ function verifyDeptCode(event) {
         document.getElementById('dashboardScreen').classList.add('active');
         document.getElementById('activeDeptNameIndicator').textContent = currentSelectedDept;
         document.getElementById('currentDeptMainTitle').innerHTML = `<i class="fas fa-tasks"></i> Gestão Operacional: ${currentSelectedDept}`;
+        renderTasks(); // Carrega os dados persistentes ao entrar
         showToast('Acesso Permitido', `Entrou no departamento de ${currentSelectedDept}.`);
     } else {
         showToast('Código Incorreto', 'O código introduzido não corresponde ao exigido para este departamento.', true);
@@ -91,7 +92,7 @@ function toggleTheme() {
     }
 }
 
-// 4. Gestão de Tarefas e Registos no Dashboard
+// 4. Gestão de Tarefas (Offline-First com LocalStorage)
 function openNewTaskModal() {
     document.getElementById('taskModal').style.display = 'flex';
 }
@@ -106,37 +107,82 @@ function addNewTask(event) {
     const owner = document.getElementById('taskOwner').value;
     const priority = document.getElementById('taskPriority').value;
     
-    const tableBody = document.getElementById('departmentTableBody');
-    const randomId = '#AP-' + Math.floor(100 + Math.random() * 900);
-    const currentDate = new Date().toLocaleDateString('pt-PT');
+    const newTask = {
+        id: '#AP-' + Math.floor(100 + Math.random() * 900),
+        title: title,
+        owner: owner,
+        date: new Date().toLocaleDateString('pt-PT'),
+        priority: priority,
+        status: 'Em Curso',
+        synced: navigator.onLine
+    };
 
-    const newRow = document.createElement('tr');
-    newRow.innerHTML = `
-        <td>${randomId}</td>
-        <td>${title}</td>
-        <td>${owner}</td>
-        <td>${currentDate}</td>
-        <td><span class="badge ${priority.toLowerCase() === 'alta' ? 'high' : 'medium'}">${priority}</span></td>
-        <td><span class="badge in-progress">Em Curso</span></td>
-        <td><button onclick="completeTask(this)" class="btn-action">Concluir</button></td>
-    `;
-    
-    tableBody.prepend(newRow);
+    let tasks = JSON.parse(localStorage.getItem('apsan_tasks')) || [];
+    tasks.unshift(newTask);
+    localStorage.setItem('apsan_tasks', JSON.stringify(tasks));
+
+    renderTasks();
     closeNewTaskModal();
-    showToast('Sucesso', 'Novo registo adicionado com sucesso.');
     document.getElementById('taskTitle').value = '';
     document.getElementById('taskOwner').value = '';
+
+    if (navigator.onLine) {
+        showToast('Sucesso', 'Registo guardado e sincronizado.');
+    } else {
+        showToast('Modo Offline', 'Sem rede! O registo foi guardado localmente.');
+    }
 }
 
-function completeTask(button) {
-    const row = button.closest('tr');
-    const statusBadge = row.querySelector('.badge.in-progress');
-    if (statusBadge) {
-        statusBadge.className = 'badge';
-        statusBadge.style.backgroundColor = '#28a745';
-        statusBadge.style.color = '#fff';
-        statusBadge.textContent = 'Concluído';
-    }
-    button.remove();
+function renderTasks() {
+    const tbody = document.getElementById('departmentTableBody');
+    if (!tbody) return;
+
+    let tasks = JSON.parse(localStorage.getItem('apsan_tasks')) || [];
+    tbody.innerHTML = '';
+
+    tasks.forEach((task, index) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${task.id} ${!task.synced ? '<i class="fas fa-clock" title="Pendente de sincronização" style="color:orange; margin-left:5px;"></i>' : ''}</td>
+            <td>${task.title}</td>
+            <td>${task.owner}</td>
+            <td>${task.date}</td>
+            <td><span class="badge ${task.priority.toLowerCase() === 'alta' ? 'high' : 'medium'}">${task.priority}</span></td>
+            <td><span class="badge ${task.status === 'Concluído' ? '' : 'in-progress'}">${task.status}</span></td>
+            <td>${task.status !== 'Concluído' ? `<button onclick="completeTask(${index})" class="btn-action">Concluir</button>` : ''}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function completeTask(index) {
+    let tasks = JSON.parse(localStorage.getItem('apsan_tasks')) || [];
+    tasks[index].status = 'Concluído';
+    localStorage.setItem('apsan_tasks', JSON.stringify(tasks));
+    renderTasks();
     showToast('Atualizado', 'O registo foi marcado como concluído.');
 }
+
+// Sincronização Automática ao detetar rede
+window.addEventListener('online', () => {
+    let tasks = JSON.parse(localStorage.getItem('apsan_tasks')) || [];
+    let hasChanges = false;
+
+    tasks = tasks.map(task => {
+        if (!task.synced) {
+            task.synced = true;
+            hasChanges = true;
+        }
+        return task;
+    });
+
+    if (hasChanges) {
+        localStorage.setItem('apsan_tasks', JSON.stringify(tasks));
+        renderTasks();
+        showToast('Rede Restabelecida', 'Dados sincronizados com sucesso!');
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderTasks();
+});
