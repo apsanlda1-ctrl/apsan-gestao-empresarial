@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>APSAN, LDA - ERP Contabilístico Profissional Completo</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <title>APSAN, LDA - ERP Contabilístico Executivo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <!-- BIBLIOTECAS DE EXPORTAÇÃO -->
@@ -13,100 +13,108 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
     :root {
-      --primary: #047857; --primary-dark: #065f46; --primary-light: #ecfdf5;
+      --bg-app: #f8fafc;
+      --primary: #059669; --primary-dark: #047857; --primary-light: #ecfdf5;
+      --accent: #6366f1; --accent-light: #eef2ff;
       --secondary: #64748b; --success: #10b981; --danger: #ef4444;
-      --warning: #f59e0b; --dark: #1e293b; --light: #f8fafc;
-      --white: #ffffff; --border: #e2e8f0; --audit-bg: #fff7ed;
-      --shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
-      --radius: 8px; --radius-lg: 12px;
+      --warning: #f59e0b; --dark: #0f172a; --light: #f1f5f9;
+      --white: #ffffff; --border: #e2e8f0; --audit-bg: #fffbeb;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+      --radius: 10px; --radius-lg: 16px;
     }
 
-    body { background: #f1f5f9; color: var(--dark); line-height: 1.5; padding: 20px; }
-    .dashboard-container { max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+    body { background: var(--bg-app); color: var(--dark); line-height: 1.6; padding: 24px; }
+    .dashboard-container { max-width: 1440px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
 
     /* TOPO / HEADER DO PAINEL */
-    .master-header { background: var(--white); border-radius: var(--radius-lg); padding: 20px 30px; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
-    .master-header h1 { font-size: 24px; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 10px; }
-    .master-header h1 i { color: var(--primary); }
-    .master-header-right { display: flex; align-items: center; gap: 20px; font-size: 14px; color: var(--secondary); }
+    .master-header { background: var(--white); border-radius: var(--radius-lg); padding: 24px 32px; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; border: 1px solid var(--border); }
+    .master-header h1 { font-size: 20px; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 12px; letter-spacing: -0.02em; }
+    .master-header h1 i { color: var(--primary); background: var(--primary-light); padding: 10px; border-radius: 10px; font-size: 18px; }
+    .master-header-right { display: flex; align-items: center; gap: 16px; font-size: 13px; font-weight: 500; color: var(--secondary); background: var(--light); padding: 8px 16px; border-radius: 30px; border: 1px solid var(--border); }
 
     /* STATS / MÉTRICAS DE TOPO */
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
-    .stat-card { background: var(--white); border-radius: var(--radius-lg); padding: 18px; display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow); }
-    .stat-icon { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+    .stat-card { background: var(--white); border-radius: var(--radius-lg); padding: 20px 24px; display: flex; align-items: center; gap: 18px; box-shadow: var(--shadow); border: 1px solid var(--border); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+    .stat-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
     .stat-icon.green { background: #d1fae5; color: #047857; }
     .stat-icon.blue { background: #dbeafe; color: #2563eb; }
     .stat-icon.purple { background: #ede9fe; color: #7c3aed; }
-    .stat-icon.orange { background: #fef3c7; color: #f59e0b; }
-    .stat-info h3 { font-size: 22px; font-weight: 700; color: var(--dark); }
-    .stat-info p { font-size: 13px; color: var(--secondary); }
+    .stat-icon.orange { background: #fef3c7; color: #d97706; }
+    .stat-info h3 { font-size: 22px; font-weight: 700; color: var(--dark); letter-spacing: -0.03em; }
+    .stat-info p { font-size: 12px; font-weight: 500; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
 
     /* GRELHA PRINCIPAL DE MÓDULOS */
-    .master-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; align-items: start; }
-    @media (max-width: 1024px) { .master-grid { grid-template-columns: 1fr; } }
+    .master-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; align-items: start; }
+    @media (max-width: 1100px) { .master-grid { grid-template-columns: 1fr; } }
 
-    .grid-module-card { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); border-top: 4px solid var(--primary); overflow: hidden; display: flex; flex-direction: column; }
-    .grid-module-card.blue { border-top-color: #2563eb; }
-    .grid-module-card.purple { border-top-color: #7c3aed; }
-    .grid-module-card.orange { border-top-color: #f59e0b; }
-    .grid-module-card.cyan { border-top-color: #06b6d4; }
-    .grid-module-card.indigo { border-top-color: #6366f1; }
-
-    .module-header { padding: 16px 20px; border-bottom: 1px solid var(--border); background: #f8fafc; display: flex; align-items: center; justify-content: space-between; }
-    .module-header h4 { font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; color: var(--dark); }
-    .module-body { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+    .grid-module-card { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; }
+    
+    .module-header { padding: 18px 24px; border-bottom: 1px solid var(--border); background: var(--white); display: flex; align-items: center; justify-content: space-between; }
+    .module-header h4 { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 10px; color: var(--dark); letter-spacing: -0.01em; }
+    .module-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
 
     /* CARTÃO BFA */
-    .bfa-virtual-card { background: linear-gradient(135deg, #002D62 0%, #0056b3 100%); color: white; border-radius: 12px; padding: 18px; box-shadow: 0 8px 16px rgba(0,45,98,0.2); position: relative; overflow: hidden; }
-    .bfa-virtual-card::before { content: ""; position: absolute; top: -40px; right: -40px; width: 120px; height: 120px; background: rgba(255,255,255,0.1); border-radius: 50%; }
-    .bfa-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .bfa-card-chip { width: 32px; height: 24px; background: #eab308; border-radius: 4px; }
-    .bfa-card-number { font-size: 16px; font-family: monospace; letter-spacing: 2px; margin-bottom: 10px; }
+    .bfa-virtual-card { background: linear-gradient(135deg, #0f172a 1e0%, #1e3a8a 100%); color: white; border-radius: 14px; padding: 22px; box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
+    .bfa-virtual-card::before { content: ""; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%; }
+    .bfa-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .bfa-card-chip { width: 36px; height: 26px; background: linear-gradient(135deg, #fef08a 0%, #eab308 100%); border-radius: 4px; }
+    .bfa-card-number { font-size: 16px; font-family: monospace; letter-spacing: 3px; margin-bottom: 14px; color: #e2e8f0; }
     .bfa-card-info { display: flex; justify-content: space-between; align-items: flex-end; }
-    .bfa-card-holder span { font-size: 9px; text-transform: uppercase; opacity: 0.8; display: block; }
-    .bfa-card-holder strong { font-size: 12px; letter-spacing: 1px; }
-    .bfa-balance-box { background: rgba(255,255,255,0.15); padding: 8px 12px; border-radius: 6px; backdrop-filter: blur(5px); }
-    .bfa-balance-box span { font-size: 9px; display: block; opacity: 0.9; }
-    .bfa-balance-box strong { font-size: 14px; }
+    .bfa-card-holder span { font-size: 9px; text-transform: uppercase; opacity: 0.7; display: block; letter-spacing: 0.1em; }
+    .bfa-card-holder strong { font-size: 12px; letter-spacing: 0.05em; font-weight: 600; }
+    .bfa-balance-box { background: rgba(255, 255, 255, 0.1); padding: 8px 14px; border-radius: 8px; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); }
+    .bfa-balance-box span { font-size: 9px; display: block; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; }
+    .bfa-balance-box strong { font-size: 14px; font-weight: 700; }
 
     /* TABELAS */
-    .table-container { overflow-x: auto; width: 100%; }
-    table { width: 100%; border-collapse: collapse; text-align: left; }
+    .table-container { overflow-x: auto; width: 100%; border-radius: 8px; border: 1px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; text-align: left; background: var(--white); }
     thead { background: var(--light); }
-    th { padding: 8px 10px; font-size: 11px; font-weight: 600; color: var(--secondary); border-bottom: 1px solid var(--border); }
-    td { padding: 8px 10px; font-size: 12px; border-bottom: 1px solid var(--border); color: var(--dark); }
+    th { padding: 10px 14px; font-size: 11px; font-weight: 600; color: var(--secondary); border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.05em; }
+    td { padding: 11px 14px; font-size: 13px; border-bottom: 1px solid var(--border); color: var(--dark); font-weight: 400; }
+    tr:last-child td { border-bottom: none; }
     tr:hover { background: #f8fafc; }
 
-    .status-badge { padding: 3px 8px; border-radius: 12px; font-size: 0.75em; font-weight: bold; color: white; display: inline-block; }
-    .status-pago { background-color: #38a169; }
-    .status-pendente { background-color: #d69e2e; }
-    .status-vencido { background-color: #e53e3e; }
+    .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+    .status-pago { background-color: #d1fae5; color: #047857; }
+    .status-pendente { background-color: #fef3c7; color: #b45309; }
+    .status-vencido { background-color: #fee2e2; color: #b91c1c; }
 
     /* FORMULÁRIOS & BOTÕES */
-    .btn-primary { padding: 8px 14px; background: var(--primary); color: var(--white); border: none; border-radius: var(--radius); font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label { font-size: 12px; font-weight: 600; color: var(--dark); }
+    .form-control { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius); outline: none; font-size: 13px; background: var(--white); color: var(--dark); transition: border-color 0.2s, box-shadow 0.2s; }
+    .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); }
+    
+    .btn { padding: 10px 18px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: none; transition: background 0.2s, transform 0.1s; }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--primary); color: var(--white); }
     .btn-primary:hover { background: var(--primary-dark); }
-    .btn-secondary { padding: 8px 14px; background: var(--white); color: var(--dark); border: 1px solid var(--border); border-radius: var(--radius); font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-    .btn-success { padding: 8px 14px; background: var(--success); color: var(--white); border: none; border-radius: var(--radius); font-size: 12px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
-    .form-control { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius); outline: none; margin-bottom: 8px; font-size: 12px; }
+    .btn-secondary { background: var(--white); color: var(--dark); border: 1px solid var(--border); }
+    .btn-secondary:hover { background: var(--light); }
+    .btn-success { background: var(--success); color: var(--white); }
+    .btn-success:hover { background: #059669; }
+
+    .row-inputs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 
     /* EXCEL */
     .excel-table { width: 100%; border-collapse: collapse; background: white; }
-    .excel-table th, .excel-table td { border: 1px solid #cbd5e1; padding: 6px 8px; font-size: 12px; }
-    .excel-table th { background: #f1f5f9; text-align: center; color: #334155; font-weight: 600; }
-    .excel-cell { width: 100%; border: none; outline: none; background: transparent; font-size: 12px; font-family: 'Inter', sans-serif; text-align: right; }
+    .excel-table th, .excel-table td { border: 1px solid var(--border); padding: 8px 10px; font-size: 13px; }
+    .excel-table th { background: var(--light); text-align: center; color: var(--secondary); font-weight: 600; }
+    .excel-cell { width: 100%; border: none; outline: none; background: transparent; font-size: 13px; font-family: 'Plus Jakarta Sans', sans-serif; text-align: right; color: var(--dark); }
     .excel-cell-text { text-align: left; }
 
-    /* WORD SIMULATOR CARD & AUDIT LOG */
-    .document-page-preview { background: #ffffff; border: 1px solid var(--border); padding: 15px; border-radius: var(--radius); min-height: 180px; max-height: 220px; overflow-y: auto; font-size: 13px; line-height: 1.5; outline: none; }
-    .audit-log { font-size: 11px; background: var(--audit-bg); padding: 10px; border-radius: var(--radius); max-height: 120px; overflow-y: auto; border: 1px solid #fed7aa; }
-
-    .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-    .toast { position: fixed; bottom: 25px; right: 25px; background: var(--dark); color: var(--white); padding: 14px 20px; border-radius: var(--radius); display: flex; align-items: center; gap: 10px; box-shadow: var(--shadow-lg); transform: translateX(150%); transition: transform 0.3s ease; z-index: 2000; font-size: 14px; }
-    .toast.show { transform: translateX(0); }
-    .toast i { color: var(--success); }
+    /* AUDIT LOG & EXTRAS */
+    .audit-log { font-size: 12px; background: var(--audit-bg); padding: 12px; border-radius: var(--radius); max-height: 140px; overflow-y: auto; border: 1px solid #fde68a; font-family: monospace; color: #b45309; line-height: 1.5; }
+    
+    .toast { position: fixed; bottom: 30px; right: 30px; background: var(--dark); color: var(--white); padding: 14px 24px; border-radius: var(--radius); display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow-lg); transform: translateY(100px); opacity: 0; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 2000; font-size: 13px; font-weight: 500; border: 1px solid rgba(255,255,255,0.1); }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast i { color: var(--success); font-size: 16px; }
   </style>
 </head>
 <body>
@@ -115,10 +123,11 @@
 
   <!-- TOPO DO PAINEL -->
   <header class="master-header">
-    <h1><i class="fas fa-th-large"></i> APSAN, LDA - ERP Contabilístico Completo</h1>
+    <h1><i class="fas fa-chart-pie"></i> APSAN, LDA — ERP Contabilístico Executivo</h1>
     <div class="master-header-right">
-      <span id="current-date"></span>
-      <span id="current-time"></span>
+      <i class="far fa-calendar-alt" style="color: var(--primary);"></i> <span id="current-date"></span>
+      <span style="opacity: 0.3;">|</span>
+      <i class="far fa-clock" style="color: var(--primary);"></i> <span id="current-time"></span>
     </div>
   </header>
 
@@ -142,54 +151,54 @@
     </div>
   </div>
 
-  <!-- GRELHA COMPLETA COM TODOS OS MÓDULOS -->
+  <!-- GRELHA COMPLETA -->
   <div class="master-grid">
     
     <!-- 1. TESOURARIA & CARTÃO BFA -->
     <div class="grid-module-card">
       <div class="module-header">
         <h4><i class="fas fa-wallet" style="color: var(--primary);"></i> Tesouraria & Cartão BFA</h4>
-        <span class="status-badge status-pago">Ativo</span>
+        <span class="status-badge status-pago"><i class="fas fa-circle" style="font-size: 6px;"></i> Ativo</span>
       </div>
       <div class="module-body">
         <div class="bfa-virtual-card">
           <div class="bfa-card-top">
             <div class="bfa-card-chip"></div>
-            <span style="font-weight: 700; font-size: 13px; letter-spacing: 1px;">BFA CORPORATE</span>
+            <span style="font-weight: 700; font-size: 12px; letter-spacing: 1.5px;">BFA CORPORATE</span>
           </div>
           <div class="bfa-card-number">**** **** **** 8920</div>
           <div class="bfa-card-info">
             <div class="bfa-card-holder">
-              <span>Cartão Virtual</span>
-              <strong>Conciliação Bancária</strong>
+              <span>Titular</span>
+              <strong>APSAN, LDA</strong>
             </div>
             <div class="bfa-balance-box">
-              <span>Saldo Atual</span>
+              <span>Saldo Disponível</span>
               <strong id="bfa-card-display-val">500.000 Kz</strong>
             </div>
           </div>
         </div>
 
-        <div style="display: flex; gap: 6px;">
-          <input type="number" id="input-bfa-update" class="form-control" style="margin-bottom:0;" placeholder="Novo saldo BFA (Kz)">
-          <button class="btn-primary" style="white-space: nowrap;" onclick="atualizarValorBFA()">Atualizar</button>
+        <div style="display: flex; gap: 8px;">
+          <input type="number" id="input-bfa-update" class="form-control" placeholder="Atualizar saldo do cartão (Kz)">
+          <button class="btn btn-primary" style="white-space: nowrap;" onclick="atualizarValorBFA()">Atualizar</button>
         </div>
 
-        <div style="border-top: 1px solid var(--border); padding-top: 10px;">
-          <h5 style="font-size: 12px; font-weight: 700; margin-bottom: 6px;">Registar Movimento Diário</h5>
-          <input type="date" id="caixa-data" class="form-control">
-          <input type="text" id="caixa-descricao" class="form-control" placeholder="Descrição (ex: Pagamento internet)">
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
-            <select id="caixa-tipo" class="form-control" style="margin-bottom:0;">
+        <div style="border-top: 1px solid var(--border); padding-top: 14px; display: flex; flex-direction: column; gap: 12px;">
+          <h5 style="font-size: 13px; font-weight: 700; color: var(--dark);">Registar Movimento Diário</h5>
+          <div class="row-inputs">
+            <input type="date" id="caixa-data" class="form-control">
+            <select id="caixa-tipo" class="form-control">
               <option value="Receita">Receita</option>
               <option value="Despesa">Despesa</option>
             </select>
-            <input type="number" id="caixa-valor" class="form-control" style="margin-bottom:0;" placeholder="Valor (Kz)">
           </div>
-          <button class="btn-primary" style="width: 100%; margin-top: 8px; justify-content: center;" onclick="salvarMovimentoCaixa()"><i class="fas fa-plus"></i> Adicionar Movimento</button>
+          <input type="text" id="caixa-descricao" class="form-control" placeholder="Descrição detalhada (ex: Licenciamento de Software)">
+          <input type="number" id="caixa-valor" class="form-control" placeholder="Valor em Kz">
+          <button class="btn btn-primary" style="width: 100%;" onclick="salvarMovimentoCaixa()"><i class="fas fa-plus"></i> Adicionar Movimento</button>
         </div>
 
-        <div class="table-container" style="max-height: 140px; overflow-y: auto;">
+        <div class="table-container" style="max-height: 160px; overflow-y: auto;">
           <table>
             <thead><tr><th>Data</th><th>Descrição</th><th>Tipo</th><th>Valor</th><th></th></tr></thead>
             <tbody id="tabela-caixa"></tbody>
@@ -199,49 +208,49 @@
     </div>
 
     <!-- 2. MOTOR DE PARTIDAS DOBRADAS & AUDITORIA -->
-    <div class="grid-module-card purple">
-      <div class="module-header" style="background: #f5f3ff;">
-        <h4 style="color: #7c3aed;"><i class="fas fa-balance-scale"></i> Partidas Dobradas & Auditoria</h4>
-        <span class="status-badge" style="background-color: #7c3aed;">Contabilidade</span>
+    <div class="grid-module-card">
+      <div class="module-header">
+        <h4><i class="fas fa-balance-scale" style="color: #7c3aed;"></i> Partidas Dobradas & Auditoria</h4>
+        <span class="status-badge" style="background-color: #ede9fe; color: #7c3aed;"><i class="fas fa-shield-alt" style="font-size: 10px;"></i> PGC-LE</span>
       </div>
       <div class="module-body">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
-          <input type="text" id="lc-conta-deb" class="form-control" placeholder="Conta a Debitar">
-          <input type="text" id="lc-conta-cred" class="form-control" placeholder="Conta a Creditar">
+        <div class="row-inputs">
+          <input type="text" id="lc-conta-deb" class="form-control" placeholder="Conta a Debitar (ex: 12 Caixa)">
+          <input type="text" id="lc-conta-cred" class="form-control" placeholder="Conta a Creditar (ex: 31 Clientes)">
         </div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
-          <input type="number" id="lc-valor" class="form-control" placeholder="Valor (Kz)">
+        <div class="row-inputs">
+          <input type="number" id="lc-valor" class="form-control" placeholder="Montante (Kz)">
           <select id="lc-centro" class="form-control">
             <option value="Sede">Centro: Sede</option>
             <option value="Projetos">Centro: Projetos</option>
           </select>
         </div>
-        <button class="btn-primary" style="background-color: #7c3aed; width: 100%; justify-content: center;" onclick="registarLancamento()"><i class="fas fa-save"></i> Registar Partida Dobrada</button>
+        <button class="btn" style="background: #7c3aed; color: white;" onclick="registarLancamento()"><i class="fas fa-check-double"></i> Registar Partida Dobrada</button>
 
-        <h5 style="font-size: 11px; font-weight: 700; color: var(--secondary); margin-top: 4px;">Trilha de Auditoria (Audit Log)</h5>
+        <h5 style="font-size: 12px; font-weight: 700; color: var(--secondary); margin-top: 4px;">Trilha de Auditoria Imutável (Audit Log)</h5>
         <div id="audit-trail" class="audit-log"></div>
       </div>
     </div>
 
     <!-- 3. FATURAÇÃO & CLIENTES -->
-    <div class="grid-module-card blue">
-      <div class="module-header" style="background: #eff6ff;">
-        <h4 style="color: #2563eb;"><i class="fas fa-file-invoice-dollar"></i> Faturação & Clientes</h4>
-        <span class="status-badge" style="background-color: #2563eb;">Ativo</span>
+    <div class="grid-module-card">
+      <div class="module-header">
+        <h4><i class="fas fa-file-invoice-dollar" style="color: #2563eb;"></i> Faturação & Clientes</h4>
+        <span class="status-badge" style="background-color: #dbeafe; color: #2563eb;">Comercial</span>
       </div>
       <div class="module-body">
-        <input type="text" id="fat-cliente" class="form-control" placeholder="Nome do Cliente / Fornecedor">
-        <input type="text" id="fat-servico" class="form-control" placeholder="Descrição do Serviço">
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
-          <input type="number" id="fat-valor" class="form-control" style="margin-bottom:0;" placeholder="Valor (Kz)">
-          <select id="fat-estado" class="form-control" style="margin-bottom:0;">
+        <input type="text" id="fat-cliente" class="form-control" placeholder="Nome do Cliente / Entidade">
+        <input type="text" id="fat-servico" class="form-control" placeholder="Descrição do Serviço / Produto">
+        <div class="row-inputs">
+          <input type="number" id="fat-valor" class="form-control" placeholder="Valor (Kz)">
+          <select id="fat-estado" class="form-control">
             <option value="Pago">Pago</option>
             <option value="Pendente">Pendente</option>
           </select>
         </div>
-        <button class="btn-primary" style="background-color: #2563eb; width: 100%; justify-content: center;" onclick="salvarFatura()"><i class="fas fa-save"></i> Emitir Fatura</button>
+        <button class="btn" style="background: #2563eb; color: white; width: 100%;" onclick="salvarFatura()"><i class="fas fa-file-invoice"></i> Emitir Fatura</button>
 
-        <div class="table-container" style="max-height: 220px; overflow-y: auto;">
+        <div class="table-container" style="max-height: 200px; overflow-y: auto;">
           <table>
             <thead><tr><th>Nº</th><th>Cliente</th><th>Valor</th><th>Estado</th><th></th></tr></thead>
             <tbody id="tabela-faturas"></tbody>
@@ -251,23 +260,23 @@
     </div>
 
     <!-- 4. IMPOSTOS & AGT -->
-    <div class="grid-module-card orange">
-      <div class="module-header" style="background: #fffbeb;">
-        <h4 style="color: #f59e0b;"><i class="fas fa-landmark"></i> Impostos & AGT</h4>
-        <span class="status-badge" style="background-color: #f59e0b;">Obrigações</span>
+    <div class="grid-module-card">
+      <div class="module-header">
+        <h4><i class="fas fa-landmark" style="color: #d97706;"></i> Obrigações Fiscais (AGT)</h4>
+        <span class="status-badge" style="background-color: #fef3c7; color: #d97706;">Fiscal</span>
       </div>
       <div class="module-body">
-        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 6px;">
-          <input type="text" id="imp-tipo" class="form-control" style="margin-bottom:0;" placeholder="Imposto (ex: IVA, IRT)">
-          <input type="number" id="imp-valor" class="form-control" style="margin-bottom:0;" placeholder="Valor Kz">
-          <select id="imp-estado" class="form-control" style="margin-bottom:0;">
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px;">
+          <input type="text" id="imp-tipo" class="form-control" placeholder="Imposto (ex: IVA, IRT)">
+          <input type="number" id="imp-valor" class="form-control" placeholder="Valor">
+          <select id="imp-estado" class="form-control">
             <option value="Pendente">Pendente</option>
             <option value="Pago">Pago</option>
           </select>
         </div>
-        <button class="btn-primary" style="background-color: #f59e0b; width: 100%; justify-content: center;" onclick="salvarImposto()"><i class="fas fa-save"></i> Registar Imposto</button>
+        <button class="btn" style="background: #d97706; color: white; width: 100%;" onclick="salvarImposto()"><i class="fas fa-shield-alt"></i> Registar Imposto</button>
 
-        <div class="table-container" style="max-height: 200px; overflow-y: auto;">
+        <div class="table-container" style="max-height: 180px; overflow-y: auto;">
           <table>
             <thead><tr><th>Imposto</th><th>Valor</th><th>Estado</th><th></th></tr></thead>
             <tbody id="tabela-impostos"></tbody>
@@ -277,21 +286,21 @@
     </div>
 
     <!-- 5. PGC & DEMONSTRAÇÕES -->
-    <div class="grid-module-card cyan">
-      <div class="module-header" style="background: #ecfeff;">
-        <h4 style="color: #0891b2;"><i class="fas fa-chart-line"></i> PGC & Balancete</h4>
-        <span class="status-badge" style="background-color: #0891b2;">Balanço</span>
+    <div class="grid-module-card">
+      <div class="module-header">
+        <h4><i class="fas fa-balance-scale-right" style="color: #0891b2;"></i> PGC & Balancete Analítico</h4>
+        <span class="status-badge" style="background-color: #ecfeff; color: #0891b2;">Contas</span>
       </div>
       <div class="module-body">
         <div class="table-container">
           <table>
-            <thead><tr><th>Rubrica / Conta</th><th>Montante (Kz)</th></tr></thead>
+            <thead><tr><th>Rubrica / Classe PGC</th><th>Montante (Kz)</th></tr></thead>
             <tbody>
               <tr><td>Caixa e Bancos (Classe 1)</td><td id="res-classe1">0 Kz</td></tr>
               <tr><td>Clientes e Terceiros (Classe 3)</td><td id="res-classe3">0 Kz</td></tr>
               <tr><td>Total de Proveitos (Classe 6)</td><td id="res-proveitos" style="color: var(--success); font-weight: 600;">0 Kz</td></tr>
               <tr><td>Total de Gastos (Classe 6/7)</td><td id="res-gastos" style="color: var(--danger); font-weight: 600;">0 Kz</td></tr>
-              <tr><td><strong>Resultado Líquido</strong></td><td id="res-liquido" style="font-weight: 700;">0 Kz</td></tr>
+              <tr><td><strong>Resultado Líquido do Exercício</strong></td><td id="res-liquido" style="font-weight: 700;">0 Kz</td></tr>
             </tbody>
           </table>
         </div>
@@ -299,16 +308,16 @@
     </div>
 
     <!-- 6. MINI-CALCULADORA EXCEL -->
-    <div class="grid-module-card indigo">
-      <div class="module-header" style="background: #eef2ff;">
-        <h4 style="color: #6366f1;"><i class="fas fa-file-excel" style="color: #10b981;"></i> Simulador Excel</h4>
-        <button class="btn-success" style="padding: 4px 8px; font-size: 11px;" onclick="exportarExcel()"><i class="fas fa-download"></i> .xlsx</button>
+    <div class="grid-module-card">
+      <div class="module-header">
+        <h4><i class="fas fa-file-excel" style="color: #10b981;"></i> Simulador Comercial & Orçamentos</h4>
+        <button class="btn btn-success" style="padding: 6px 12px; font-size: 12px;" onclick="exportarExcel()"><i class="fas fa-download"></i> Exportar .xlsx</button>
       </div>
       <div class="module-body">
         <div class="table-container">
           <table class="excel-table" id="tabela-excel-simulador">
             <thead>
-              <tr><th>Descrição</th><th>Qtd</th><th>Preço Kz</th><th>Total Kz</th></tr>
+              <tr><th>Descrição</th><th>Qtd</th><th>Preço Unit. (Kz)</th><th>Subtotal</th></tr>
             </thead>
             <tbody>
               <tr>
@@ -326,9 +335,9 @@
             </tbody>
           </table>
         </div>
-        <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: bold; background: #f8fafc; padding: 6px; border-radius: 4px;">
-          <span>TOTAL ESTIMADO:</span>
-          <input type="text" id="excel-total-geral" class="excel-cell" style="font-weight: bold; color: var(--primary); width: 120px;" readonly value="350.000">
+        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--light); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border);">
+          <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--secondary);">Total Estimado:</span>
+          <input type="text" id="excel-total-geral" class="excel-cell" style="font-weight: 700; color: var(--primary); width: 140px; font-size: 15px;" readonly value="350.000">
         </div>
       </div>
     </div>
@@ -363,7 +372,7 @@
     localStorage.setItem('apsan_fin_bfa', bfaSaldo);
     document.getElementById('input-bfa-update').value = '';
     atualizarDados();
-    showToast('Cartão Virtual BFA atualizado!');
+    showToast('Cartão Virtual BFA atualizado com sucesso!');
   }
 
   function salvarMovimentoCaixa() {
@@ -371,20 +380,20 @@
     const descricao = document.getElementById('caixa-descricao').value;
     const tipo = document.getElementById('caixa-tipo').value;
     const valor = parseFloat(document.getElementById('caixa-valor').value) || 0;
-    if (!descricao || !valor) { alert('Preencha os campos.'); return; }
+    if (!descricao || !valor) { alert('Preencha os campos obrigatórios.'); return; }
     dbCaixa.push({ id: Date.now(), data: data || new Date().toLocaleDateString('pt-PT'), descricao, tipo, valor });
     localStorage.setItem('apsan_fin_caixa', JSON.stringify(dbCaixa));
     document.getElementById('caixa-descricao').value = '';
     document.getElementById('caixa-valor').value = '';
     atualizarDados();
-    showToast('Movimento registado!');
+    showToast('Movimento registado com sucesso!');
   }
 
   function eliminarMovimentoCaixa(id) {
     dbCaixa = dbCaixa.filter(c => c.id !== id);
     localStorage.setItem('apsan_fin_caixa', JSON.stringify(dbCaixa));
     atualizarDados();
-    showToast('Removido.');
+    showToast('Movimento removido.');
   }
 
   function registarLancamento() {
@@ -393,9 +402,9 @@
     const val = parseFloat(document.getElementById('lc-valor').value) || 0;
     const centro = document.getElementById('lc-centro').value;
 
-    if (!deb || !cred || !val) { alert("Preencha os campos de partidas dobradas."); return; }
+    if (!deb || !cred || !val) { alert("Preencha os campos da partida dobrada."); return; }
 
-    const logMsg = `[${new Date().toLocaleTimeString()}] Débito: ${deb} | Crédito: ${cred} | ${val.toLocaleString('pt-PT')} Kz [Centro: ${centro}]`;
+    const logMsg = `[${new Date().toLocaleTimeString()}] D: ${deb} | C: ${cred} | ${val.toLocaleString('pt-PT')} Kz [${centro}]`;
     dbAudit.unshift(logMsg);
     localStorage.setItem('apsan_fin_audit', JSON.stringify(dbAudit));
 
@@ -411,14 +420,14 @@
     const servico = document.getElementById('fat-servico').value;
     const valor = parseFloat(document.getElementById('fat-valor').value) || 0;
     const estado = document.getElementById('fat-estado').value;
-    if (!cliente || !valor) { alert('Preencha os dados.'); return; }
+    if (!cliente || !valor) { alert('Preencha os dados da fatura.'); return; }
     dbFaturas.push({ id: 'FAT-' + Date.now().toString().slice(-4), cliente, servico, valor, estado });
     localStorage.setItem('apsan_fin_faturas', JSON.stringify(dbFaturas));
     document.getElementById('fat-cliente').value = '';
     document.getElementById('fat-servico').value = '';
     document.getElementById('fat-valor').value = '';
     atualizarDados();
-    showToast('Fatura emitida!');
+    showToast('Fatura emitida com sucesso!');
   }
 
   function eliminarFatura(id) {
@@ -432,7 +441,7 @@
     const tipo = document.getElementById('imp-tipo').value;
     const valor = parseFloat(document.getElementById('imp-valor').value) || 0;
     const estado = document.getElementById('imp-estado').value;
-    if (!tipo || !valor) { alert('Preencha os campos.'); return; }
+    if (!tipo || !valor) { alert('Preencha os campos do imposto.'); return; }
     dbImpostos.push({ id: Date.now(), tipo, valor, estado });
     localStorage.setItem('apsan_fin_impostos', JSON.stringify(dbImpostos));
     document.getElementById('imp-tipo').value = '';
@@ -445,7 +454,7 @@
     dbImpostos = dbImpostos.filter(i => i.id !== id);
     localStorage.setItem('apsan_fin_impostos', JSON.stringify(dbImpostos));
     atualizarDados();
-    showToast('Removido.');
+    showToast('Imposto removido.');
   }
 
   function calcularExcel() {
@@ -468,7 +477,7 @@
   function exportarExcel() {
     const wb = XLSX.utils.table_to_book(document.getElementById('tabela-excel-simulador'), {sheet: "Simulador APSAN"});
     XLSX.writeFile(wb, "Simulacao_Contabilistica_APSAN.xlsx");
-    showToast('Ficheiro Excel descarregado!');
+    showToast('Ficheiro Excel descarregado com sucesso!');
   }
 
   function atualizarDados() {
@@ -500,25 +509,25 @@
     document.getElementById('res-liquido').style.color = resultadoLiquido >= 0 ? 'var(--success)' : 'var(--danger)';
 
     document.getElementById('tabela-caixa').innerHTML = dbCaixa.map(c => `
-      <tr><td>${c.data}</td><td>${c.descricao}</td><td><span class="status-badge ${c.tipo === 'Receita' ? 'status-pago' : 'status-vencido'}">${c.tipo}</span></td><td>${c.valor.toLocaleString('pt-PT')}</td><td><button class="btn-secondary" style="color: var(--danger); padding:1px 4px;" onclick="eliminarMovimentoCaixa(${c.id})"><i class="fas fa-trash"></i></button></td></tr>
-    `).join('') || `<tr><td colspan="5" style="text-align: center; color: var(--secondary);">Vazio.</td></tr>`;
+      <tr><td>${c.data}</td><td>${c.descricao}</td><td><span class="status-badge ${c.tipo === 'Receita' ? 'status-pago' : 'status-vencido'}">${c.tipo}</span></td><td>${c.valor.toLocaleString('pt-PT')} Kz</td><td><button class="btn btn-secondary" style="padding:4px 8px; color: var(--danger);" onclick="eliminarMovimentoCaixa(${c.id})"><i class="fas fa-trash"></i></button></td></tr>
+    `).join('') || `<tr><td colspan="5" style="text-align: center; color: var(--secondary);">Sem movimentos registados.</td></tr>`;
 
     document.getElementById('tabela-faturas').innerHTML = dbFaturas.map(f => `
-      <tr><td><strong>${f.id}</strong></td><td>${f.cliente}</td><td>${f.valor.toLocaleString('pt-PT')}</td><td><span class="status-badge ${f.estado === 'Pago' ? 'status-pago' : 'status-pendente'}">${f.estado}</span></td><td><button class="btn-secondary" style="color: var(--danger); padding:1px 4px;" onclick="eliminarFatura('${f.id}')"><i class="fas fa-trash"></i></button></td></tr>
-    `).join('') || `<tr><td colspan="5" style="text-align: center; color: var(--secondary);">Vazio.</td></tr>`;
+      <tr><td><strong>${f.id}</strong></td><td>${f.cliente}</td><td>${f.valor.toLocaleString('pt-PT')} Kz</td><td><span class="status-badge ${f.estado === 'Pago' ? 'status-pago' : 'status-pendente'}">${f.estado}</span></td><td><button class="btn btn-secondary" style="padding:4px 8px; color: var(--danger);" onclick="eliminarFatura('${f.id}')"><i class="fas fa-trash"></i></button></td></tr>
+    `).join('') || `<tr><td colspan="5" style="text-align: center; color: var(--secondary);">Sem faturas emitidas.</td></tr>`;
 
     document.getElementById('tabela-impostos').innerHTML = dbImpostos.map(i => `
-      <tr><td>${i.tipo}</td><td>${i.valor.toLocaleString('pt-PT')}</td><td><span class="status-badge ${i.estado === 'Pago' ? 'status-pago' : 'status-pendente'}">${i.estado}</span></td><td><button class="btn-secondary" style="color: var(--danger); padding:1px 4px;" onclick="eliminarImposto(${i.id})"><i class="fas fa-trash"></i></button></td></tr>
-    `).join('') || `<tr><td colspan="4" style="text-align: center; color: var(--secondary);">Vazio.</td></tr>`;
+      <tr><td>${i.tipo}</td><td>${i.valor.toLocaleString('pt-PT')} Kz</td><td><span class="status-badge ${i.estado === 'Pago' ? 'status-pago' : 'status-pendente'}">${i.estado}</span></td><td><button class="btn btn-secondary" style="padding:4px 8px; color: var(--danger);" onclick="eliminarImposto(${i.id})"><i class="fas fa-trash"></i></button></td></tr>
+    `).join('') || `<tr><td colspan="4" style="text-align: center; color: var(--secondary);">Sem obrigações fiscais.</td></tr>`;
 
-    document.getElementById('audit-trail').innerHTML = dbAudit.map(a => `<div>${a}</div>`).join('<hr style="border:0; border-top:1px solid #fed7agg; margin:4px 0;">') || '<span style="color: var(--secondary); font-size: 11px;">Sem registos de auditoria recentes.</span>';
+    document.getElementById('audit-trail').innerHTML = dbAudit.map(a => `<div>${a}</div>`).join('') || '<span style="color: var(--secondary); font-size: 11px;">Sem registos de auditoria recentes.</span>';
   }
 
   function showToast(message) {
     const toast = document.getElementById('toast');
     document.getElementById('toast-message').innerText = message;
     toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 3000);
+    setTimeout(() => toast.classList.remove('show'), 3500);
   }
 
   atualizarDados();
