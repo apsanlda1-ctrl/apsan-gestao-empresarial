@@ -7,10 +7,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- BIBLIOTECAS DE EXPORTAÇÃO (PDF E WORD) -->
+  <!-- BIBLIOTECAS DE EXPORTAÇÃO (PDF, WORD E EXCEL) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
@@ -87,7 +88,7 @@
     .btn-secondary { padding: 9px 16px; background: var(--white); color: var(--dark); border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
     .btn-success { padding: 9px 16px; background: var(--success); color: var(--white); border: none; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
 
-    /* GRELHA DUPLA (FINANÇAS ESQUERDA / CONTABILIDADE DIREITA) */
+    /* GRELHA DUPLA */
     .dual-grid-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
     @media (max-width: 1024px) { .dual-grid-layout { grid-template-columns: 1fr; } }
 
@@ -124,7 +125,7 @@
     .status-pendente { background-color: #d69e2e; }
     .status-vencido { background-color: #e53e3e; }
 
-    /* EDITOR WORD INTEGRADO */
+    /* EDITOR WORD E EXCEL INTEGRADOS */
     .word-app-container { display: flex; flex-direction: column; height: 100%; background: #f3f4f6; }
     .word-toolbar { background-color: #ffffff; border-bottom: 1px solid #e5e7eb; padding: 10px 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
     .word-toolbar-group { display: flex; gap: 4px; align-items: center; border-right: 1px solid #e5e7eb; padding-right: 10px; }
@@ -133,6 +134,13 @@
     .word-editor-body { flex: 1; overflow-y: auto; padding: 40px 20px; display: flex; justify-content: center; background-color: #e5e7eb; }
     .document-page { background: #ffffff; width: 210mm; min-height: 297mm; padding: 25mm 20mm; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); outline: none; line-height: 1.6; font-size: 14px; color: #111827; border-radius: 2px; }
     .document-page p { margin-bottom: 12px; }
+
+    /* ESTILOS EXCEL / PLANILHA */
+    .excel-table { width: 100%; border-collapse: collapse; background: white; }
+    .excel-table th, .excel-table td { border: 1px solid #cbd5e1; padding: 6px 8px; font-size: 12px; }
+    .excel-table th { background: #f1f5f9; text-align: center; color: #334155; font-weight: 600; }
+    .excel-cell { width: 100%; border: none; outline: none; background: transparent; font-size: 12px; font-family: 'Inter', sans-serif; text-align: right; }
+    .excel-cell-text { text-align: left; }
 
     .form-control { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); outline: none; margin-bottom: 10px; font-size: 12px; }
     .grid-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
@@ -156,7 +164,7 @@
       <div class="user-avatar"><i class="fas fa-calculator"></i></div>
       <div class="user-details">
         <h4>Finanças & Contabilidade</h4>
-        <span>Departamento Ativo</span>
+        <span>Centro de Controlo</span>
       </div>
     </div>
     
@@ -164,10 +172,12 @@
       <ul>
         <li class="active" onclick="showSection('dashboard', this)"><i class="fas fa-chart-line"></i><span>Dashboard Geral</span></li>
         <li onclick="showSection('unificado', this)"><i class="fas fa-columns"></i><span>Finanças & Contabilidade</span></li>
-        <li onclick="showSection('feed', this)"><i class="fas fa-bullhorn"></i><span>Mural & Feed</span></li>
+        <li onclick="showSection('pgc', this)"><i class="fas fa-book"></i><span>Plano de Contas (PGC)</span></li>
+        <li onclick="showSection('agt', this)"><i class="fas fa-landmark"></i><span>Impostos & AGT</span></li>
+        <li onclick="showSection('excel', this)"><i class="fas fa-file-excel" style="color: #10b981;"></i><span>Excel & Demonstrações</span></li>
         <li onclick="showSection('editor-word', this)"><i class="fas fa-file-word"></i><span>Editor Word</span></li>
         <li onclick="showSection('meus-docs-word', this)"><i class="fas fa-folder-tree"></i><span>Meus Docs Word</span></li>
-        <li onclick="showSection('arquivo-pdfs', this)"><i class="fas fa-folder-open"></i><span>Arquivo Digital</span></li>
+        <li onclick="showSection('arquivo-pdfs', this)"><i class="fas fa-folder-open"></i><span>Repositório Digital</span></li>
       </ul>
     </nav>
     
@@ -181,7 +191,7 @@
     <header class="top-header">
       <div class="header-left">
         <h2>Departamento de Finanças e Contabilidade</h2>
-        <span class="breadcrumb">APSAN > Gestão Integrada e Organizada em Grelha</span>
+        <span class="breadcrumb">APSAN > Centro de Controlo Contabilístico e Fiscal</span>
       </div>
       <div class="header-right">
         <div class="date-time">
@@ -200,18 +210,47 @@
         <div class="stat-card"><div class="stat-icon orange"><i class="fas fa-credit-card"></i></div><div class="stat-info"><h3 id="dash-bfa">0 Kz</h3><p>Cartão Virtual BFA</p></div></div>
       </div>
 
-      <div class="card">
-        <div class="card-body">
-          <h4 style="margin-bottom: 15px;">Bem-vindo ao Sistema Unificado APSAN, LDA[cite: 5]</h4>
-          <p style="color: var(--secondary); font-size: 14px;">Aceda à aba <strong>Finanças & Contabilidade</strong> para visualizar o painel estruturado em grelha lado a lado (Finanças à esquerda e Contabilidade à direita), garantindo controlo rigoroso e sem confusões[cite: 5].</p>
+      <div class="dual-grid-layout">
+        <div class="card">
+          <div class="card-body">
+            <h4 style="margin-bottom: 12px;"><i class="fas fa-balance-scale"></i> Mini-Balanço Patrimonial</h4>
+            <p style="font-size: 13px; color: var(--secondary); margin-bottom: 15px;">Resumo instantâneo das contas do Ativo e Meios Financeiros da APSAN, LDA.</p>
+            <div class="table-container">
+              <table>
+                <thead><tr><th>Rubrica Contabilística</th><th>Montante (Kz)</th></tr></thead>
+                <tbody>
+                  <tr><td>Classe 1 - Caixa e Bancos (BFA)</td><td id="res-classe1">0 Kz</td></tr>
+                  <tr><td>Classe 3 - Clientes e Terceiros</td><td id="res-classe3">0 Kz</td></tr>
+                  <tr><td><strong>Total Ativo Circulante</strong></td><td id="res-total-ativo" style="font-weight: 700;">0 Kz</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <h4 style="margin-bottom: 12px;"><i class="fas fa-chart-pie"></i> Demonstração de Resultados</h4>
+            <p style="font-size: 13px; color: var(--secondary); margin-bottom: 15px;">Apuramento automático do resultado líquido do exercício.</p>
+            <div class="table-container">
+              <table>
+                <thead><tr><th>Descrição</th><th>Valor (Kz)</th></tr></thead>
+                <tbody>
+                  <tr><td>Total de Proveitos / Vendas (Classe 6/7)</td><td id="res-proveitos" style="color: var(--success); font-weight: 600;">0 Kz</td></tr>
+                  <tr><td>Total de Gastos / Custos</td><td id="res-gastos" style="color: var(--danger); font-weight: 600;">0 Kz</td></tr>
+                  <tr><td><strong>Resultado Líquido do Exercício</strong></td><td id="res-liquido" style="font-weight: 700;">0 Kz</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 2. GRELHA PRINCIPAL (FINANÇAS ESQUERDA / CONTABILIDADE DIREITA) -->
+    <!-- 2. GRELHA PRINCIPAL (FINANÇAS & CONTABILIDADE) -->
     <section id="section-unificado" class="content-section">
       <div class="section-toolbar">
-        <h3><i class="fas fa-columns"></i> Gestão Paralela: Finanças (Esquerda) & Contabilidade (Direita)[cite: 5]</h3>
+        <h3><i class="fas fa-columns"></i> Gestão Paralela: Finanças (Esquerda) & Contabilidade (Direita)</h3>
       </div>
 
       <div class="dual-grid-layout">
@@ -224,7 +263,7 @@
           </div>
           <div class="column-body">
             
-            <!-- CARTÃO VIRTUAL BFA (Limitado e Editável) -->
+            <!-- CARTÃO VIRTUAL BFA -->
             <div class="bfa-virtual-card">
               <div class="bfa-card-top">
                 <div class="bfa-card-chip"></div>
@@ -234,7 +273,7 @@
               <div class="bfa-card-info">
                 <div class="bfa-card-holder">
                   <span>Nome do Cartão</span>
-                  <strong>Cartão Virtual BFA (Limitado)</strong>
+                  <strong>Cartão Virtual BFA (Conciliação)</strong>
                 </div>
                 <div class="bfa-balance-box">
                   <span>Saldo Atual (Kz)</span>
@@ -244,14 +283,14 @@
             </div>
 
             <div style="background: var(--light); padding: 12px; border-radius: var(--radius); margin-bottom: 20px;">
-              <h5 style="font-size: 12px; margin-bottom: 8px; font-weight: 600;"><i class="fas fa-edit"></i> Atualizar Saldo da Conta Real / Cartão BFA</h5>
+              <h5 style="font-size: 12px; margin-bottom: 8px; font-weight: 600;"><i class="fas fa-edit"></i> Atualizar Saldo / Conciliação Bancária BFA</h5>
               <div style="display: flex; gap: 8px;">
                 <input type="number" id="input-bfa-update" class="form-control" style="margin-bottom:0;" placeholder="Novo valor em Kz">
                 <button class="btn-primary" style="white-space: nowrap;" onclick="atualizarValorBFA()">Atualizar</button>
               </div>
             </div>
 
-            <h5 style="font-size: 13px; font-weight: 700; margin-bottom: 10px;"><i class="fas fa-exchange-alt"></i> Movimentos de Caixa & Tesouraria</h5>
+            <h5 style="font-size: 13px; font-weight: 700; margin-bottom: 10px;"><i class="fas fa-exchange-alt"></i> Diário de Tesouraria (Caixa / Bancos)</h5>
             <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 15px;">
               <input type="date" id="caixa-data" class="form-control">
               <input type="text" id="caixa-descricao" class="form-control" placeholder="Descrição da transação">
@@ -273,7 +312,7 @@
           </div>
         </div>
 
-        <!-- COLUNA DIREITA: CONTABILIDADE (Balancete, Faturas e Impostos) -->
+        <!-- COLUNA DIREITA: CONTABILIDADE -->
         <div class="column-panel contabilidade">
           <div class="column-header" style="background: #eff6ff;">
             <h4 style="color: #2563eb;"><i class="fas fa-balance-scale"></i> Módulo de Contabilidade</h4>
@@ -282,10 +321,10 @@
           <div class="column-body">
 
             <!-- Faturas & Recibos -->
-            <h5 style="font-size: 13px; font-weight: 700; margin-bottom: 10px;"><i class="fas fa-file-invoice-dollar"></i> Emissão de Faturas</h5>
+            <h5 style="font-size: 13px; font-weight: 700; margin-bottom: 10px;"><i class="fas fa-file-invoice-dollar"></i> Emissão de Faturas & IVA</h5>
             <div style="display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 15px;">
-              <input type="text" id="fat-cliente" class="form-control" placeholder="Nome do Cliente">
-              <input type="text" id="fat-servico" class="form-control" placeholder="Serviço prestado">
+              <input type="text" id="fat-cliente" class="form-control" placeholder="Nome do Cliente / Fornecedor">
+              <input type="text" id="fat-servico" class="form-control" placeholder="Descrição do Serviço">
               <input type="number" id="fat-valor" class="form-control" placeholder="Valor (Kz)">
               <select id="fat-estado" class="form-control">
                 <option value="Pago">Pago</option>
@@ -302,10 +341,10 @@
             </div>
 
             <!-- Balancete Simplificado -->
-            <h5 style="font-size: 13px; font-weight: 700; margin-bottom: 10px;"><i class="fas fa-chart-pie"></i> Balancete Contabilístico</h5>
+            <h5 style="font-size: 13px; font-weight: 700; margin-bottom: 10px;"><i class="fas fa-chart-pie"></i> Balancete de Contas (PGC)</h5>
             <div class="table-container" style="margin-bottom: 20px;">
               <table>
-                <thead><tr><th>Conta</th><th>Designação</th><th>Débito / Crédito</th></tr></thead>
+                <thead><tr><th>Conta</th><th>Designação</th><th>Montante</th></tr></thead>
                 <tbody>
                   <tr><td>11</td><td>Caixa Geral</td><td id="bal-11">0 Kz</td></tr>
                   <tr><td>12</td><td>Depósitos / BFA</td><td id="bal-12">0 Kz</td></tr>
@@ -315,41 +354,122 @@
               </table>
             </div>
 
-            <!-- Impostos AGT -->
-            <h5 style="font-size: 13px; font-weight: 700; margin-bottom: 10px;"><i class="fas fa-landmark"></i> Controlo de Impostos (AGT)</h5>
-            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-              <input type="text" id="imp-tipo" class="form-control" style="margin-bottom:0;" placeholder="Imposto (IVA, IRT...)">
-              <input type="number" id="imp-valor" class="form-control" style="margin-bottom:0;" placeholder="Valor (Kz)">
-              <button class="btn-secondary" style="white-space: nowrap;" onclick="salvarImposto()">Registar</button>
-            </div>
-            <div class="table-container">
-              <table>
-                <thead><tr><th>Imposto</th><th>Valor</th><th>Estado</th><th>Ação</th></tr></thead>
-                <tbody id="tabela-impostos"></tbody>
-              </table>
-            </div>
-
           </div>
         </div>
 
       </div>
     </section>
 
-    <!-- 3. MURAL & FEED -->
-    <section id="section-feed" class="content-section">
-      <div style="max-width: 800px; margin: 0 auto; width: 100%;">
-        <div class="card" style="margin-bottom: 20px;">
-          <div class="card-body">
-            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 10px;"><i class="fas fa-bullhorn"></i> Mural & Feed</h3>
-            <textarea id="dept-feed-text" placeholder="Partilhe informações..." style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; resize: none; height: 80px; margin-bottom: 10px; outline: none;"></textarea>
-            <button class="btn-primary" id="dept-publish-feed-btn" style="padding: 8px 16px; font-size: 12px;"><i class="fas fa-paper-plane"></i> Publicar</button>
+    <!-- 3. PLANO DE CONTAS (PGC) -->
+    <section id="section-pgc" class="content-section">
+      <div class="section-toolbar">
+        <h3><i class="fas fa-book"></i> Plano Geral de Contabilidade (PGC) - Consulta Rápida</h3>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <p style="font-size: 13px; color: var(--secondary); margin-bottom: 15px;">Consulte as contas oficiais em vigor para garantir o correto lançamento contábil na APSAN, LDA.</p>
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Classe / Conta</th><th>Designação da Conta</th><th>Aplicação Prática na APSAN</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Classe 1</strong></td><td><strong>Meios Financeiros Líquidos</strong></td><td>Caixa, Contas Bancárias e Cartão Virtual BFA.</td></tr>
+                <tr><td>11</td><td>Caixa</td><td>Gestão de numerário em cofre ou dependências.</td></tr>
+                <tr><td>12</td><td>Depósitos em Bancos</td><td>Conta bancária BFA e outras instituições financeiras.</td></tr>
+                <tr><td><strong>Classe 2</strong></td><td><strong>Terceiros - Fornecedores e Clientes</strong></td><td>Controlo de saldos comerciais correntes.</td></tr>
+                <tr><td><strong>Classe 3</strong></td><td><strong>Existências</strong></td><td>Mercadorias e consumíveis de escritório.</td></tr>
+                <tr><td><strong>Classe 6</strong></td><td><strong>Gastos</strong></td><td>Custos operacionais, fornecimentos e serviços externos.</td></tr>
+                <tr><td><strong>Classe 7</strong></td><td><strong>Rendimentos / Proveitos</strong></td><td>Vendas de serviços e infoprodutos.</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
-        <div id="dept-feed-posts-container"></div>
       </div>
     </section>
 
-    <!-- 4. EDITOR WORD -->
+    <!-- 4. IMPOSTOS E AGT -->
+    <section id="section-agt" class="content-section">
+      <div class="section-toolbar">
+        <h3><i class="fas fa-landmark"></i> Gestão de Impostos & Obrigações Fiscais (AGT)</h3>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h4 style="font-size: 14px; margin-bottom: 12px;"><i class="fas fa-plus-circle"></i> Registar Apuramento de Imposto (IVA, IRT, etc.)</h4>
+          <div style="display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 8px; margin-bottom: 20px; align-items: center;">
+            <input type="text" id="imp-tipo" class="form-control" style="margin-bottom:0;" placeholder="Tipo de Imposto (ex: IVA Mensal, IRT)">
+            <input type="number" id="imp-valor" class="form-control" style="margin-bottom:0;" placeholder="Valor (Kz)">
+            <select id="imp-estado" class="form-control" style="margin-bottom:0;">
+              <option value="Pendente">Pendente</option>
+              <option value="Pago">Pago</option>
+            </select>
+            <button class="btn-primary" style="white-space: nowrap;" onclick="salvarImposto()"><i class="fas fa-save"></i> Registar</button>
+          </div>
+
+          <div class="table-container">
+            <table>
+              <thead><tr><th>Imposto / Obrigação</th><th>Valor (Kz)</th><th>Estado</th><th>Ação</th></tr></thead>
+              <tbody id="tabela-impostos"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. EXCEL & DEMONSTRAÇÕES -->
+    <section id="section-excel" class="content-section">
+      <div class="section-toolbar">
+        <h3><i class="fas fa-file-excel" style="color: #10b981;"></i> Planilha de Contabilidade & Simulações (Excel)</h3>
+        <div class="btn-group">
+          <button class="btn-success" onclick="exportarExcel()"><i class="fas fa-download"></i> Descarregar Excel (.xlsx)</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <p style="font-size: 13px; color: var(--secondary); margin-bottom: 15px;">Utilize esta tabela interativa tipo Excel para efetuar cálculos rápidos de orçamentos, estimativas de IVA ou custos operacionais.</p>
+          <div class="table-container">
+            <table class="excel-table" id="tabela-excel-simulador">
+              <thead>
+                <tr>
+                  <th style="width: 50px;">A</th>
+                  <th>B (Descrição do Item / Serviço)</th>
+                  <th style="width: 150px;">C (Quantidade)</th>
+                  <th style="width: 180px;">D (Preço Unitário Kz)</th>
+                  <th style="width: 180px;">E (Total Calculado Kz)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="text-align: center; background:#f1f5f9;">1</td>
+                  <td><input type="text" class="excel-cell excel-cell-text" value="Serviços de Consultoria Contabilística"></td>
+                  <td><input type="number" class="excel-cell calc-trigger" value="1" oninput="calcularExcel()"></td>
+                  <td><input type="number" class="excel-cell calc-trigger" value="150000" oninput="calcularExcel()"></td>
+                  <td><input type="text" class="excel-cell excel-res" readonly value="150.000"></td>
+                </tr>
+                <tr>
+                  <td style="text-align: center; background:#f1f5f9;">2</td>
+                  <td><input type="text" class="excel-cell excel-cell-text" value="Manutenção de Sistemas e Suporte IT"></td>
+                  <td><input type="number" class="excel-cell calc-trigger" value="2" oninput="calcularExcel()"></td>
+                  <td><input type="number" class="excel-cell calc-trigger" value="75000" oninput="calcularExcel()"></td>
+                  <td><input type="text" class="excel-cell excel-res" readonly value="150.000"></td>
+                </tr>
+                <tr>
+                  <td style="text-align: center; background:#f1f5f9;">3</td>
+                  <td><input type="text" class="excel-cell excel-cell-text" value="Fornecimento de Material de Escritório"></td>
+                  <td><input type="number" class="excel-cell calc-trigger" value="5" oninput="calcularExcel()"></td>
+                  <td><input type="number" class="excel-cell calc-trigger" value="10000" oninput="calcularExcel()"></td>
+                  <td><input type="text" class="excel-cell excel-res" readonly value="50.000"></td>
+                </tr>
+                <tr>
+                  <td colspan="4" style="text-align: right; font-weight: bold; background: #f8fafc;">TOTAL GERAL ESTIMADO:</td>
+                  <td><input type="text" id="excel-total-geral" class="excel-cell" style="font-weight: bold; color: var(--primary);" readonly value="350.000"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. EDITOR WORD -->
     <section id="section-editor-word" class="content-section" style="padding: 0;">
       <div class="word-app-container">
         <div class="word-toolbar">
@@ -366,13 +486,13 @@
         <div class="word-editor-body">
           <div class="document-page" id="word-editor-content" contenteditable="true" spellcheck="false">
             <h1>Relatório de Contas & Finanças</h1>
-            <p>Insira os dados...</p>
+            <p>Insira os dados do relatório contabilístico...</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- 5. MEUS DOCS WORD -->
+    <!-- 7. MEUS DOCS WORD -->
     <section id="section-meus-docs-word" class="content-section">
       <div class="section-toolbar"><h3><i class="fas fa-folder-tree"></i> Documentos Guardados</h3></div>
       <div class="card"><div class="card-body">
@@ -385,10 +505,11 @@
       </div></div>
     </section>
 
-    <!-- 6. ARQUIVO DIGITAL -->
+    <!-- 8. REPOSITÓRIO DIGITAL -->
     <section id="section-arquivo-pdfs" class="content-section">
-      <div class="section-toolbar"><h3><i class="fas fa-folder-open"></i> Repositório Digital</h3></div>
+      <div class="section-toolbar"><h3><i class="fas fa-folder-open"></i> Repositório de Documentos Fiscais e Comprovativos</h3></div>
       <div class="card"><div class="card-body">
+        <p style="font-size: 13px; color: var(--secondary); margin-bottom: 15px;">Anexe guias de pagamento de impostos, recibos e extratos bancários em PDF ou imagem.</p>
         <input type="file" id="upload-file-input" class="form-control" accept=".pdf,.doc,.docx,.jpg,.png">
         <button class="btn-primary" onclick="salvarFicheiro()"><i class="fas fa-upload"></i> Guardar Ficheiro</button>
       </div></div>
@@ -490,8 +611,9 @@
   function salvarImposto() {
     const tipo = document.getElementById('imp-tipo').value;
     const valor = parseFloat(document.getElementById('imp-valor').value) || 0;
+    const estado = document.getElementById('imp-estado').value;
     if (!tipo || !valor) { alert('Preencha os campos.'); return; }
-    dbImpostos.push({ id: Date.now(), tipo, valor, estado: 'Pendente' });
+    dbImpostos.push({ id: Date.now(), tipo, valor, estado });
     localStorage.setItem('apsan_fin_impostos', JSON.stringify(dbImpostos));
     document.getElementById('imp-tipo').value = '';
     document.getElementById('imp-valor').value = '';
@@ -504,6 +626,28 @@
     localStorage.setItem('apsan_fin_impostos', JSON.stringify(dbImpostos));
     atualizarDados();
     showToast('Removido.');
+  }
+
+  function calcularExcel() {
+    const rows = document.querySelectorAll('#tabela-excel-simulador tbody tr');
+    let totalGeral = 0;
+    rows.forEach((row, index) => {
+      if(index < rows.length - 1) {
+        const inputs = row.querySelectorAll('input');
+        const qtd = parseFloat(inputs[1].value) || 0;
+        const preco = parseFloat(inputs[2].value) || 0;
+        const subtotal = qtd * preco;
+        inputs[3].value = subtotal.toLocaleString('pt-PT');
+        totalGeral += subtotal;
+      }
+    });
+    document.getElementById('excel-total-geral').value = totalGeral.toLocaleString('pt-PT') + ' Kz';
+  }
+
+  function exportarExcel() {
+    const wb = XLSX.utils.table_to_book(document.getElementById('tabela-excel-simulador'), {sheet: "Simulador APSAN"});
+    XLSX.writeFile(wb, "Simulacao_Contabilistica_APSAN.xlsx");
+    showToast('Ficheiro Excel descarregado!');
   }
 
   function salvarDocumentoWord() {
@@ -565,6 +709,7 @@
     });
 
     const saldo = totalReceitas - totalDespesas;
+    const resultadoLiquido = totalReceitas - totalDespesas;
 
     document.getElementById('dash-receitas').innerText = totalReceitas.toLocaleString('pt-PT') + ' Kz';
     document.getElementById('dash-despesas').innerText = totalDespesas.toLocaleString('pt-PT') + ' Kz';
@@ -572,6 +717,15 @@
     document.getElementById('dash-bfa').innerText = bfaSaldo.toLocaleString('pt-PT') + ' Kz';
 
     document.getElementById('bfa-card-display-val').innerText = bfaSaldo.toLocaleString('pt-PT') + ' Kz';
+
+    // Mini-Balanço e Demonstração de Resultados
+    document.getElementById('res-classe1').innerText = (saldo + bfaSaldo).toLocaleString('pt-PT') + ' Kz';
+    document.getElementById('res-classe3').innerText = totalReceitas.toLocaleString('pt-PT') + ' Kz';
+    document.getElementById('res-total-ativo').innerText = (saldo + bfaSaldo + totalReceitas).toLocaleString('pt-PT') + ' Kz';
+    document.getElementById('res-proveitos').innerText = totalReceitas.toLocaleString('pt-PT') + ' Kz';
+    document.getElementById('res-gastos').innerText = totalDespesas.toLocaleString('pt-PT') + ' Kz';
+    document.getElementById('res-liquido').innerText = resultadoLiquido.toLocaleString('pt-PT') + ' Kz';
+    document.getElementById('res-liquido').style.color = resultadoLiquido >= 0 ? 'var(--success)' : 'var(--danger)';
 
     document.getElementById('tabela-caixa').innerHTML = dbCaixa.map(c => `
       <tr><td>${c.data}</td><td>${c.descricao}</td><td><span class="status-badge ${c.tipo === 'Receita' ? 'status-pago' : 'status-vencido'}">${c.tipo}</span></td><td>${c.valor.toLocaleString('pt-PT')} Kz</td><td><button class="btn-secondary" style="color: var(--danger); padding:2px 6px;" onclick="eliminarMovimentoCaixa(${c.id})"><i class="fas fa-trash"></i></button></td></tr>
@@ -582,17 +736,18 @@
     `).join('') || `<tr><td colspan="5" style="text-align: center; color: var(--secondary);">Nenhuma fatura.</td></tr>`;
 
     document.getElementById('tabela-impostos').innerHTML = dbImpostos.map(i => `
-      <tr><td>${i.tipo}</td><td>${i.valor.toLocaleString('pt-PT')} Kz</td><td><span class="status-badge status-pendente">${i.estado}</span></td><td><button class="btn-secondary" style="color: var(--danger); padding:2px 6px;" onclick="eliminarImposto(${i.id})"><i class="fas fa-trash"></i></button></td></tr>
-    `).join('') || `<tr><td colspan="4" style="text-align: center; color: var(--secondary);">Nenhum imposto.</td></tr>`;
+      <tr><td>${i.tipo}</td><td>${i.valor.toLocaleString('pt-PT')} Kz</td><td><span class="status-badge ${i.estado === 'Pago' ? 'status-pago' : 'status-pendente'}">${i.estado}</span></td><td><button class="btn-secondary" style="color: var(--danger); padding:2px 6px;" onclick="eliminarImposto(${i.id})"><i class="fas fa-trash"></i></button></td></tr>
+    `).join('') || `<tr><td colspan="4" style="text-align: center; color: var(--secondary);">Nenhum imposto registado.</td></tr>`;
 
     document.getElementById('tabela-meus-docs').innerHTML = dbDocsWord.map(d => `
       <tr><td><strong>${d.titulo}</strong></td><td>${d.data}</td><td><button class="btn-primary" style="padding: 4px 8px; font-size: 11px;" onclick="exportPDFWordIntegrated()">PDF</button> <button class="btn-secondary" style="padding: 4px 8px; font-size: 11px; color: var(--danger);" onclick="eliminarDocWord(${d.id})"><i class="fas fa-trash"></i></button></td></tr>
-    `).join('') || `<tr><td colspan="3" style="text-align: center; color: var(--security);">Nenhum documento.</td></tr>`;
+    `).join('') || `<tr><td colspan="3" style="text-align: center; color: var(--secondary);">Nenhum documento.</td></tr>`;
 
     document.getElementById('grid-ficheiros').innerHTML = dbFicheiros.map(f => `
       <div class="card" style="padding: 15px; text-align: center;">
         <i class="fas fa-file-alt" style="font-size: 30px; color: var(--primary); margin-bottom: 6px;"></i>
         <h4 style="font-size: 12px;">${f.nome}</h4>
+        <span style="font-size: 10px; color: var(--secondary); display:block; margin: 4px 0;">${f.tamanho}</span>
         <button class="btn-secondary" style="margin-top: 6px; color: var(--danger); font-size:11px; padding:4px 8px;" onclick="eliminarFicheiro(${f.id})">Eliminar</button>
       </div>
     `).join('');
