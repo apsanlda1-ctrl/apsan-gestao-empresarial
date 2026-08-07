@@ -3,98 +3,120 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>APSAN, LDA - ERP Contabilístico Robusto</title>
-  <!-- Estilos e bibliotecas mantidos para consistência -->
+  <title>APSAN, LDA - ERP Contabilístico Profissional</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <style>
-    /* ... [Mantém o CSS original anterior] ... */
-    :root { --primary: #047857; --audit-bg: #fff7ed; }
-    .audit-log { font-size: 10px; color: #64748b; background: var(--audit-bg); padding: 8px; border-radius: 4px; margin-top: 10px; max-height: 80px; overflow-y: auto; }
-    .dobrada-warning { color: var(--danger); font-size: 11px; font-weight: bold; margin-top: 5px; }
+    :root { 
+      --primary: #047857; --primary-dark: #065f46; --secondary: #64748b; 
+      --dark: #1e293b; --light: #f8fafc; --border: #e2e8f0; --audit: #fff7ed;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+    body { background: #f1f5f9; padding: 20px; color: var(--dark); }
+    .dashboard-container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+    
+    .master-header { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+    .master-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px; }
+    
+    .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 4px solid var(--primary); }
+    .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 10px; }
+    .btn { padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer; color: white; background: var(--primary); font-weight: 600; width: 100%; }
+    
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th { text-align: left; font-size: 12px; color: var(--secondary); border-bottom: 2px solid var(--border); padding: 8px; }
+    td { padding: 8px; border-bottom: 1px solid var(--border); font-size: 13px; }
+    
+    .audit-log { font-size: 11px; background: var(--audit); padding: 10px; border-radius: 6px; height: 150px; overflow-y: auto; margin-top: 10px; border: 1px solid #fed7aa; }
+    .status-tag { padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: bold; background: #dcfce7; color: #166534; }
   </style>
 </head>
 <body>
 
 <div class="dashboard-container">
   <header class="master-header">
-    <h1><i class="fas fa-landmark"></i> APSAN, LDA - ERP Contabilístico</h1>
+    <h1><i class="fas fa-landmark"></i> APSAN, LDA - ERP</h1>
+    <div id="relogio"></div>
   </header>
 
-  <!-- Módulos Estruturados -->
   <div class="master-grid">
-    
-    <!-- 1. MOTOR CONTABILÍSTICO (Partidas Dobradas & Auditoria) -->
-    <div class="grid-module-card">
-      <div class="module-header">
-        <h4><i class="fas fa-balance-scale"></i> Lançamentos (Partidas Dobradas)</h4>
-      </div>
-      <div class="module-body">
-        <input type="text" id="lc-conta-deb" class="form-control" placeholder="Conta a Debitar">
-        <input type="text" id="lc-conta-cred" class="form-control" placeholder="Conta a Creditar">
-        <input type="number" id="lc-valor" class="form-control" placeholder="Valor (Kz)">
-        <select id="lc-centro" class="form-control">
-          <option value="Sede">Centro: Sede</option>
-          <option value="Projetos">Centro: Projetos</option>
-        </select>
-        <button class="btn-primary" onclick="salvarLancamento()">Registar Partida Dobrada</button>
-        <div id="audit-trail" class="audit-log"></div>
-      </div>
+    <!-- MÓDULO: PARTIDAS DOBRADAS E AUDITORIA -->
+    <div class="card">
+      <h4><i class="fas fa-balance-scale"></i> Lançamento Contabilístico</h4>
+      <input type="text" id="debito" class="form-control" placeholder="Conta a Debitar">
+      <input type="text" id="credito" class="form-control" placeholder="Conta a Creditar">
+      <input type="number" id="valor" class="form-control" placeholder="Valor (Kz)">
+      <select id="centro" class="form-control">
+        <option value="Sede">Centro: Sede</option>
+        <option value="Projetos">Centro: Projetos</option>
+      </select>
+      <button class="btn" onclick="registarLancamento()">Registar Movimento</button>
+      
+      <h6>Trilha de Auditoria</h6>
+      <div id="audit-trail" class="audit-log"></div>
     </div>
 
-    <!-- 2. GESTÃO FISCAL (IVA/IRT) -->
-    <div class="grid-module-card blue">
-      <div class="module-header"><h4><i class="fas fa-file-invoice"></i> Gestão Fiscal</h4></div>
-      <div class="module-body">
-        <div id="fiscal-alerts" class="dobrada-warning"></div>
-        <table>
-          <thead><tr><th>Imposto</th><th>Valor</th><th>Data Vencimento</th></tr></thead>
-          <tbody id="tabela-fiscal"></tbody>
-        </table>
-      </div>
+    <!-- MÓDULO: PGC - BALANCETE -->
+    <div class="card" style="border-top-color: #f59e0b;">
+      <h4><i class="fas fa-chart-pie"></i> Balancete (Resumo PGC)</h4>
+      <table>
+        <thead><tr><th>Rubrica</th><th>Saldo (Kz)</th></tr></thead>
+        <tbody id="tabela-balancete">
+          <tr><td>Classe 1 (Ativos)</td><td id="val-c1">0</td></tr>
+          <tr><td>Classe 3 (Terceiros)</td><td id="val-c3">0</td></tr>
+          <tr><td>Classe 6 (Gastos)</td><td id="val-c6">0</td></tr>
+        </tbody>
+      </table>
     </div>
-
-    <!-- 3. DEMONSTRAÇÕES (PGC Integrado) -->
-    <div class="grid-module-card orange">
-      <div class="module-header"><h4><i class="fas fa-chart-line"></i> PGC - Balancete em Tempo Real</h4></div>
-      <div class="module-body">
-        <table>
-          <tr><td>Total Ativo (Classe 1-3)</td><td id="res-ativo">0 Kz</td></tr>
-          <tr><td>Total Passivo (Classe 4)</td><td id="res-passivo">0 Kz</td></tr>
-          <tr><td>Resultados (Classe 6-7)</td><td id="res-resultado">0 Kz</td></tr>
-        </table>
-      </div>
-    </div>
-
   </div>
 </div>
 
 <script>
-  // Banco de Dados Estruturado
-  let auditLogs = JSON.parse(localStorage.getItem('apsan_audit')) || [];
-  
-  function salvarLancamento() {
-    const deb = document.getElementById('lc-conta-deb').value;
-    const cred = document.getElementById('lc-conta-cred').value;
-    const val = parseFloat(document.getElementById('lc-valor').value);
-    
-    if(!deb || !cred || !val) { alert("Dados incompletos."); return; }
+  let transacoes = JSON.parse(localStorage.getItem('apsan_contabilidade')) || [];
 
-    // Registo de Auditoria (Trilha)
-    const log = `[${new Date().toLocaleTimeString()}] Débito:${deb} | Crédito:${cred} | Valor:${val} Kz`;
-    auditLogs.unshift(log);
-    localStorage.setItem('apsan_audit', JSON.stringify(auditLogs));
+  function registarLancamento() {
+    const deb = document.getElementById('debito').value;
+    const cred = document.getElementById('credito').value;
+    const val = parseFloat(document.getElementById('valor').value);
+    const centro = document.getElementById('centro').value;
+
+    if (!deb || !cred || isNaN(val)) { alert("Preencha todos os campos corretamente."); return; }
+
+    const novaTransacao = {
+      id: Date.now(),
+      data: new Date().toLocaleString(),
+      deb, cred, val, centro
+    };
+
+    transacoes.push(novaTransacao);
+    localStorage.setItem('apsan_contabilidade', JSON.stringify(transacoes));
     
     atualizarUI();
+    limparCampos();
   }
 
   function atualizarUI() {
+    // Atualizar Auditoria
     const auditDiv = document.getElementById('audit-trail');
-    auditDiv.innerHTML = auditLogs.map(l => `<div>${l}</div>`).join('');
-    // Lógica adicional de cálculo para PGC conforme a estrutura proposta
+    auditDiv.innerHTML = transacoes.map(t => 
+      `<div><b>${t.data}</b>: ${t.deb} D | ${t.cred} C - ${t.val} Kz [${t.centro}]</div>`
+    ).reverse().join('<hr>');
+
+    // Lógica simples de Balancete (agrupamento por classe simplificado)
+    let totalC1 = transacoes.reduce((acc, curr) => curr.deb.startsWith('1') ? acc + curr.val : acc, 0);
+    document.getElementById('val-c1').innerText = totalC1.toLocaleString('pt-PT') + ' Kz';
   }
+
+  function limparCampos() {
+    document.getElementById('debito').value = '';
+    document.getElementById('credito').value = '';
+    document.getElementById('valor').value = '';
+  }
+
+  setInterval(() => {
+    document.getElementById('relogio').innerText = new Date().toLocaleTimeString();
+  }, 1000);
 
   atualizarUI();
 </script>
