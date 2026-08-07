@@ -3,534 +3,189 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>APSAN, LDA - ERP Contabilístico Executivo</title>
+  <title>APSAN, LDA - Hub do Departamento Financeiro</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- BIBLIOTECAS DE EXPORTAÇÃO -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
     :root {
-      --bg-app: #f8fafc;
+      --bg-app: #f4f6f9;
       --primary: #059669; --primary-dark: #047857; --primary-light: #ecfdf5;
-      --accent: #6366f1; --accent-light: #eef2ff;
-      --secondary: #64748b; --success: #10b981; --danger: #ef4444;
-      --warning: #f59e0b; --dark: #0f172a; --light: #f1f5f9;
-      --white: #ffffff; --border: #e2e8f0; --audit-bg: #fffbeb;
-      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-      --radius: 10px; --radius-lg: 16px;
+      --dark: #0f172a; --secondary: #64748b; --white: #ffffff;
+      --border: #e2e8f0; --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 10px 10px -5px rgba(0, 0, 0, 0.03);
+      --radius-lg: 16px; --radius: 12px;
     }
 
-    body { background: var(--bg-app); color: var(--dark); line-height: 1.6; padding: 24px; }
-    .dashboard-container { max-width: 1440px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
-
-    /* TOPO / HEADER DO PAINEL */
-    .master-header { background: var(--white); border-radius: var(--radius-lg); padding: 24px 32px; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; border: 1px solid var(--border); }
-    .master-header h1 { font-size: 20px; font-weight: 700; color: var(--dark); display: flex; align-items: center; gap: 12px; letter-spacing: -0.02em; }
-    .master-header h1 i { color: var(--primary); background: var(--primary-light); padding: 10px; border-radius: 10px; font-size: 18px; }
-    .master-header-right { display: flex; align-items: center; gap: 16px; font-size: 13px; font-weight: 500; color: var(--secondary); background: var(--light); padding: 8px 16px; border-radius: 30px; border: 1px solid var(--border); }
-
-    /* STATS / MÉTRICAS DE TOPO */
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
-    .stat-card { background: var(--white); border-radius: var(--radius-lg); padding: 20px 24px; display: flex; align-items: center; gap: 18px; box-shadow: var(--shadow); border: 1px solid var(--border); transition: transform 0.2s ease, box-shadow 0.2s ease; }
-    .stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-    .stat-icon { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
-    .stat-icon.green { background: #d1fae5; color: #047857; }
-    .stat-icon.blue { background: #dbeafe; color: #2563eb; }
-    .stat-icon.purple { background: #ede9fe; color: #7c3aed; }
-    .stat-icon.orange { background: #fef3c7; color: #d97706; }
-    .stat-info h3 { font-size: 22px; font-weight: 700; color: var(--dark); letter-spacing: -0.03em; }
-    .stat-info p { font-size: 12px; font-weight: 500; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
-
-    /* GRELHA PRINCIPAL DE MÓDULOS */
-    .master-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; align-items: start; }
-    @media (max-width: 1100px) { .master-grid { grid-template-columns: 1fr; } }
-
-    .grid-module-card { background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; }
+    body { background: var(--bg-app); color: var(--dark); min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between; padding: 32px; }
     
-    .module-header { padding: 18px 24px; border-bottom: 1px solid var(--border); background: var(--white); display: flex; align-items: center; justify-content: space-between; }
-    .module-header h4 { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 10px; color: var(--dark); letter-spacing: -0.01em; }
-    .module-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+    .hub-container { max-width: 1400px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; }
 
-    /* CARTÃO BFA */
-    .bfa-virtual-card { background: linear-gradient(135deg, #0f172a 1e0%, #1e3a8a 100%); color: white; border-radius: 14px; padding: 22px; box-shadow: 0 10px 20px rgba(15, 23, 42, 0.15); position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-    .bfa-virtual-card::before { content: ""; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: rgba(255,255,255,0.05); border-radius: 50%; }
-    .bfa-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .bfa-card-chip { width: 36px; height: 26px; background: linear-gradient(135deg, #fef08a 0%, #eab308 100%); border-radius: 4px; }
-    .bfa-card-number { font-size: 16px; font-family: monospace; letter-spacing: 3px; margin-bottom: 14px; color: #e2e8f0; }
-    .bfa-card-info { display: flex; justify-content: space-between; align-items: flex-end; }
-    .bfa-card-holder span { font-size: 9px; text-transform: uppercase; opacity: 0.7; display: block; letter-spacing: 0.1em; }
-    .bfa-card-holder strong { font-size: 12px; letter-spacing: 0.05em; font-weight: 600; }
-    .bfa-balance-box { background: rgba(255, 255, 255, 0.1); padding: 8px 14px; border-radius: 8px; backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); }
-    .bfa-balance-box span { font-size: 9px; display: block; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; }
-    .bfa-balance-box strong { font-size: 14px; font-weight: 700; }
-
-    /* TABELAS */
-    .table-container { overflow-x: auto; width: 100%; border-radius: 8px; border: 1px solid var(--border); }
-    table { width: 100%; border-collapse: collapse; text-align: left; background: var(--white); }
-    thead { background: var(--light); }
-    th { padding: 10px 14px; font-size: 11px; font-weight: 600; color: var(--secondary); border-bottom: 1px solid var(--border); text-transform: uppercase; letter-spacing: 0.05em; }
-    td { padding: 11px 14px; font-size: 13px; border-bottom: 1px solid var(--border); color: var(--dark); font-weight: 400; }
-    tr:last-child td { border-bottom: none; }
-    tr:hover { background: #f8fafc; }
-
-    .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
-    .status-pago { background-color: #d1fae5; color: #047857; }
-    .status-pendente { background-color: #fef3c7; color: #b45309; }
-    .status-vencido { background-color: #fee2e2; color: #b91c1c; }
-
-    /* FORMULÁRIOS & BOTÕES */
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    .form-label { font-size: 12px; font-weight: 600; color: var(--dark); }
-    .form-control { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius); outline: none; font-size: 13px; background: var(--white); color: var(--dark); transition: border-color 0.2s, box-shadow 0.2s; }
-    .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1); }
+    /* TOPO / CABEÇALHO DO HUB */
+    .hub-header { background: var(--white); border-radius: var(--radius-lg); padding: 32px; box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border); flex-wrap: wrap; gap: 20px; }
+    .hub-user-info { display: flex; align-items: center; gap: 20px; }
+    .hub-avatar { width: 64px; height: 64px; background: var(--primary-light); color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700; border: 2px solid var(--primary); }
+    .hub-title h2 { font-size: 24px; font-weight: 700; color: var(--dark); letter-spacing: -0.02em; }
+    .hub-title p { font-size: 13px; color: var(--secondary); margin-top: 4px; font-weight: 500; }
     
-    .btn { padding: 10px 18px; border-radius: var(--radius); font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: none; transition: background 0.2s, transform 0.1s; }
-    .btn:active { transform: scale(0.98); }
-    .btn-primary { background: var(--primary); color: var(--white); }
-    .btn-primary:hover { background: var(--primary-dark); }
-    .btn-secondary { background: var(--white); color: var(--dark); border: 1px solid var(--border); }
-    .btn-secondary:hover { background: var(--light); }
-    .btn-success { background: var(--success); color: var(--white); }
-    .btn-success:hover { background: #059669; }
+    .hub-status-badge { background: #d1fae5; color: #047857; padding: 8px 16px; border-radius: 30px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 8px; border: 1px solid #a7f3d0; }
 
-    .row-inputs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    /* GRELHA DO MENU RECHEADA */
+    .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
 
-    /* EXCEL */
-    .excel-table { width: 100%; border-collapse: collapse; background: white; }
-    .excel-table th, .excel-table td { border: 1px solid var(--border); padding: 8px 10px; font-size: 13px; }
-    .excel-table th { background: var(--light); text-align: center; color: var(--secondary); font-weight: 600; }
-    .excel-cell { width: 100%; border: none; outline: none; background: transparent; font-size: 13px; font-family: 'Plus Jakarta Sans', sans-serif; text-align: right; color: var(--dark); }
-    .excel-cell-text { text-align: left; }
+    .menu-card { background: var(--white); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow); border: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; gap: 20px; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); position: relative; overflow: hidden; text-decoration: none; color: inherit; }
+    .menu-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: var(--card-color, var(--primary)); opacity: 0.8; transition: height 0.2s; }
+    .menu-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--card-color, var(--primary)); }
+    .menu-card:hover::before { height: 8px; }
 
-    /* AUDIT LOG & EXTRAS */
-    .audit-log { font-size: 12px; background: var(--audit-bg); padding: 12px; border-radius: var(--radius); max-height: 140px; overflow-y: auto; border: 1px solid #fde68a; font-family: monospace; color: #b45309; line-height: 1.5; }
+    .menu-card-header { display: flex; align-items: flex-start; justify-content: space-between; }
+    .menu-icon-box { width: 50px; height: 50px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 20px; color: white; background: var(--card-color, var(--primary)); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
     
-    .toast { position: fixed; bottom: 30px; right: 30px; background: var(--dark); color: var(--white); padding: 14px 24px; border-radius: var(--radius); display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow-lg); transform: translateY(100px); opacity: 0; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); z-index: 2000; font-size: 13px; font-weight: 500; border: 1px solid rgba(255,255,255,0.1); }
-    .toast.show { transform: translateY(0); opacity: 1; }
-    .toast i { color: var(--success); font-size: 16px; }
+    .menu-counter { font-size: 11px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; background: var(--bg-app); color: var(--secondary); letter-spacing: 0.05em; border: 1px solid var(--border); }
+
+    .menu-card-body h3 { font-size: 18px; font-weight: 700; color: var(--dark); margin-bottom: 8px; letter-spacing: -0.01em; }
+    .menu-card-body p { font-size: 13px; color: var(--secondary); line-height: 1.5; font-weight: 400; }
+
+    .menu-card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; font-weight: 600; color: var(--card-color, var(--primary)); }
+    .menu-card-footer i { transition: transform 0.2s; }
+    .menu-card:hover .menu-card-footer i { transform: translateX(4px); }
+
+    /* RODAPÉ DO HUB */
+    .hub-footer { text-align: center; font-size: 12px; color: var(--secondary); padding: 20px 0; border-top: 1px solid var(--border); margin-top: 20px; font-weight: 500; }
   </style>
 </head>
 <body>
 
-<div class="dashboard-container">
+<div class="hub-container">
 
-  <!-- TOPO DO PAINEL -->
-  <header class="master-header">
-    <h1><i class="fas fa-chart-pie"></i> APSAN, LDA — ERP Contabilístico Executivo</h1>
-    <div class="master-header-right">
-      <i class="far fa-calendar-alt" style="color: var(--primary);"></i> <span id="current-date"></span>
-      <span style="opacity: 0.3;">|</span>
-      <i class="far fa-clock" style="color: var(--primary);"></i> <span id="current-time"></span>
+  <!-- CABEÇALHO DO UTILIZADOR / DEPARTAMENTO -->
+  <header class="hub-header">
+    <div class="hub-user-info">
+      <div class="hub-avatar">AF</div>
+      <div class="hub-title">
+        <h2>Departamento Financeiro e Contabilidade</h2>
+        <p>Selecione abaixo o subsistema ou módulo de trabalho pretendido para iniciar a sessão operacional.</p>
+      </div>
+    </div>
+    <div class="hub-status-badge">
+      <i class="fas fa-shield-alt" style="color: var(--primary);"></i> Sistema Integrado PGC-LE / AGT
     </div>
   </header>
 
-  <!-- MÉTRICAS / STATS -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-icon green"><i class="fas fa-arrow-trend-up"></i></div>
-      <div class="stat-info"><h3 id="dash-receitas">0 Kz</h3><p>Receitas Totais</p></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon purple"><i class="fas fa-arrow-trend-down"></i></div>
-      <div class="stat-info"><h3 id="dash-despesas">0 Kz</h3><p>Despesas Totais</p></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon blue"><i class="fas fa-wallet"></i></div>
-      <div class="stat-info"><h3 id="dash-saldo">0 Kz</h3><p>Saldo em Caixa</p></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-icon orange"><i class="fas fa-credit-card"></i></div>
-      <div class="stat-info"><h3 id="dash-bfa">0 Kz</h3><p>Cartão Virtual BFA</p></div>
-    </div>
+  <!-- GRELHA DE ACESSO RÁPIDO (MENU RECHEADO) -->
+  <div class="menu-grid">
+
+    <!-- 1. Tesouraria & Bancos -->
+    <a href="#" class="menu-card" style="--card-color: #059669;" onclick="abrirModulo('Tesouraria')">
+      <div class="menu-card-header">
+        <div class="menu-icon-box"><i class="fas fa-wallet"></i></div>
+        <span class="menu-counter">Módulo 01</span>
+      </div>
+      <div class="menu-card-body">
+        <h3>Tesouraria & Bancos</h3>
+        <p>Gestão de caixa central, cartões virtuais corporativos (BFA), fluxos diários, conciliação de extratos e pagamentos.</p>
+      </div>
+      <div class="menu-card-footer">
+        <span>Aceder ao Módulo</span>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    </a>
+
+    <!-- 2. Contabilidade Geral & PGC -->
+    <a href="#" class="menu-card" style="--card-color: #7c3aed;" onclick="abrirModulo('Contabilidade')">
+      <div class="menu-card-header">
+        <div class="menu-icon-box" style="background: #7c3aed;"><i class="fas fa-balance-scale"></i></div>
+        <span class="menu-counter">Módulo 02</span>
+      </div>
+      <div class="menu-card-body">
+        <h3>Partidas Dobradas & PGC</h3>
+        <p>Lançamentos contabilísticos estruturados por classes, centros de custo, balancetes analíticos e trilha de auditoria imutável.</p>
+      </div>
+      <div class="menu-card-footer" style="color: #7c3aed;">
+        <span>Aceder ao Módulo</span>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    </a>
+
+    <!-- 3. Faturação & Clientes -->
+    <a href="#" class="menu-card" style="--card-color: #2563eb;" onclick="abrirModulo('Faturacao')">
+      <div class="menu-card-header">
+        <div class="menu-icon-box" style="background: #2563eb;"><i class="fas fa-file-invoice-dollar"></i></div>
+        <span class="menu-counter">Módulo 03</span>
+      </div>
+      <div class="menu-card-body">
+        <h3>Faturação & Comercial</h3>
+        <p>Emissão de faturas certificadas, registo de clientes corporativos, controlo de recebimentos e histórico de vendas de serviços.</p>
+      </div>
+      <div class="menu-card-footer" style="color: #2563eb;">
+        <span>Aceder ao Módulo</span>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    </a>
+
+    <!-- 4. Obrigações Fiscais (AGT) -->
+    <a href="#" class="menu-card" style="--card-color: #d97706;" onclick="abrirModulo('Fiscal')">
+      <div class="menu-card-header">
+        <div class="menu-icon-box" style="background: #d97706;"><i class="fas fa-landmark"></i></div>
+        <span class="menu-counter">Módulo 04</span>
+      </div>
+      <div class="menu-card-body">
+        <h3>Obrigações Fiscais (AGT)</h3>
+        <p>Apuração e controlo de impostos como IVA, IRT, imposto industrial, prazos de submissão e histórico de pagamentos ao Estado.</p>
+      </div>
+      <div class="menu-card-footer" style="color: #d97706;">
+        <span>Aceder ao Módulo</span>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    </a>
+
+    <!-- 5. Relatórios & Demonstrações Financeiras -->
+    <a href="#" class="menu-card" style="--card-color: #0891b2;" onclick="abrirModulo('Relatorios')">
+      <div class="menu-card-header">
+        <div class="menu-icon-box" style="background: #0891b2;"><i class="fas fa-chart-line"></i></div>
+        <span class="menu-counter">Módulo 05</span>
+      </div>
+      <div class="menu-card-body">
+        <h3>Demonstrações & Relatórios</h3>
+        <p>Balanço patrimonial, demonstração de resultados (DRE), relatórios de gestão executivos e exportação analítica em tempo real.</p>
+      </div>
+      <div class="menu-card-footer" style="color: #0891b2;">
+        <span>Aceder ao Módulo</span>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    </a>
+
+    <!-- 6. Orçamentos & Simulador Excel -->
+    <a href="#" class="menu-card" style="--card-color: #10b981;" onclick="abrirModulo('Simulador')">
+      <div class="menu-card-header">
+        <div class="menu-icon-box" style="background: #10b981;"><i class="fas fa-file-excel"></i></div>
+        <span class="menu-counter">Módulo 06</span>
+      </div>
+      <div class="menu-card-body">
+        <h3>Simulador & Orçamentos</h3>
+        <p>Calculadora integrada de propostas comerciais, estimativas de custos de projetos e exportação direta para folhas de cálculo Excel (.xlsx).</p>
+      </div>
+      <div class="menu-card-footer" style="color: #10b981;">
+        <span>Aceder ao Módulo</span>
+        <i class="fas fa-arrow-right"></i>
+      </div>
+    </a>
+
   </div>
 
-  <!-- GRELHA COMPLETA -->
-  <div class="master-grid">
-    
-    <!-- 1. TESOURARIA & CARTÃO BFA -->
-    <div class="grid-module-card">
-      <div class="module-header">
-        <h4><i class="fas fa-wallet" style="color: var(--primary);"></i> Tesouraria & Cartão BFA</h4>
-        <span class="status-badge status-pago"><i class="fas fa-circle" style="font-size: 6px;"></i> Ativo</span>
-      </div>
-      <div class="module-body">
-        <div class="bfa-virtual-card">
-          <div class="bfa-card-top">
-            <div class="bfa-card-chip"></div>
-            <span style="font-weight: 700; font-size: 12px; letter-spacing: 1.5px;">BFA CORPORATE</span>
-          </div>
-          <div class="bfa-card-number">**** **** **** 8920</div>
-          <div class="bfa-card-info">
-            <div class="bfa-card-holder">
-              <span>Titular</span>
-              <strong>APSAN, LDA</strong>
-            </div>
-            <div class="bfa-balance-box">
-              <span>Saldo Disponível</span>
-              <strong id="bfa-card-display-val">500.000 Kz</strong>
-            </div>
-          </div>
-        </div>
-
-        <div style="display: flex; gap: 8px;">
-          <input type="number" id="input-bfa-update" class="form-control" placeholder="Atualizar saldo do cartão (Kz)">
-          <button class="btn btn-primary" style="white-space: nowrap;" onclick="atualizarValorBFA()">Atualizar</button>
-        </div>
-
-        <div style="border-top: 1px solid var(--border); padding-top: 14px; display: flex; flex-direction: column; gap: 12px;">
-          <h5 style="font-size: 13px; font-weight: 700; color: var(--dark);">Registar Movimento Diário</h5>
-          <div class="row-inputs">
-            <input type="date" id="caixa-data" class="form-control">
-            <select id="caixa-tipo" class="form-control">
-              <option value="Receita">Receita</option>
-              <option value="Despesa">Despesa</option>
-            </select>
-          </div>
-          <input type="text" id="caixa-descricao" class="form-control" placeholder="Descrição detalhada (ex: Licenciamento de Software)">
-          <input type="number" id="caixa-valor" class="form-control" placeholder="Valor em Kz">
-          <button class="btn btn-primary" style="width: 100%;" onclick="salvarMovimentoCaixa()"><i class="fas fa-plus"></i> Adicionar Movimento</button>
-        </div>
-
-        <div class="table-container" style="max-height: 160px; overflow-y: auto;">
-          <table>
-            <thead><tr><th>Data</th><th>Descrição</th><th>Tipo</th><th>Valor</th><th></th></tr></thead>
-            <tbody id="tabela-caixa"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- 2. MOTOR DE PARTIDAS DOBRADAS & AUDITORIA -->
-    <div class="grid-module-card">
-      <div class="module-header">
-        <h4><i class="fas fa-balance-scale" style="color: #7c3aed;"></i> Partidas Dobradas & Auditoria</h4>
-        <span class="status-badge" style="background-color: #ede9fe; color: #7c3aed;"><i class="fas fa-shield-alt" style="font-size: 10px;"></i> PGC-LE</span>
-      </div>
-      <div class="module-body">
-        <div class="row-inputs">
-          <input type="text" id="lc-conta-deb" class="form-control" placeholder="Conta a Debitar (ex: 12 Caixa)">
-          <input type="text" id="lc-conta-cred" class="form-control" placeholder="Conta a Creditar (ex: 31 Clientes)">
-        </div>
-        <div class="row-inputs">
-          <input type="number" id="lc-valor" class="form-control" placeholder="Montante (Kz)">
-          <select id="lc-centro" class="form-control">
-            <option value="Sede">Centro: Sede</option>
-            <option value="Projetos">Centro: Projetos</option>
-          </select>
-        </div>
-        <button class="btn" style="background: #7c3aed; color: white;" onclick="registarLancamento()"><i class="fas fa-check-double"></i> Registar Partida Dobrada</button>
-
-        <h5 style="font-size: 12px; font-weight: 700; color: var(--secondary); margin-top: 4px;">Trilha de Auditoria Imutável (Audit Log)</h5>
-        <div id="audit-trail" class="audit-log"></div>
-      </div>
-    </div>
-
-    <!-- 3. FATURAÇÃO & CLIENTES -->
-    <div class="grid-module-card">
-      <div class="module-header">
-        <h4><i class="fas fa-file-invoice-dollar" style="color: #2563eb;"></i> Faturação & Clientes</h4>
-        <span class="status-badge" style="background-color: #dbeafe; color: #2563eb;">Comercial</span>
-      </div>
-      <div class="module-body">
-        <input type="text" id="fat-cliente" class="form-control" placeholder="Nome do Cliente / Entidade">
-        <input type="text" id="fat-servico" class="form-control" placeholder="Descrição do Serviço / Produto">
-        <div class="row-inputs">
-          <input type="number" id="fat-valor" class="form-control" placeholder="Valor (Kz)">
-          <select id="fat-estado" class="form-control">
-            <option value="Pago">Pago</option>
-            <option value="Pendente">Pendente</option>
-          </select>
-        </div>
-        <button class="btn" style="background: #2563eb; color: white; width: 100%;" onclick="salvarFatura()"><i class="fas fa-file-invoice"></i> Emitir Fatura</button>
-
-        <div class="table-container" style="max-height: 200px; overflow-y: auto;">
-          <table>
-            <thead><tr><th>Nº</th><th>Cliente</th><th>Valor</th><th>Estado</th><th></th></tr></thead>
-            <tbody id="tabela-faturas"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- 4. IMPOSTOS & AGT -->
-    <div class="grid-module-card">
-      <div class="module-header">
-        <h4><i class="fas fa-landmark" style="color: #d97706;"></i> Obrigações Fiscais (AGT)</h4>
-        <span class="status-badge" style="background-color: #fef3c7; color: #d97706;">Fiscal</span>
-      </div>
-      <div class="module-body">
-        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px;">
-          <input type="text" id="imp-tipo" class="form-control" placeholder="Imposto (ex: IVA, IRT)">
-          <input type="number" id="imp-valor" class="form-control" placeholder="Valor">
-          <select id="imp-estado" class="form-control">
-            <option value="Pendente">Pendente</option>
-            <option value="Pago">Pago</option>
-          </select>
-        </div>
-        <button class="btn" style="background: #d97706; color: white; width: 100%;" onclick="salvarImposto()"><i class="fas fa-shield-alt"></i> Registar Imposto</button>
-
-        <div class="table-container" style="max-height: 180px; overflow-y: auto;">
-          <table>
-            <thead><tr><th>Imposto</th><th>Valor</th><th>Estado</th><th></th></tr></thead>
-            <tbody id="tabela-impostos"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- 5. PGC & DEMONSTRAÇÕES -->
-    <div class="grid-module-card">
-      <div class="module-header">
-        <h4><i class="fas fa-balance-scale-right" style="color: #0891b2;"></i> PGC & Balancete Analítico</h4>
-        <span class="status-badge" style="background-color: #ecfeff; color: #0891b2;">Contas</span>
-      </div>
-      <div class="module-body">
-        <div class="table-container">
-          <table>
-            <thead><tr><th>Rubrica / Classe PGC</th><th>Montante (Kz)</th></tr></thead>
-            <tbody>
-              <tr><td>Caixa e Bancos (Classe 1)</td><td id="res-classe1">0 Kz</td></tr>
-              <tr><td>Clientes e Terceiros (Classe 3)</td><td id="res-classe3">0 Kz</td></tr>
-              <tr><td>Total de Proveitos (Classe 6)</td><td id="res-proveitos" style="color: var(--success); font-weight: 600;">0 Kz</td></tr>
-              <tr><td>Total de Gastos (Classe 6/7)</td><td id="res-gastos" style="color: var(--danger); font-weight: 600;">0 Kz</td></tr>
-              <tr><td><strong>Resultado Líquido do Exercício</strong></td><td id="res-liquido" style="font-weight: 700;">0 Kz</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- 6. MINI-CALCULADORA EXCEL -->
-    <div class="grid-module-card">
-      <div class="module-header">
-        <h4><i class="fas fa-file-excel" style="color: #10b981;"></i> Simulador Comercial & Orçamentos</h4>
-        <button class="btn btn-success" style="padding: 6px 12px; font-size: 12px;" onclick="exportarExcel()"><i class="fas fa-download"></i> Exportar .xlsx</button>
-      </div>
-      <div class="module-body">
-        <div class="table-container">
-          <table class="excel-table" id="tabela-excel-simulador">
-            <thead>
-              <tr><th>Descrição</th><th>Qtd</th><th>Preço Unit. (Kz)</th><th>Subtotal</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><input type="text" class="excel-cell excel-cell-text" value="Consultoria Contabilística"></td>
-                <td><input type="number" class="excel-cell calc-trigger" style="width:40px;" value="1" oninput="calcularExcel()"></td>
-                <td><input type="number" class="excel-cell calc-trigger" value="150000" oninput="calcularExcel()"></td>
-                <td><input type="text" class="excel-cell excel-res" readonly value="150.000"></td>
-              </tr>
-              <tr>
-                <td><input type="text" class="excel-cell excel-cell-text" value="Manutenção IT & Sistemas"></td>
-                <td><input type="number" class="excel-cell calc-trigger" style="width:40px;" value="2" oninput="calcularExcel()"></td>
-                <td><input type="number" class="excel-cell calc-trigger" value="75000" oninput="calcularExcel()"></td>
-                <td><input type="text" class="excel-cell excel-res" readonly value="150.000"></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div style="display: flex; justify-content: space-between; align-items: center; background: var(--light); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border);">
-          <span style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: var(--secondary);">Total Estimado:</span>
-          <input type="text" id="excel-total-geral" class="excel-cell" style="font-weight: 700; color: var(--primary); width: 140px; font-size: 15px;" readonly value="350.000">
-        </div>
-      </div>
-    </div>
-
-  </div>
 </div>
 
-<div id="toast" class="toast">
-  <i class="fas fa-check-circle"></i>
-  <span id="toast-message">Operação efetuada com sucesso!</span>
-</div>
+<footer class="hub-footer">
+  &copy; 2026 APSAN, LDA — Todos os direitos reservados. Módulo de Controlo Financeiro Executivo.
+</footer>
 
 <script>
-  let dbCaixa = JSON.parse(localStorage.getItem('apsan_fin_caixa')) || [];
-  let dbFaturas = JSON.parse(localStorage.getItem('apsan_fin_faturas')) || [];
-  let dbImpostos = JSON.parse(localStorage.getItem('apsan_fin_impostos')) || [];
-  let dbAudit = JSON.parse(localStorage.getItem('apsan_fin_audit')) || [];
-  let bfaSaldo = parseFloat(localStorage.getItem('apsan_fin_bfa')) || 500000;
-
-  function updateClock() {
-    const now = new Date();
-    document.getElementById('current-date').innerText = now.toLocaleDateString('pt-PT');
-    document.getElementById('current-time').innerText = now.toLocaleTimeString('pt-PT');
+  function abrirModulo(nomeModulo) {
+    // Aqui podes redirecionar para a vista interna do painel correspondente
+    alert('A carregar o ambiente de trabalho: ' + nomeModulo + '...');
   }
-  setInterval(updateClock, 1000);
-  updateClock();
-
-  function atualizarValorBFA() {
-    const val = parseFloat(document.getElementById('input-bfa-update').value);
-    if (isNaN(val)) { alert('Insira um valor válido.'); return; }
-    bfaSaldo = val;
-    localStorage.setItem('apsan_fin_bfa', bfaSaldo);
-    document.getElementById('input-bfa-update').value = '';
-    atualizarDados();
-    showToast('Cartão Virtual BFA atualizado com sucesso!');
-  }
-
-  function salvarMovimentoCaixa() {
-    const data = document.getElementById('caixa-data').value;
-    const descricao = document.getElementById('caixa-descricao').value;
-    const tipo = document.getElementById('caixa-tipo').value;
-    const valor = parseFloat(document.getElementById('caixa-valor').value) || 0;
-    if (!descricao || !valor) { alert('Preencha os campos obrigatórios.'); return; }
-    dbCaixa.push({ id: Date.now(), data: data || new Date().toLocaleDateString('pt-PT'), descricao, tipo, valor });
-    localStorage.setItem('apsan_fin_caixa', JSON.stringify(dbCaixa));
-    document.getElementById('caixa-descricao').value = '';
-    document.getElementById('caixa-valor').value = '';
-    atualizarDados();
-    showToast('Movimento registado com sucesso!');
-  }
-
-  function eliminarMovimentoCaixa(id) {
-    dbCaixa = dbCaixa.filter(c => c.id !== id);
-    localStorage.setItem('apsan_fin_caixa', JSON.stringify(dbCaixa));
-    atualizarDados();
-    showToast('Movimento removido.');
-  }
-
-  function registarLancamento() {
-    const deb = document.getElementById('lc-conta-deb').value;
-    const cred = document.getElementById('lc-conta-cred').value;
-    const val = parseFloat(document.getElementById('lc-valor').value) || 0;
-    const centro = document.getElementById('lc-centro').value;
-
-    if (!deb || !cred || !val) { alert("Preencha os campos da partida dobrada."); return; }
-
-    const logMsg = `[${new Date().toLocaleTimeString()}] D: ${deb} | C: ${cred} | ${val.toLocaleString('pt-PT')} Kz [${centro}]`;
-    dbAudit.unshift(logMsg);
-    localStorage.setItem('apsan_fin_audit', JSON.stringify(dbAudit));
-
-    document.getElementById('lc-conta-deb').value = '';
-    document.getElementById('lc-conta-cred').value = '';
-    document.getElementById('lc-valor').value = '';
-    atualizarDados();
-    showToast('Partida dobrada registada na auditoria!');
-  }
-
-  function salvarFatura() {
-    const cliente = document.getElementById('fat-cliente').value;
-    const servico = document.getElementById('fat-servico').value;
-    const valor = parseFloat(document.getElementById('fat-valor').value) || 0;
-    const estado = document.getElementById('fat-estado').value;
-    if (!cliente || !valor) { alert('Preencha os dados da fatura.'); return; }
-    dbFaturas.push({ id: 'FAT-' + Date.now().toString().slice(-4), cliente, servico, valor, estado });
-    localStorage.setItem('apsan_fin_faturas', JSON.stringify(dbFaturas));
-    document.getElementById('fat-cliente').value = '';
-    document.getElementById('fat-servico').value = '';
-    document.getElementById('fat-valor').value = '';
-    atualizarDados();
-    showToast('Fatura emitida com sucesso!');
-  }
-
-  function eliminarFatura(id) {
-    dbFaturas = dbFaturas.filter(f => f.id !== id);
-    localStorage.setItem('apsan_fin_faturas', JSON.stringify(dbFaturas));
-    atualizarDados();
-    showToast('Fatura removida.');
-  }
-
-  function salvarImposto() {
-    const tipo = document.getElementById('imp-tipo').value;
-    const valor = parseFloat(document.getElementById('imp-valor').value) || 0;
-    const estado = document.getElementById('imp-estado').value;
-    if (!tipo || !valor) { alert('Preencha os campos do imposto.'); return; }
-    dbImpostos.push({ id: Date.now(), tipo, valor, estado });
-    localStorage.setItem('apsan_fin_impostos', JSON.stringify(dbImpostos));
-    document.getElementById('imp-tipo').value = '';
-    document.getElementById('imp-valor').value = '';
-    atualizarDados();
-    showToast('Imposto registado!');
-  }
-
-  function eliminarImposto(id) {
-    dbImpostos = dbImpostos.filter(i => i.id !== id);
-    localStorage.setItem('apsan_fin_impostos', JSON.stringify(dbImpostos));
-    atualizarDados();
-    showToast('Imposto removido.');
-  }
-
-  function calcularExcel() {
-    const rows = document.querySelectorAll('.excel-table tbody tr');
-    let totalGeral = 0;
-    rows.forEach((row) => {
-      const inputs = row.querySelectorAll('input');
-      if(inputs.length >= 4) {
-        const qtd = parseFloat(inputs[1].value) || 0;
-        const preco = parseFloat(inputs[2].value) || 0;
-        const subtotal = qtd * preco;
-        inputs[3].value = subtotal.toLocaleString('pt-PT');
-        totalGeral += subtotal;
-      }
-    });
-    const totalEl = document.getElementById('excel-total-geral');
-    if(totalEl) totalEl.value = totalGeral.toLocaleString('pt-PT') + ' Kz';
-  }
-
-  function exportarExcel() {
-    const wb = XLSX.utils.table_to_book(document.getElementById('tabela-excel-simulador'), {sheet: "Simulador APSAN"});
-    XLSX.writeFile(wb, "Simulacao_Contabilistica_APSAN.xlsx");
-    showToast('Ficheiro Excel descarregado com sucesso!');
-  }
-
-  function atualizarDados() {
-    let totalReceitas = 0;
-    let totalDespesas = 0;
-    dbCaixa.forEach(c => {
-      if (c.tipo === 'Receita') totalReceitas += c.valor;
-      else totalDespesas += c.valor;
-    });
-
-    dbFaturas.forEach(f => {
-      if (f.estado === 'Pago') totalReceitas += f.valor;
-    });
-
-    const saldo = totalReceitas - totalDespesas;
-    const resultadoLiquido = totalReceitas - totalDespesas;
-
-    document.getElementById('dash-receitas').innerText = totalReceitas.toLocaleString('pt-PT') + ' Kz';
-    document.getElementById('dash-despesas').innerText = totalDespesas.toLocaleString('pt-PT') + ' Kz';
-    document.getElementById('dash-saldo').innerText = saldo.toLocaleString('pt-PT') + ' Kz';
-    document.getElementById('dash-bfa').innerText = bfaSaldo.toLocaleString('pt-PT') + ' Kz';
-    document.getElementById('bfa-card-display-val').innerText = bfaSaldo.toLocaleString('pt-PT') + ' Kz';
-
-    document.getElementById('res-classe1').innerText = (saldo + bfaSaldo).toLocaleString('pt-PT') + ' Kz';
-    document.getElementById('res-classe3').innerText = totalReceitas.toLocaleString('pt-PT') + ' Kz';
-    document.getElementById('res-proveitos').innerText = totalReceitas.toLocaleString('pt-PT') + ' Kz';
-    document.getElementById('res-gastos').innerText = totalDespesas.toLocaleString('pt-PT') + ' Kz';
-    document.getElementById('res-liquido').innerText = resultadoLiquido.toLocaleString('pt-PT') + ' Kz';
-    document.getElementById('res-liquido').style.color = resultadoLiquido >= 0 ? 'var(--success)' : 'var(--danger)';
-
-    document.getElementById('tabela-caixa').innerHTML = dbCaixa.map(c => `
-      <tr><td>${c.data}</td><td>${c.descricao}</td><td><span class="status-badge ${c.tipo === 'Receita' ? 'status-pago' : 'status-vencido'}">${c.tipo}</span></td><td>${c.valor.toLocaleString('pt-PT')} Kz</td><td><button class="btn btn-secondary" style="padding:4px 8px; color: var(--danger);" onclick="eliminarMovimentoCaixa(${c.id})"><i class="fas fa-trash"></i></button></td></tr>
-    `).join('') || `<tr><td colspan="5" style="text-align: center; color: var(--secondary);">Sem movimentos registados.</td></tr>`;
-
-    document.getElementById('tabela-faturas').innerHTML = dbFaturas.map(f => `
-      <tr><td><strong>${f.id}</strong></td><td>${f.cliente}</td><td>${f.valor.toLocaleString('pt-PT')} Kz</td><td><span class="status-badge ${f.estado === 'Pago' ? 'status-pago' : 'status-pendente'}">${f.estado}</span></td><td><button class="btn btn-secondary" style="padding:4px 8px; color: var(--danger);" onclick="eliminarFatura('${f.id}')"><i class="fas fa-trash"></i></button></td></tr>
-    `).join('') || `<tr><td colspan="5" style="text-align: center; color: var(--secondary);">Sem faturas emitidas.</td></tr>`;
-
-    document.getElementById('tabela-impostos').innerHTML = dbImpostos.map(i => `
-      <tr><td>${i.tipo}</td><td>${i.valor.toLocaleString('pt-PT')} Kz</td><td><span class="status-badge ${i.estado === 'Pago' ? 'status-pago' : 'status-pendente'}">${i.estado}</span></td><td><button class="btn btn-secondary" style="padding:4px 8px; color: var(--danger);" onclick="eliminarImposto(${i.id})"><i class="fas fa-trash"></i></button></td></tr>
-    `).join('') || `<tr><td colspan="4" style="text-align: center; color: var(--secondary);">Sem obrigações fiscais.</td></tr>`;
-
-    document.getElementById('audit-trail').innerHTML = dbAudit.map(a => `<div>${a}</div>`).join('') || '<span style="color: var(--secondary); font-size: 11px;">Sem registos de auditoria recentes.</span>';
-  }
-
-  function showToast(message) {
-    const toast = document.getElementById('toast');
-    document.getElementById('toast-message').innerText = message;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 3500);
-  }
-
-  atualizarDados();
 </script>
+
 </body>
 </html>
