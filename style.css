@@ -50,6 +50,53 @@ body {
 }
 
 /* ==========================================================
+   ESTRUTURA DE GRELHA PARA OS MENUS E DEPARTAMENTOS
+   ================================================---------- */
+.grid-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.grid-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.grid-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary-color);
+    box-shadow: 0 12px 20px rgba(0,0,0,0.1);
+}
+
+.grid-card i {
+    font-size: 40px;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.grid-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
+
+.grid-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+/* ==========================================================
    TELA DE LOGIN: VÍDEO A COBRIR O ECRÃ INTEIRO (SEM FAIXAS)
    ================================================---------- */
 .cyber-login-screen {
@@ -66,7 +113,6 @@ body {
     display: flex;
 }
 
-/* Vídeo em modo cover para preencher todo o ecrã sem margens ou faixas laterais */
 .bg-video {
     position: absolute;
     top: 50%;
@@ -80,7 +126,6 @@ body {
     object-fit: cover;
 }
 
-/* Logo e Nome fixos no canto superior esquerdo */
 .cyber-top-brand {
     position: absolute;
     top: 25px;
@@ -109,7 +154,6 @@ body {
     text-shadow: 0 2px 6px rgba(0,0,0,0.8);
 }
 
-/* Container do formulário: deslocado para a direita e ligeiramente para baixo */
 .cyber-login-container {
     position: relative;
     width: 100%;
@@ -121,7 +165,7 @@ body {
 }
 
 .cyber-form-box {
-    background: rgba(11, 43, 92, 0.85); /* Fundo em azul escuro translúcido */
+    background: rgba(11, 43, 92, 0.85);
     padding: 30px;
     border-radius: 8px;
     backdrop-filter: blur(12px);
@@ -129,7 +173,6 @@ body {
     box-shadow: 0 15px 35px rgba(0,0,0,0.4);
 }
 
-/* Campos em Glassmorphism */
 .cyber-input-group {
     display: flex;
     align-items: center;
@@ -166,7 +209,6 @@ body {
     color: rgba(255, 255, 255, 0.65);
 }
 
-/* Opções Remember Me / Forgot Password */
 .cyber-options {
     display: flex;
     justify-content: space-between;
@@ -194,7 +236,6 @@ body {
     text-decoration: underline;
 }
 
-/* Botões */
 .cyber-btn-login {
     width: 100%;
     background: rgba(255, 255, 255, 0.9);
@@ -244,7 +285,6 @@ body {
     }
 }
 
-/* Ecrã de Seleção de Departamentos */
 .header-top-dash {
     display: flex;
     justify-content: space-between;
@@ -339,7 +379,6 @@ body {
     display: inline-block;
 }
 
-/* Modais */
 .modal-overlay {
     display: none;
     position: fixed;
@@ -375,7 +414,6 @@ body {
     cursor: pointer;
 }
 
-/* Dashboard Interno */
 .dash-nav {
     background-color: var(--primary-color);
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -478,7 +516,6 @@ body {
     cursor: pointer;
 }
 
-/* Notificação Toast */
 .toast-notification {
     position: fixed;
     bottom: 20px;
