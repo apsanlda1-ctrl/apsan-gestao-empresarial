@@ -46,6 +46,13 @@
         .btn-pdf:hover { background: #c82333; }
         .btn-word { background: #0069d9; }
         .btn-word:hover { background: #0056b3; }
+
+        /* Botões de Ação na Tabela */
+        .btn-table-action { background: none; border: none; cursor: pointer; font-size: 14px; padding: 4px 6px; border-radius: 4px; transition: 0.2s; }
+        .btn-edit { color: #007bff; }
+        .btn-edit:hover { background: rgba(0, 123, 255, 0.1); }
+        .btn-delete { color: #dc3545; }
+        .btn-delete:hover { background: rgba(220, 53, 69, 0.1); }
     </style>
 </head>
 <body data-theme="light">
@@ -148,13 +155,16 @@
             </div>
         </div>
 
-        <!-- SEÇÃO DE TRABALHO ESPECIAL: REGISTRAR FUNCIONÁRIO (FORMULÁRIO COMPLETO + EXPORTAÇÃO PDF/WORD) -->
+        <!-- SEÇÃO DE TRABALHO ESPECIAL: REGISTRAR FUNCIONÁRIO (FORMULÁRIO COMPLETO + EDIÇÃO/ELIMINAÇÃO + EXPORTAÇÃO) -->
         <div id="secao-workspace-regfunc" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
             <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
-                <h3><i class="fas fa-user-plus"></i> Módulo: Registrar Funcionário (Cadastro Completo)</h3>
+                <h3 id="formTituloModo"><i class="fas fa-user-plus"></i> Módulo: Registrar Funcionário (Cadastro Completo)</h3>
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Preencha todos os dados pessoais, profissionais e bancários exigidos para o cadastro oficial na APSAN, LDA.</p>
                 
+                <!-- Campo oculto para controlo de edição -->
+                <input type="hidden" id="funcEditIndex" value="-1">
+
                 <!-- Formulário Completo com Campos Detalhados -->
                 <div class="form-grid">
                     <div class="form-group">
@@ -208,10 +218,7 @@
                     <div class="form-group">
                         <label>Departamento</label>
                         <select id="funcDepartamento">
-                            <option value="Tecnologia & Sistemas">Tecnologia & Sistemas</option>
-                            <option value="Recursos Humanos">Recursos Humanos</option>
-                            <option value="Administração & Finanças">Administração & Finanças</option>
-                            <option value="Operações & Logística">Operações & Logística</option>
+                            <!-- Preenchido dinamicamente com todos os departamentos/módulos do sistema -->
                         </select>
                     </div>
                     <div class="form-group">
@@ -236,8 +243,9 @@
                     </div>
                 </div>
 
-                <div style="margin-bottom: 25px;">
-                    <button onclick="salvarNovoFuncionarioCompleto()" class="btn-primary-custom" style="width: auto; padding: 12px 25px;"><i class="fas fa-save"></i> Guardar Funcionário no Sistema</button>
+                <div style="margin-bottom: 25px; display: flex; gap: 10px;">
+                    <button onclick="salvarOuAtualizarFuncionario()" class="btn-primary-custom" style="width: auto; padding: 12px 25px;" id="btnSalvarFunc"><i class="fas fa-save"></i> Guardar Funcionário no Sistema</button>
+                    <button onclick="cancelarEdicaoFuncionario()" class="btn-secondary-custom" style="width: auto; padding: 12px 20px; display: none;" id="btnCancelarEdicao"><i class="fas fa-times"></i> Cancelar Edição</button>
                 </div>
 
                 <!-- Botões de Exportação PDF e Word para Registos Completos -->
@@ -260,6 +268,7 @@
                                 <th>Departamento</th>
                                 <th>Contacto</th>
                                 <th>Salário</th>
+                                <th style="text-align: center;">Ações</th>
                             </tr>
                         </thead>
                         <tbody id="tabelaFuncionariosCompletos">
@@ -315,7 +324,7 @@
 
         // Array específico para guardar os registos completos do funcionário
         let funcionariosCadastrados = [
-            { id: '#FUNC-01', nome: 'Eduardo Ngongoyove Gabriel', bi: '003892832LA041', nif: '5002938192', nasc: '15/05/1995', genero: 'Masculino', civil: 'Solteiro(a)', telefone: '+244 923 000 000', email: 'eduardo@apsanlda.com', morada: 'Namacunde, Cunene', cargo: 'Desenvolvedor Software', departamento: 'Tecnologia & Sistemas', admissao: '01/01/2026', contrato: 'Sem Termo', salario: '350.000,00 Kz', banco: 'BAI - AO06 0040 ...' }
+            { id: '#FUNC-01', nome: 'Eduardo Ngongoyove Gabriel', bi: '003892832LA041', nif: '5002938192', nasc: '1995-05-15', genero: 'Masculino', civil: 'Solteiro(a)', telefone: '+244 923 000 000', email: 'eduardo@apsanlda.com', morada: 'Namacunde, Cunene', cargo: 'Desenvolvedor Software', departamento: 'Tecnologia & Sistemas', admissao: '2026-01-01', contrato: 'Sem Termo', salario: '350.000,00 Kz', banco: 'BAI - AO06 0040 ...' }
         ];
 
         let moduloAtivoAtual = null;
@@ -333,7 +342,21 @@
         document.addEventListener("DOMContentLoaded", () => {
             renderizarGrelhaModulos();
             inicializarGraficosExecutivos();
+            popularSelectDepartamentos();
         });
+
+        function popularSelectDepartamentos() {
+            const selectDep = document.getElementById('funcDepartamento');
+            if(!selectDep) return;
+            selectDep.innerHTML = '';
+            // Filtra e lista todos os departamentos/módulos existentes no sistema
+            modulosData.forEach(mod => {
+                const opt = document.createElement('option');
+                opt.value = mod.nome;
+                opt.textContent = mod.nome;
+                selectDep.appendChild(opt);
+            });
+        }
 
         function renderizarGrelhaModulos() {
             const grid = document.getElementById('modulesGridContainer');
@@ -370,6 +393,7 @@
 
             if (id === 'regfunc') {
                 document.getElementById('secao-workspace-regfunc').classList.add('active');
+                cancelarEdicaoFuncionario();
                 recarregarTabelaFuncionarios();
             } else {
                 document.getElementById('secao-workspace-generica').classList.add('active');
@@ -422,7 +446,8 @@
             });
         }
 
-        function salvarNovoFuncionarioCompleto() {
+        function salvarOuAtualizarFuncionario() {
+            const editIndex = parseInt(document.getElementById('funcEditIndex').value);
             const nome = document.getElementById('funcNome').value.trim();
             const bi = document.getElementById('funcBI').value.trim();
             const cargo = document.getElementById('funcCargo').value.trim();
@@ -436,57 +461,131 @@
                 return;
             }
 
-            const novoId = `#FUNC-0${funcionariosCadastrados.length + 1}`;
-            funcionariosCadastrados.unshift({
-                id: novoId,
-                nome: nome,
-                bi: bi,
-                nif: document.getElementById('funcNIF').value || 'N/A',
-                nasc: document.getElementById('funcNasc').value || 'N/A',
-                genero: document.getElementById('funcGenero').value,
-                civil: document.getElementById('funcEstadoCivil').value,
-                telefone: telefone || 'N/A',
-                email: email || 'N/A',
-                morada: document.getElementById('funcMorada').value || 'N/A',
-                cargo: cargo,
-                departamento: departamento,
-                admissao: document.getElementById('funcAdmissao').value || 'N/A',
-                contrato: document.getElementById('funcContrato').value,
-                salario: salario ? salario + ' Kz' : '0,00 Kz',
-                banco: document.getElementById('funcBanco').value || 'N/A'
-            });
+            if (editIndex === -1) {
+                // Criar Novo Registo
+                const novoId = `#FUNC-0${funcionariosCadastrados.length + 1}`;
+                funcionariosCadastrados.unshift({
+                    id: novoId,
+                    nome: nome,
+                    bi: bi,
+                    nif: document.getElementById('funcNIF').value || 'N/A',
+                    nasc: document.getElementById('funcNasc').value || '',
+                    genero: document.getElementById('funcGenero').value,
+                    civil: document.getElementById('funcEstadoCivil').value,
+                    telefone: telefone || 'N/A',
+                    email: email || 'N/A',
+                    morada: document.getElementById('funcMorada').value || 'N/A',
+                    cargo: cargo,
+                    departamento: departamento,
+                    admissao: document.getElementById('funcAdmissao').value || '',
+                    contrato: document.getElementById('funcContrato').value,
+                    salario: salario ? salario + ' Kz' : '0,00 Kz',
+                    banco: document.getElementById('funcBanco').value || 'N/A'
+                });
 
-            // Atualiza também o contador e o registo na contagem do gráfico do módulo regfunc
-            const listaReg = dadosModulosEstado['regfunc'].registos;
-            listaReg.unshift({
-                id: `#REG-0${listaReg.length + 1}`,
-                descricao: `Registo completo do funcionário: ${nome} (${cargo})`,
-                data: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
-                estado: 'Ativo'
-            });
+                const listaReg = dadosModulosEstado['regfunc'].registos;
+                listaReg.unshift({
+                    id: `#REG-0${listaReg.length + 1}`,
+                    descricao: `Registo completo do funcionário: ${nome} (${cargo})`,
+                    data: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
+                    estado: 'Ativo'
+                });
 
-            // Limpar campos principais
-            document.getElementById('funcNome').value = '';
-            document.getElementById('funcBI').value = '';
-            document.getElementById('funcNIF').value = '';
-            document.getElementById('funcCargo').value = '';
-            document.getElementById('funcTelefone').value = '';
-            document.getElementById('funcEmail').value = '';
-            document.getElementById('funcMorada').value = '';
-            document.getElementById('funcSalario').value = '';
-            document.getElementById('funcBanco').value = '';
+                showToast("Sucesso", "Funcionário registado e salvo com sucesso no sistema!");
+            } else {
+                // Atualizar Registo Existente
+                let f = funcionariosCadastrados[editIndex];
+                f.nome = nome;
+                f.bi = bi;
+                f.nif = document.getElementById('funcNIF').value || 'N/A';
+                f.nasc = document.getElementById('funcNasc').value || '';
+                f.genero = document.getElementById('funcGenero').value;
+                f.civil = document.getElementById('funcEstadoCivil').value;
+                f.telefone = telefone || 'N/A';
+                f.email = email || 'N/A';
+                f.morada = document.getElementById('funcMorada').value || 'N/A';
+                f.cargo = cargo;
+                f.departamento = departamento;
+                f.admissao = document.getElementById('funcAdmissao').value || '';
+                f.contrato = document.getElementById('funcContrato').value;
+                f.salario = salario ? (salario.includes('Kz') ? salario : salario + ' Kz') : '0,00 Kz';
+                f.banco = document.getElementById('funcBanco').value || 'N/A';
 
+                showToast("Sucesso", "Dados do funcionário atualizados com sucesso!");
+                cancelarEdicaoFuncionario();
+            }
+
+            limparFormularioFuncionario();
             recarregarTabelaFuncionarios();
             atualizarContadorCardModulo('regfunc');
             atualizarGraficosDinamicos();
+        }
 
-            showToast("Sucesso", "Funcionário registado e salvo com sucesso no sistema!");
+        function preencherFormularioParaEditar(index) {
+            const f = funcionariosCadastrados[index];
+            document.getElementById('funcEditIndex').value = index;
+            document.getElementById('funcNome').value = f.nome;
+            document.getElementById('funcBI').value = f.bi;
+            document.getElementById('funcNIF').value = f.nif !== 'N/A' ? f.nif : '';
+            document.getElementById('funcNasc').value = f.nasc || '';
+            document.getElementById('funcGenero').value = f.genero;
+            document.getElementById('funcEstadoCivil').value = f.civil;
+            document.getElementById('funcTelefone').value = f.telefone !== 'N/A' ? f.telefone : '';
+            document.getElementById('funcEmail').value = f.email !== 'N/A' ? f.email : '';
+            document.getElementById('funcMorada').value = f.morada !== 'N/A' ? f.morada : '';
+            document.getElementById('funcCargo').value = f.cargo;
+            document.getElementById('funcDepartamento').value = f.departamento;
+            document.getElementById('funcAdmissao').value = f.admissao || '';
+            document.getElementById('funcContrato').value = f.contrato;
+            document.getElementById('funcSalario').value = f.salario ? f.salario.replace(' Kz', '') : '';
+            document.getElementById('funcBanco').value = f.banco !== 'N/A' ? f.banco : '';
+
+            // Alterar rótulos para modo de edição
+            document.getElementById('formTituloModo').innerHTML = `<i class="fas fa-user-edit"></i> Editar Registo de Funcionário: ${f.nome}`;
+            document.getElementById('btnSalvarFunc').innerHTML = `<i class="fas fa-sync-alt"></i> Atualizar Dados do Funcionário`;
+            document.getElementById('btnCancelarEdicao').style.display = 'inline-flex';
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelarEdicaoFuncionario() {
+            document.getElementById('funcEditIndex').value = '-1';
+            limparFormularioFuncionario();
+            document.getElementById('formTituloModo').innerHTML = `<i class="fas fa-user-plus"></i> Módulo: Registrar Funcionário (Cadastro Completo)`;
+            document.getElementById('btnSalvarFunc').innerHTML = `<i class="fas fa-save"></i> Guardar Funcionário no Sistema`;
+            document.getElementById('btnCancelarEdicao').style.display = 'none';
+        }
+
+        function eliminarFuncionario(index) {
+            const nomeRemovido = funcionariosCadastrados[index].nome;
+            if(confirm(`Tem a certeza de que pretende eliminar o registo de ${nomeRemovido}?`)) {
+                funcionariosCadastrados.splice(index, 1);
+                recarregarTabelaFuncionarios();
+                atualizarContadorCardModulo('regfunc');
+                atualizarGraficosDinamicos();
+                showToast("Eliminado", `O registo de ${nomeRemovido} foi removido do sistema.`);
+                cancelarEdicaoFuncionario();
+            }
+        }
+
+        function limparFormularioFuncionario() {
+            document.getElementById('funcNome').value = '';
+            document.getElementById('funcBI').value = '';
+            document.getElementById('funcNIF').value = '';
+            document.getElementById('funcNasc').value = '';
+            document.getElementById('funcTelefone').value = '';
+            document.getElementById('funcEmail').value = '';
+            document.getElementById('funcMorada').value = '';
+            document.getElementById('funcCargo').value = '';
+            document.getElementById('funcAdmissao').value = '';
+            document.getElementById('funcSalario').value = '';
+            document.getElementById('funcBanco').value = '';
         }
 
         function recarregarTabelaFuncionarios() {
             const tbody = document.getElementById('tabelaFuncionariosCompletos');
             tbody.innerHTML = '';
-            funcionariosCadastrados.forEach(f => {
+            funcionariosCadastrados.forEach((f, index) => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${f.id}</td>
@@ -496,6 +595,10 @@
                     <td>${f.departamento}</td>
                     <td>${f.telefone}</td>
                     <td>${f.salario}</td>
+                    <td style="text-align: center; white-space: nowrap;">
+                        <button class="btn-table-action btn-edit" title="Editar Funcionário" onclick="preencherFormularioParaEditar(${index})"><i class="fas fa-edit"></i></button>
+                        <button class="btn-table-action btn-delete" title="Eliminar Funcionário" onclick="eliminarFuncionario(${index})"><i class="fas fa-trash-alt"></i></button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
