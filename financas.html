@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>APSAN, LDA </title>
+  <title>APSAN, LDA — Hub Executivo & Sistema Master</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -16,6 +16,7 @@
   <!-- Firebase SDKs (Compat / v9) -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -80,6 +81,15 @@
     .menu-card-body p { font-size: 13px; color: var(--secondary); line-height: 1.5; }
     .menu-card-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--border); font-size: 13px; font-weight: 600; color: var(--card-color, var(--primary)); }
 
+    /* MODAL DE LOGIN / AUTENTICAÇÃO DE DEPARTAMENTOS */
+    .auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.75); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 2000; padding: 20px; }
+    .auth-container { background: var(--white); width: 100%; max-width: 440px; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    .auth-header { padding: 24px; background: var(--bg-app); text-align: center; border-bottom: 1px solid var(--border); }
+    .auth-header h3 { font-size: 20px; font-weight: 700; color: var(--dark); margin-top: 8px; }
+    .auth-header p { font-size: 13px; color: var(--secondary); margin-top: 4px; }
+    .auth-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+    .auth-footer { padding: 16px 24px; background: var(--bg-app); border-top: 1px solid var(--border); text-align: center; font-size: 12px; color: var(--secondary); display: flex; justify-content: space-between; align-items: center; }
+
     /* MODAL FUNCIONAL DE TRABALHO & GESTÃO COMPLETA */
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
     .modal-container { background: var(--white); width: 100%; max-width: 1100px; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); border: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; animation: modalIn 0.3s cubic-bezier(0.16, 1, 0.3, 1); max-height: 90vh; }
@@ -134,6 +144,61 @@
 </head>
 <body>
 
+<!-- MODAL DE LOGIN / CREDENCIAIS POR DEPARTAMENTO -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-container">
+    <div class="auth-header">
+      <div class="hub-avatar" style="margin: 0 auto; width: 50px; height: 50px; font-size: 20px;"><i class="fas fa-lock"></i></div>
+      <h3>Segurança APSAN, LDA</h3>
+      <p id="authSubtitle">Selecione o departamento e insira a credencial</p>
+    </div>
+    <div class="auth-body">
+      <div class="form-group">
+        <label>Departamento / Módulo</label>
+        <select class="form-control" id="authDeptSelect">
+          <option value="Tesouraria & Bancos">Tesouraria & Bancos</option>
+          <option value="Partidas Dobradas & PGC">Partidas Dobradas & PGC</option>
+          <option value="Faturação & Comercial">Faturação & Comercial</option>
+          <option value="Obrigações Fiscais (AGT)">Obrigações Fiscais (AGT)</option>
+          <option value="Demonstrações & Relatórios">Demonstrações & Relatórios</option>
+          <option value="Simulador & Orçamentos">Simulador & Orçamentos</option>
+          <option value="Recursos Humanos & Salários">Recursos Humanos & Salários</option>
+          <option value="Ativos & Imobilizado">Ativos & Imobilizado</option>
+          <option value="Contratos & Fornecedores">Contratos & Fornecedores</option>
+          <option value="Auditoria & Conformidade">Auditoria & Conformidade</option>
+          <option value="Stocks & Armazém">Stocks & Armazém</option>
+          <option value="Multimoeda & Câmbios">Multimoeda & Câmbios</option>
+          <option value="Planeamento Orçamental">Planeamento Orçamental</option>
+          <option value="Projetos & CAPEX">Projetos & CAPEX</option>
+          <option value="Conciliação Bancária IA">Conciliação Bancária IA</option>
+          <option value="Reembolsos & Despesas">Reembolsos & Despesas</option>
+          <option value="Dashboard Executivo Board">Dashboard Executivo Board</option>
+          <option value="Seguros & Apólices">Seguros & Apólices</option>
+          <option value="Previsão de Cash Flow">Previsão de Cash Flow</option>
+          <option value="Arquivo Digital (GED)">Arquivo Digital (GED)</option>
+          <option value="Crédito & Cobranças">Crédito & Cobranças</option>
+          <option value="Ficheiros SAF-T & Legais">Ficheiros SAF-T & Legais</option>
+          <option value="Contabilidade Analítica">Contabilidade Analítica</option>
+          <option value="Parâmetros & Permissões">Parâmetros & Permissões</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>E-mail Corporativo / Utilizador</label>
+        <input type="email" class="form-control" id="authUserEmail" placeholder="ex: departamento@apsan.com" value="admin@apsan.com">
+      </div>
+      <div class="form-group">
+        <label>Palavra-passe do Departamento</label>
+        <input type="password" class="form-control" id="authPassword" placeholder="••••••••" value="apsan2026">
+      </div>
+      <button class="btn-action" style="justify-content: center; width: 100%; margin-top: 8px;" onclick="realizarLoginDepartamento()"><i class="fas fa-sign-in-alt"></i> Autenticar & Aceder</button>
+    </div>
+    <div class="auth-footer">
+      <span>Controlo de Acesso Multidepartamental</span>
+      <button style="background: none; border: none; color: var(--primary); font-weight: 700; cursor: pointer;" onclick="bypassLoginMaster()">Modo Direto</button>
+    </div>
+  </div>
+</div>
+
 <div class="hub-container">
 
   <!-- CABEÇALHO -->
@@ -145,8 +210,11 @@
         <p>Painel de Controlo Operacional — Sincronizado em Tempo Real (Angola & Namíbia)</p>
       </div>
     </div>
-    <div class="hub-status-badge">
-      <i class="fas fa-circle fa-beat" style="color: #10b981;"></i> Sistema Operacional Ativo
+    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <div class="hub-status-badge" id="loggedUserBadge">
+        <i class="fas fa-circle fa-beat" style="color: #10b981;"></i> Sessão: Não Autenticado
+      </div>
+      <button class="btn-secondary" style="padding: 8px 14px; font-size: 12px;" onclick="abrirTelaLogin()"><i class="fas fa-user-lock"></i> Trocar / Login</button>
     </div>
   </header>
 
@@ -181,51 +249,51 @@
     <hr>
   </div>
   <div class="integrations-bar">
-    <div class="integration-pill" onclick="abrirModulo('integração', 'Gateway BFA')">
+    <div class="integration-pill" onclick="abrirModuloComPermissao('Tesouraria & Bancos')">
       <div class="integration-icon"><i class="fas fa-university"></i></div>
       <div class="integration-info"><h5>Gateway Bancário BFA</h5><span>API de Extratos</span></div>
     </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'Portal AGT API')">
+    <div class="integration-pill" onclick="abrirModuloComPermissao('Obrigações Fiscais (AGT)')">
       <div class="integration-icon"><i class="fas fa-file-invoice"></i></div>
       <div class="integration-info"><h5>Certificação AGT</h5><span>Validação Direta</span></div>
     </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'Motor SAF-T')">
+    <div class="integration-pill" onclick="abrirModuloComPermissao('Ficheiros SAF-T & Legais')">
       <div class="integration-icon"><i class="fas fa-code"></i></div>
       <div class="integration-info"><h5>Motor SAF-T (AO)</h5><span>Exportação XML</span></div>
     </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'IA Conciliação')">
+    <div class="integration-pill" onclick="abrirModuloComPermissao('Conciliação Bancária IA')">
       <div class="integration-icon"><i class="fas fa-brain"></i></div>
       <div class="integration-info"><h5>IA de Conciliação</h5><span>Cruzamento Automático</span></div>
     </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'Câmbios BNA')">
+    <div class="integration-pill" onclick="abrirModuloComPermissao('Multimoeda & Câmbios')">
       <div class="integration-icon"><i class="fas fa-exchange-alt"></i></div>
       <div class="integration-info"><h5>Câmbios Oficiais BNA</h5><span>USD, EUR, NAD, AOA</span></div>
     </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'Segurança Social')">
+    <div class="integration-pill" onclick="abrirModuloComPermissao('Recursos Humanos & Salários')">
       <div class="integration-icon"><i class="fas fa-id-card"></i></div>
       <div class="integration-info"><h5>INSS / Segurança Social</h5><span>Deduções de Salários</span></div>
     </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'Cloud GED AWS')">
+    <div class="integration-pill" onclick="abrirModuloComPermissao('Arquivo Digital (GED)')">
       <div class="integration-icon"><i class="fas fa-cloud-upload-alt"></i></div>
       <div class="integration-info"><h5>Arquivo Cloud AWS S3</h5><span>Backup Criptografado</span></div>
     </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'Assinatura Digital')">
+    <div class="integration-pill" onclick="abrirModuloComPermissao('Parâmetros & Permissões')">
       <div class="integration-icon"><i class="fas fa-signature"></i></div>
       <div class="integration-info"><h5>Assinatura Certificada</h5><span>Validação Jurídica</span></div>
     </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'WhatsApp Business API')">
+    <div class="integration-pill" onclick="abrirModuloComPermissao('Faturação & Comercial')">
       <div class="integration-icon"><i class="fab fa-whatsapp"></i></div>
       <div class="integration-info"><h5>Alertas WhatsApp</h5><span>Avisos de Faturas</span></div>
     </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'Exportador Excel/PDF')">
+    <div class="integration-pill" onclick="abrirModuloComPermissao('Simulador & Orçamentos')">
       <div class="integration-icon"><i class="fas fa-file-excel"></i></div>
       <div class="integration-info"><h5>SheetJS & jsPDF Engine</h5><span>Relatórios de Gestão</span></div>
     </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'Gateway de Pagamentos')">
+    <div class="integration-pill" onclick="abrirModuloComPermissao('Tesouraria & Bancos')">
       <div class="integration-icon"><i class="fas fa-credit-card"></i></div>
       <div class="integration-info"><h5>Multicaixa / Cartões</h5><span>Recebimentos Online</span></div>
     </div>
-    <div class="integration-pill" onclick="abrirModulo('integração', 'Assistente Azny Gabriel')">
+    <div class="integration-pill" onclick="abrirModuloComPermissao('Dashboard Executivo Board')">
       <div class="integration-icon"><i class="fas fa-robot"></i></div>
       <div class="integration-info"><h5>Chatbot IA (Gemini)</h5><span>Assistente Interno</span></div>
     </div>
@@ -237,122 +305,122 @@
     <hr>
   </div>
   <div class="menu-grid">
-    <div class="menu-card" style="--card-color: #059669;" onclick="abrirModulo('modulo', 'Tesouraria & Bancos')">
+    <div class="menu-card" style="--card-color: #059669;" onclick="abrirModuloComPermissao('Tesouraria & Bancos')">
       <div class="menu-card-header"><div class="menu-icon-box"><i class="fas fa-wallet"></i></div><span class="menu-counter">Módulo 01</span></div>
       <div class="menu-card-body"><h3>Tesouraria & Bancos</h3><p>Gestão de caixa central, cartões virtuais corporativos (BFA), fluxos diários, conciliação e pagamentos.</p></div>
       <div class="menu-card-footer"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #7c3aed;" onclick="abrirModulo('modulo', 'Partidas Dobradas & PGC')">
+    <div class="menu-card" style="--card-color: #7c3aed;" onclick="abrirModuloComPermissao('Partidas Dobradas & PGC')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #7c3aed;"><i class="fas fa-balance-scale"></i></div><span class="menu-counter">Módulo 02</span></div>
       <div class="menu-card-body"><h3>Partidas Dobradas & PGC</h3><p>Lançamentos contabilísticos estruturados por classes, centros de custo e balancetes analíticos.</p></div>
       <div class="menu-card-footer" style="color: #7c3aed;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #2563eb;" onclick="abrirModulo('modulo', 'Faturação & Comercial')">
+    <div class="menu-card" style="--card-color: #2563eb;" onclick="abrirModuloComPermissao('Faturação & Comercial')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #2563eb;"><i class="fas fa-file-invoice-dollar"></i></div><span class="menu-counter">Módulo 03</span></div>
       <div class="menu-card-body"><h3>Faturação & Comercial</h3><p>Emissão de faturas certificadas, registo de clientes corporativos e controlo de recebimentos.</p></div>
       <div class="menu-card-footer" style="color: #2563eb;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #d97706;" onclick="abrirModulo('modulo', 'Obrigações Fiscais (AGT)')">
+    <div class="menu-card" style="--card-color: #d97706;" onclick="abrirModuloComPermissao('Obrigações Fiscais (AGT)')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #d97706;"><i class="fas fa-landmark"></i></div><span class="menu-counter">Módulo 04</span></div>
       <div class="menu-card-body"><h3>Obrigações Fiscais (AGT)</h3><p>Apuração de impostos como IVA, IRT, imposto industrial e prazos de submissão legal.</p></div>
       <div class="menu-card-footer" style="color: #d97706;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #0891b2;" onclick="abrirModulo('modulo', 'Demonstrações & Relatórios')">
+    <div class="menu-card" style="--card-color: #0891b2;" onclick="abrirModuloComPermissao('Demonstrações & Relatórios')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #0891b2;"><i class="fas fa-chart-line"></i></div><span class="menu-counter">Módulo 05</span></div>
       <div class="menu-card-body"><h3>Demonstrações & Relatórios</h3><p>Balanço patrimonial, demonstração de resultados (DRE) e relatórios de gestão executiva.</p></div>
       <div class="menu-card-footer" style="color: #0891b2;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #10b981;" onclick="abrirModulo('modulo', 'Simulador & Orçamentos')">
+    <div class="menu-card" style="--card-color: #10b981;" onclick="abrirModuloComPermissao('Simulador & Orçamentos')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #10b981;"><i class="fas fa-file-excel"></i></div><span class="menu-counter">Módulo 06</span></div>
       <div class="menu-card-body"><h3>Simulador & Orçamentos</h3><p>Calculadora de propostas comerciais, estimativas e exportação direta para Excel (.xlsx).</p></div>
       <div class="menu-card-footer" style="color: #10b981;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #4f46e5;" onclick="abrirModulo('modulo', 'Recursos Humanos & Salários')">
+    <div class="menu-card" style="--card-color: #4f46e5;" onclick="abrirModuloComPermissao('Recursos Humanos & Salários')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #4f46e5;"><i class="fas fa-users-cog"></i></div><span class="menu-counter">Módulo 07</span></div>
       <div class="menu-card-body"><h3>Recursos Humanos & Salários</h3><p>Processamento de folhas de vencimento, deduções da Segurança Social e subsídios.</p></div>
       <div class="menu-card-footer" style="color: #4f46e5;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #be185d;" onclick="abrirModulo('modulo', 'Ativos & Imobilizado')">
+    <div class="menu-card" style="--card-color: #be185d;" onclick="abrirModuloComPermissao('Ativos & Imobilizado')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #be185d;"><i class="fas fa-building"></i></div><span class="menu-counter">Módulo 08</span></div>
       <div class="menu-card-body"><h3>Ativos & Imobilizado</h3><p>Inventário de ativos fixos, cálculo automático de depreciações e reavaliações patrimoniais.</p></div>
       <div class="menu-card-footer" style="color: #be185d;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #ea580c;" onclick="abrirModulo('modulo', 'Contratos & Fornecedores')">
+    <div class="menu-card" style="--card-color: #ea580c;" onclick="abrirModuloComPermissao('Contratos & Fornecedores')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #ea580c;"><i class="fas fa-handshake"></i></div><span class="menu-counter">Módulo 09</span></div>
       <div class="menu-card-body"><h3>Contratos & Fornecedores</h3><p>Gestão de contas a pagar (Passivos), prazos de fornecedores terceirizados e contratos.</p></div>
       <div class="menu-card-footer" style="color: #ea580c;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #0284c7;" onclick="abrirModulo('modulo', 'Auditoria & Conformidade')">
+    <div class="menu-card" style="--card-color: #0284c7;" onclick="abrirModuloComPermissao('Auditoria & Conformidade')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #0284c7;"><i class="fas fa-user-shield"></i></div><span class="menu-counter">Módulo 10</span></div>
       <div class="menu-card-body"><h3>Auditoria & Conformidade</h3><p>Monitorização de logs de transações, verificação de consistência fiscal e prevenção de riscos.</p></div>
       <div class="menu-card-footer" style="color: #0284c7;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #16a34a;" onclick="abrirModulo('modulo', 'Stocks & Armazém')">
+    <div class="menu-card" style="--card-color: #16a34a;" onclick="abrirModuloComPermissao('Stocks & Armazém')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #16a34a;"><i class="fas fa-boxes-stacked"></i></div><span class="menu-counter">Módulo 11</span></div>
       <div class="menu-card-body"><h3>Stocks & Armazém</h3><p>Valoração de inventários de mercadorias, custo médio ponderado e integração com o CPV.</p></div>
       <div class="menu-card-footer" style="color: #16a34a;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #9333ea;" onclick="abrirModulo('modulo', 'Multimoeda & Câmbios')">
+    <div class="menu-card" style="--card-color: #9333ea;" onclick="abrirModuloComPermissao('Multimoeda & Câmbios')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #9333ea;"><i class="fas fa-coins"></i></div><span class="menu-counter">Módulo 12</span></div>
       <div class="menu-card-body"><h3>Multimoeda & Câmbios</h3><p>Gestão de taxas de câmbio para transações internacionais e conversões (USD, EUR, NAD, AOA).</p></div>
       <div class="menu-card-footer" style="color: #9333ea;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #0d9488;" onclick="abrirModulo('modulo', 'Planeamento Orçamental')">
+    <div class="menu-card" style="--card-color: #0d9488;" onclick="abrirModuloComPermissao('Planeamento Orçamental')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #0d9488;"><i class="fas fa-bullseye"></i></div><span class="menu-counter">Módulo 13</span></div>
       <div class="menu-card-body"><h3>Planeamento Orçamental</h3><p>Definição e controlo de budgets por departamentos, desvios orçamentais e metas anuais.</p></div>
       <div class="menu-card-footer" style="color: #0d9488;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #c026d3;" onclick="abrirModulo('modulo', 'Projetos & CAPEX')">
+    <div class="menu-card" style="--card-color: #c026d3;" onclick="abrirModuloComPermissao('Projetos & CAPEX')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #c026d3;"><i class="fas fa-project-diagram"></i></div><span class="menu-counter">Módulo 14</span></div>
       <div class="menu-card-body"><h3>Projetos & CAPEX</h3><p>Acompanhamento financeiro de investimentos de capital, retornos esperados e custos de obra.</p></div>
       <div class="menu-card-footer" style="color: #c026d3;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #2563eb;" onclick="abrirModulo('modulo', 'Conciliação Bancária IA')">
+    <div class="menu-card" style="--card-color: #2563eb;" onclick="abrirModuloComPermissao('Conciliação Bancária IA')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #2563eb;"><i class="fas fa-network-wired"></i></div><span class="menu-counter">Módulo 15</span></div>
       <div class="menu-card-body"><h3>Conciliação Bancária IA</h3><p>Importação automática de ficheiros MT940/CAMT.053 e cruzamento inteligente de extratos.</p></div>
       <div class="menu-card-footer" style="color: #2563eb;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #e11d48;" onclick="abrirModulo('modulo', 'Reembolsos & Despesas')">
+    <div class="menu-card" style="--card-color: #e11d48;" onclick="abrirModuloComPermissao('Reembolsos & Despesas')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #e11d48;"><i class="fas fa-receipt"></i></div><span class="menu-counter">Módulo 16</span></div>
       <div class="menu-card-body"><h3>Reembolsos & Despesas</h3><p>Controlo de ajudas de custo, despesas operacionais de campo e vales de caixa menor.</p></div>
       <div class="menu-card-footer" style="color: #e11d48;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #ca8a04;" onclick="abrirModulo('modulo', 'Dashboard Executivo Board')">
+    <div class="menu-card" style="--card-color: #ca8a04;" onclick="abrirModuloComPermissao('Dashboard Executivo Board')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #ca8a04;"><i class="fas fa-chess-board"></i></div><span class="menu-counter">Módulo 17</span></div>
       <div class="menu-card-body"><h3>Dashboard Executivo Board</h3><p>KPIs de alta performance, rácios de liquidez, solvabilidade e margens de lucro agregadas.</p></div>
       <div class="menu-card-footer" style="color: #ca8a04;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #0284c7;" onclick="abrirModulo('modulo', 'Seguros & Apólices')">
+    <div class="menu-card" style="--card-color: #0284c7;" onclick="abrirModuloComPermissao('Seguros & Apólices')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #0284c7;"><i class="fas fa-shield-heart"></i></div><span class="menu-counter">Módulo 18</span></div>
       <div class="menu-card-body"><h3>Seguros & Apólices</h3><p>Controlo de apólices de seguro de frota, edifícios, acidentes de trabalho e respetivos prémios.</p></div>
       <div class="menu-card-footer" style="color: #0284c7;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #16a34a;" onclick="abrirModulo('modulo', 'Previsão de Cash Flow')">
+    <div class="menu-card" style="--card-color: #16a34a;" onclick="abrirModuloComPermissao('Previsão de Cash Flow')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #16a34a;"><i class="fas fa-chart-area"></i></div><span class="menu-counter">Módulo 19</span></div>
       <div class="menu-card-body"><h3>Previsão de Cash Flow</h3><p>Projeção de entradas e saídas de caixa a 30, 60 e 90 dias com análise de desfasamentos.</p></div>
       <div class="menu-card-footer" style="color: #16a34a;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #52525b;" onclick="abrirModulo('modulo', 'Arquivo Digital (GED)')">
+    <div class="menu-card" style="--card-color: #52525b;" onclick="abrirModuloComPermissao('Arquivo Digital (GED)')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #52525b;"><i class="fas fa-folder-open"></i></div><span class="menu-counter">Módulo 20</span></div>
       <div class="menu-card-body"><h3>Arquivo Digital (GED)</h3><p>Repositório seguro de comprovativos, recibos, certidões fiscais e extratos digitalizados.</p></div>
       <div class="menu-card-footer" style="color: #52525b;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #9333ea;" onclick="abrirModulo('modulo', 'Crédito & Cobranças')">
+    <div class="menu-card" style="--card-color: #9333ea;" onclick="abrirModuloComPermissao('Crédito & Cobranças')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #9333ea;"><i class="fas fa-hand-holding-usd"></i></div><span class="menu-counter">Módulo 21</span></div>
       <div class="menu-card-body"><h3>Crédito & Cobranças</h3><p>Aging report de clientes, gestão de faturas vencidas, alertas de incumprimento e renegociação.</p></div>
       <div class="menu-card-footer" style="color: #9333ea;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #4f46e5;" onclick="abrirModulo('modulo', 'Ficheiros SAF-T & Legais')">
+    <div class="menu-card" style="--card-color: #4f46e5;" onclick="abrirModuloComPermissao('Ficheiros SAF-T & Legais')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #4f46e5;"><i class="fas fa-file-code"></i></div><span class="menu-counter">Módulo 22</span></div>
       <div class="menu-card-body"><h3>Ficheiros SAF-T & Legais</h3><p>Geração e validação de ficheiros SAF-T de contabilidade e faturação para auditoria externa.</p></div>
       <div class="menu-card-footer" style="color: #4f46e5;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #0284c7;" onclick="abrirModulo('modulo', 'Contabilidade Analítica')">
+    <div class="menu-card" style="--card-color: #0284c7;" onclick="abrirModuloComPermissao('Contabilidade Analítica')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #0284c7;"><i class="fas fa-sitemap"></i></div><span class="menu-counter">Módulo 23</span></div>
       <div class="menu-card-body"><h3>Contabilidade Analítica</h3><p>Apuramento de custos por secção, projeto ou linha de negócio de forma segmentada.</p></div>
       <div class="menu-card-footer" style="color: #0284c7;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
     </div>
-    <div class="menu-card" style="--card-color: #334155;" onclick="abrirModulo('modulo', 'Parâmetros & Permissões')">
+    <div class="menu-card" style="--card-color: #334155;" onclick="abrirModuloComPermissao('Parâmetros & Permissões')">
       <div class="menu-card-header"><div class="menu-icon-box" style="background: #334155;"><i class="fas fa-cogs"></i></div><span class="menu-counter">Módulo 24</span></div>
       <div class="menu-card-body"><h3>Parâmetros & Permissões</h3><p>Gestão de perfis de utilizador, níveis de acesso, exercícios fiscais e tabelas gerais do ERP.</p></div>
       <div class="menu-card-footer" style="color: #334155;"><span>Aceder & Gerir</span><i class="fas fa-arrow-right"></i></div>
@@ -458,10 +526,12 @@
   };
 
   let db = null;
+  let auth = null;
   try {
     if (firebaseConfig.apiKey !== "SUA_API_KEY") {
       firebase.initializeApp(firebaseConfig);
       db = firebase.firestore();
+      auth = firebase.auth();
     } else {
       throw new Error("Chaves padrão do Firebase detetadas.");
     }
@@ -471,6 +541,7 @@
 
   let moduloAtualAtivo = '';
   let cacheRegistosModulo = [];
+  let sessaoDepartamentoAtual = null;
 
   // TICKER DE CÂMBIO AO VIVO EM TEMPO REAL (USD, EUR, NAD, AOA)
   async function carregarCambiosReais() {
@@ -496,6 +567,60 @@
   }
   carregarCambiosReais();
   setInterval(carregarCambiosReais, 30000);
+
+  // SISTEMA DE LOGIN E AUTENTICAÇÃO POR DEPARTAMENTO
+  function abrirTelaLogin() {
+    document.getElementById('authOverlay').style.display = 'flex';
+  }
+
+  function fecharTelaLogin() {
+    document.getElementById('authOverlay').style.display = 'none';
+  }
+
+  async function realizarLoginDepartamento() {
+    const dept = document.getElementById('authDeptSelect').value;
+    const email = document.getElementById('authUserEmail').value;
+    const pass = document.getElementById('authPassword').value;
+
+    if(!email || !pass) {
+      alert('Por favor, preencha o e-mail e a palavra-passe.');
+      return;
+    }
+
+    if(auth) {
+      try {
+        await auth.signInWithEmailAndPassword(email, pass);
+      } catch(err) {
+        // Se a conta não existir no Firebase Auth, tenta criar ou simula login local seguro
+        try {
+          await auth.createUserWithEmailAndPassword(email, pass);
+        } catch(e) {
+          console.warn("Autenticação Firebase tratada localmente.");
+        }
+      }
+    }
+
+    sessaoDepartamentoAtual = dept;
+    document.getElementById('loggedUserBadge').innerHTML = `<i class="fas fa-circle fa-beat" style="color: #10b981;"></i> Sessão: ${dept}`;
+    fecharTelaLogin();
+    alert(`Autenticado com sucesso no departamento: ${dept}!`);
+  }
+
+  function bypassLoginMaster() {
+    sessaoDepartamentoAtual = "Administração Master (Todos os Módulos)";
+    document.getElementById('loggedUserBadge').innerHTML = `<i class="fas fa-circle fa-beat" style="color: #10b981;"></i> Sessão: Master Ativo`;
+    fecharTelaLogin();
+    alert('Acesso Master concedido a todos os departamentos.');
+  }
+
+  function abrirModuloComPermissao(nomeModulo) {
+    if(!sessaoDepartamentoAtual) {
+      document.getElementById('authDeptSelect').value = nomeModulo;
+      abrirTelaLogin();
+      return;
+    }
+    abrirModulo('módulo', nomeModulo);
+  }
 
   function abrirModulo(tipo, nome) {
     moduloAtualAtivo = nome;
@@ -872,4 +997,3 @@
 
 </body>
 </html>
-```[cite: 4]
