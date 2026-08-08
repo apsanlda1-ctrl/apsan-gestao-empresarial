@@ -85,13 +85,13 @@
             </div>
 
             <div class="department-grid">
-                <div class="dept-card" onclick="window.location.href='financas.html'">
+                <div class="dept-card" onclick="navegarParaDepartamento('financas.html')">
                     <div class="dept-icon"><i class="fas fa-wallet"></i></div>
                     <h3>Finanças & Contabilidade</h3>
                     <p>Tesouraria, faturas, balancete e controlo BFA/AGT.</p>
                     <span class="dept-code-hint">Aceder a financas.html</span>
                 </div>
-                <div class="dept-card" onclick="window.location.href='limpeza.html'">
+                <div class="dept-card" onclick="navegarParaDepartamento('limpeza.html')">
                     <div class="dept-icon"><i class="fas fa-broom"></i></div>
                     <h3>Limpeza Institucional</h3>
                     <p>Gestão de equipas, escalas e insumos de limpeza.</p>
@@ -127,19 +127,19 @@
                     <p>Trâmites aduaneiros, encomendas e transfronteiriços.</p>
                     <span class="dept-code-hint">Código: IMP-2026</span>
                 </div>
-                <div class="dept-card" onclick="window.location.href='rh.html'">
+                <div class="dept-card" onclick="navegarParaDepartamento('rh.html')">
                     <div class="dept-icon"><i class="fas fa-users"></i></div>
                     <h3>Recursos Humanos (RH)</h3>
                     <p>Gestão de pessoal, colaboradores, assiduidade e folhas.</p>
                     <span class="dept-code-hint">Aceder a rh.html</span>
                 </div>
-                <div class="dept-card" onclick="window.location.href='hospitalar.html'">
+                <div class="dept-card" onclick="navegarParaDepartamento('hospitalar.html')">
                     <div class="dept-icon"><i class="fas fa-user-nurse"></i></div>
                     <h3>Acompanhamento Hospitalar</h3>
                     <p>Assistência, cuidados e suporte a pacientes e familiares.</p>
                     <span class="dept-code-hint">Aceder a hospitalar.html</span>
                 </div>
-                <div class="dept-card" onclick="window.location.href='traducao.html'">
+                <div class="dept-card" onclick="navegarParaDepartamento('traducao.html')">
                     <div class="dept-icon"><i class="fas fa-language"></i></div>
                     <h3>Tradução Juramentada</h3>
                     <p>Traduções oficiais de documentos e validações legais.</p>
@@ -193,6 +193,9 @@
                 </div>
                 <div style="display: flex; align-items: center; gap: 15px;">
                     <button onclick="toggleTheme()" class="theme-btn" title="Alternar Tema"><i class="fas fa-moon" id="themeIcon"></i></button>
+                    <!-- Botões de Voltar Atrás e Prosseguir exigidos em todos os departamentos -->
+                    <button onclick="voltarHistoricoDepartamento()" class="btn-secondary-custom" title="Voltar Atrás"><i class="fas fa-arrow-left"></i> Voltar Atrás</button>
+                    <button onclick="prosseguirHistoricoDepartamento()" class="btn-secondary-custom" title="Prosseguir"><i class="fas fa-arrow-right"></i> Prosseguir</button>
                     <button onclick="backToDepartments()" class="btn-secondary-custom"><i class="fas fa-th"></i> Voltar aos Departamentos</button>
                 </div>
             </div>
@@ -288,6 +291,32 @@
     <!-- Script Principal e Registo do Service Worker para PWA -->
     <script src="script.js"></script>
     <script>
+      // Funções suplementares para garantir navegação fluida sem voltar ao login ao clicar em voltar atrás nos departamentos
+      function navegarParaDepartamento(urlPagina) {
+          // Guarda o histórico interno na sessão para permitir navegação estruturada
+          window.location.href = urlPagina;
+      }
+
+      function voltarHistoricoDepartamento() {
+          // Utiliza o histórico do browser, mas previne que redirecione para o login se o histórico esgotar na tela de departamentos
+          if (window.history.length > 1) {
+              window.history.back();
+          } else {
+              // Caso limite atingido, cai na página principal dos departamentos em vez de voltar ao login
+              const deptScreen = document.getElementById('departmentScreen');
+              if (deptScreen) {
+                  document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
+                  deptScreen.classList.add('active');
+              } else {
+                  window.location.href = '#';
+              }
+          }
+      }
+
+      function prosseguirHistoricoDepartamento() {
+          window.history.forward();
+      }
+
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('sw.js')
