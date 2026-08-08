@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acompanhamento Hospitalar</title>
+    <title>Acompanhamento Hospitalar & AZICUDA - APSAN, LDA</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Estilo de Grelha de Módulos (Estilo Hub / Cartões) */
         .modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .module-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; position: relative; display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
         .module-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.08); border-color: var(--primary-color); }
@@ -20,7 +19,6 @@
         .module-action-btn { background: none; border: none; color: var(--primary-color); font-weight: bold; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 0; }
         .module-action-btn:hover { text-decoration: underline; }
 
-        /* Estilo da Secção Ativa (Painel de Gestão do Módulo) */
         .workspace-section { display: none; margin-top: 20px; }
         .workspace-section.active { display: block; }
         .back-hub-btn { background: var(--border-color); border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; color: var(--text-color); margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
@@ -42,7 +40,6 @@
         </div>
     </div>
 
-    <!-- Modal Dinâmico -->
     <div id="dynamicModal" class="modal-overlay">
         <div class="modal-content">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
@@ -71,7 +68,7 @@
 
     <div class="container" style="max-width: 1200px; margin: 30px auto; padding: 0 20px; width: 100%;">
         
-        <!-- HUB PRINCIPAL: GRELHA DOS 12 MÓDULOS DE ACOMPANHAMENTO HOSPITALAR -->
+        <!-- HUB PRINCIPAL: GRELHA DOS 12 MÓDULOS -->
         <div id="hub-modulos" class="workspace-section active">
             <div style="margin-bottom: 25px;">
                 <h2 style="font-size: 22px; margin-bottom: 5px; color: var(--text-color);"><i class="fas fa-hospital-user"></i> Departamento de Acompanhamento Hospitalar</h2>
@@ -79,7 +76,6 @@
             </div>
 
             <div class="modules-grid">
-                <!-- Módulo 1 -->
                 <div class="module-card">
                     <div>
                         <div class="module-header"><div class="module-icon"><i class="fas fa-user-plus"></i></div><span class="module-badge">Módulo 01</span></div>
@@ -88,7 +84,6 @@
                     <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('registo')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
                 </div>
 
-                <!-- Módulo 2 -->
                 <div class="module-card">
                     <div>
                         <div class="module-header"><div class="module-icon"><i class="fas fa-folder-open"></i></div><span class="module-badge">Módulo 02</span></div>
@@ -97,7 +92,6 @@
                     <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('arquivo')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
                 </div>
 
-                <!-- Módulo 3 -->
                 <div class="module-card">
                     <div>
                         <div class="module-header"><div class="module-icon"><i class="fas fa-stethoscope"></i></div><span class="module-badge">Módulo 03</span></div>
@@ -106,7 +100,6 @@
                     <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('triagem')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
                 </div>
 
-                <!-- Módulo 4 -->
                 <div class="module-card">
                     <div>
                         <div class="module-header"><div class="module-icon"><i class="fas fa-calendar-alt"></i></div><span class="module-badge">Módulo 04</span></div>
@@ -115,7 +108,6 @@
                     <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('consultas')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
                 </div>
 
-                <!-- Módulo 5 -->
                 <div class="module-card">
                     <div>
                         <div class="module-header"><div class="module-icon"><i class="fas fa-pills"></i></div><span class="module-badge">Módulo 05</span></div>
@@ -124,7 +116,6 @@
                     <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('prescricoes')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
                 </div>
 
-                <!-- Módulo 6 -->
                 <div class="module-card">
                     <div>
                         <div class="module-header"><div class="module-icon"><i class="fas fa-microscope"></i></div><span class="module-badge">Módulo 06</span></div>
@@ -133,7 +124,6 @@
                     <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('exames')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
                 </div>
 
-                <!-- Módulo 7 -->
                 <div class="module-card">
                     <div>
                         <div class="module-header"><div class="module-icon"><i class="fas fa-bed"></i></div><span class="module-badge">Módulo 07</span></div>
@@ -142,7 +132,6 @@
                     <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('internamento')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
                 </div>
 
-                <!-- Módulo 8 -->
                 <div class="module-card">
                     <div>
                         <div class="module-header"><div class="module-icon"><i class="fas fa-capsules"></i></div><span class="module-badge">Módulo 08</span></div>
@@ -151,7 +140,6 @@
                     <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('farmacia')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
                 </div>
 
-                <!-- Módulo 9 -->
                 <div class="module-card">
                     <div>
                         <div class="module-header"><div class="module-icon"><i class="fas fa-file-invoice-dollar"></i></div><span class="module-badge">Módulo 09</span></div>
@@ -160,7 +148,6 @@
                     <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('financeiro')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
                 </div>
 
-                <!-- Módulo 10 -->
                 <div class="module-card">
                     <div>
                         <div class="module-header"><div class="module-icon"><i class="fas fa-shield-alt"></i></div><span class="module-badge">Módulo 10</span></div>
@@ -169,7 +156,6 @@
                     <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('azicuda')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
                 </div>
 
-                <!-- Módulo 11 -->
                 <div class="module-card">
                     <div>
                         <div class="module-header"><div class="module-icon"><i class="fas fa-chart-bar"></i></div><span class="module-badge">Módulo 11</span></div>
@@ -178,7 +164,6 @@
                     <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('relatorios')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
                 </div>
 
-                <!-- Módulo 12 -->
                 <div class="module-card">
                     <div>
                         <div class="module-header"><div class="module-icon"><i class="fas fa-ambulance"></i></div><span class="module-badge">Módulo 12</span></div>
@@ -189,17 +174,15 @@
             </div>
         </div>
 
-        <!-- SEÇÕES INDIVIDUAIS DOS MÓDULOS -->
-
-        <!-- 1. Registo -->
+        <!-- SEÇÃO 1: REGISTO -->
         <div id="secao-registo" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
-            <div class="management-card">
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
                 <h3><i class="fas fa-user-plus"></i> Módulo 01: Formulário de Registo de Pacientes</h3>
                 <form onsubmit="salvarPaciente(event); return false;" style="margin-top: 15px;">
                     <div class="form-grid">
-                        <div class="form-group" style="text-align: left;"><label>Nome Completo do Paciente</label><input type="text" id="pacienteNome" placeholder="Ex: Maria Shikongo" required style="font-size: 14px;"></div>
-                        <div class="form-group" style="text-align: left;"><label>Idade / Data de Nascimento</label><input type="text" id="pacienteIdade" placeholder="Ex: 34 anos" required style="font-size: 14px;"></div>
+                        <div class="form-group" style="text-align: left;"><label>Nome Completo do Paciente</label><input type="text" id="pacienteNome" placeholder="Ex: Maria Shikongo" required style="font-size: 14px; width:100%; padding:10px;"></div>
+                        <div class="form-group" style="text-align: left;"><label>Idade / Data de Nascimento</label><input type="text" id="pacienteIdade" placeholder="Ex: 34 anos" required style="font-size: 14px; width:100%; padding:10px;"></div>
                         <div class="form-group" style="text-align: left;">
                             <label>Género / Sexo</label>
                             <select id="pacienteGenero" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
@@ -216,7 +199,7 @@
                                 <option value="AB+">AB+</option><option value="AB-">AB-</option>
                             </select>
                         </div>
-                        <div class="form-group" style="text-align: left;"><label>Contacto de Emergência</label><input type="text" id="pacienteEmergencia" placeholder="Ex: +244 923 000 000" required style="font-size: 14px;"></div>
+                        <div class="form-group" style="text-align: left;"><label>Contacto de Emergência</label><input type="text" id="pacienteEmergencia" placeholder="Ex: +244 923 000 000" required style="font-size: 14px; width:100%; padding:10px;"></div>
                         <div class="form-group" style="text-align: left;">
                             <label>Estado Clínico Inicial</label>
                             <select id="pacienteEstadoClinico" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
@@ -225,27 +208,18 @@
                                 <option value="Internado">Internado</option>
                             </select>
                         </div>
-                        <div class="form-group" style="text-align: left;"><label>Patologia / Condição</label><input type="text" id="pacientePatologia" placeholder="Ex: Hipertensão" required style="font-size: 14px;"></div>
-                        <div class="form-group" style="text-align: left;"><label>Especialista Responsável</label><input type="text" id="pacienteEspecialista" placeholder="Ex: Dr. António Carlos" required style="font-size: 14px;"></div>
-                        <div class="form-group" style="text-align: left;"><label>Contacto do Doutor</label><input type="text" id="pacienteTelMedico" placeholder="Ex: +244 923 000 000" required style="font-size: 14px;"></div>
-                        <div class="form-group" style="text-align: left;">
-                            <label>Tipo de Instituição</label>
-                            <select id="pacienteTipoInst" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
-                                <option value="Privada">Privada</option>
-                                <option value="Pública">Pública</option>
-                            </select>
-                        </div>
-                        <div class="form-group" style="text-align: left; grid-column: span 2;"><label>Local de Consulta</label><input type="text" id="pacienteLocal" placeholder="Ex: Hospital Municipal de Ondjiva" required style="font-size: 14px;"></div>
+                        <div class="form-group" style="text-align: left;"><label>Patologia / Condição</label><input type="text" id="pacientePatologia" placeholder="Ex: Hipertensão" required style="font-size: 14px; width:100%; padding:10px;"></div>
+                        <div class="form-group" style="text-align: left;"><label>Especialista Responsável</label><input type="text" id="pacienteEspecialista" placeholder="Ex: Dr. António Carlos" required style="font-size: 14px; width:100%; padding:10px;"></div>
                     </div>
                     <button type="submit" class="btn-primary-custom" style="margin-top: 20px;"><i class="fas fa-save"></i> Guardar Registo no Sistema</button>
                 </form>
             </div>
         </div>
 
-        <!-- 2. Arquivo -->
+        <!-- SEÇÃO 2: ARQUIVO -->
         <div id="secao-arquivo" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
-            <div class="management-card">
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                     <h3><i class="fas fa-folder-open"></i> Módulo 02: Arquivo Clínico e Histórico</h3>
                     <div style="display: flex; gap: 10px;">
@@ -254,62 +228,62 @@
                     </div>
                 </div>
                 <div style="overflow-x: auto; margin-top: 15px;">
-                    <table class="data-table" id="tabelaPacientes">
-                        <thead><tr><th>ID</th><th>Paciente</th><th>Detalhes / Sangue</th><th>Patologia</th><th>Instituição</th><th>Médico</th><th>Estado</th><th>Ações</th></tr></thead>
+                    <table class="data-table" id="tabelaPacientes" style="width:100%; border-collapse: collapse;">
+                        <thead><tr style="border-bottom:1px solid var(--border-color); text-align:left;"><th>ID</th><th>Paciente</th><th>Detalhes / Sangue</th><th>Patologia</th><th>Médico</th><th>Estado</th><th>Ações</th></tr></thead>
                         <tbody id="pacientesTableBody">
-                            <tr><td>#HOSP-01</td><td>João Baptista</td><td>Masculino | O+</td><td>Cardiologia</td><td>Privada (Clínica Santa Maria)</td><td>Dr. Mário</td><td><span class="badge in-progress">Em Seguimento</span></td><td><button onclick="concluirAcompanhamento(this)" class="btn-action">Concluir</button></td></tr>
+                            <tr style="border-bottom:1px solid var(--border-color);"><td>#HOSP-01</td><td>João Baptista</td><td>Masculino | O+</td><td>Cardiologia</td><td>Dr. Mário</td><td><span class="badge in-progress">Em Seguimento</span></td><td><button onclick="concluirAcompanhamento(this)" class="btn-action">Concluir</button></td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- 3. Triagem -->
+        <!-- SEÇÃO 3: TRIAGEM -->
         <div id="secao-triagem" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
-            <div class="management-card">
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
                 <h3><i class="fas fa-stethoscope"></i> Módulo 03: Painel de Triagem e Sinais Vitais</h3>
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Registe os parâmetros vitais iniciais do paciente antes da consulta médica.</p>
                 <form onsubmit="registarTriagem(event); return false;">
                     <div class="form-grid">
-                        <div class="form-group"><label>Nome do Paciente</label><input type="text" id="triagemNome" placeholder="Nome do paciente" required></div>
-                        <div class="form-group"><label>Pressão Arterial</label><input type="text" id="triagemPA" placeholder="Ex: 120/80 mmHg" required></div>
-                        <div class="form-group"><label>Temperatura Corporal (°C)</label><input type="text" id="triagemTemp" placeholder="Ex: 36.5" required></div>
-                        <div class="form-group"><label>Frequência Cardíaca (bpm)</label><input type="text" id="triagemFC" placeholder="Ex: 75" required></div>
+                        <div class="form-group"><label>Nome do Paciente</label><input type="text" id="triagemNome" placeholder="Nome do paciente" required style="width:100%; padding:10px;"></div>
+                        <div class="form-group"><label>Pressão Arterial</label><input type="text" id="triagemPA" placeholder="Ex: 120/80 mmHg" required style="width:100%; padding:10px;"></div>
+                        <div class="form-group"><label>Temperatura Corporal (°C)</label><input type="text" id="triagemTemp" placeholder="Ex: 36.5" required style="width:100%; padding:10px;"></div>
+                        <div class="form-group"><label>Frequência Cardíaca (bpm)</label><input type="text" id="triagemFC" placeholder="Ex: 75" required style="width:100%; padding:10px;"></div>
                     </div>
                     <button type="submit" class="btn-primary-custom" style="margin-top: 15px;"><i class="fas fa-check"></i> Submeter Triagem</button>
                 </form>
             </div>
         </div>
 
-        <!-- 4. Consultas -->
+        <!-- SEÇÃO 4: CONSULTAS -->
         <div id="secao-consultas" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
-            <div class="management-card">
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
                 <h3><i class="fas fa-calendar-alt"></i> Módulo 04: Agendamento de Consultas</h3>
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Marque e gira as próximas consultas e especialidades médicas.</p>
                 <form onsubmit="agendarConsulta(event); return false;">
                     <div class="form-grid">
-                        <div class="form-group"><label>Nome do Paciente</label><input type="text" id="consNome" placeholder="Nome" required></div>
-                        <div class="form-group"><label>Especialidade</label><input type="text" id="consEsp" placeholder="Ex: Clínica Geral / Pediatria" required></div>
-                        <div class="form-group"><label>Data da Consulta</label><input type="date" id="consData" required></div>
-                        <div class="form-group"><label>Hora</label><input type="time" id="consHora" required></div>
+                        <div class="form-group"><label>Nome do Paciente</label><input type="text" id="consNome" placeholder="Nome" required style="width:100%; padding:10px;"></div>
+                        <div class="form-group"><label>Especialidade</label><input type="text" id="consEsp" placeholder="Ex: Clínica Geral / Pediatria" required style="width:100%; padding:10px;"></div>
+                        <div class="form-group"><label>Data da Consulta</label><input type="date" id="consData" required style="width:100%; padding:10px;"></div>
+                        <div class="form-group"><label>Hora</label><input type="time" id="consHora" required style="width:100%; padding:10px;"></div>
                     </div>
                     <button type="submit" class="btn-primary-custom" style="margin-top: 15px;"><i class="fas fa-calendar-plus"></i> Agendar Consulta</button>
                 </form>
             </div>
         </div>
 
-        <!-- 5. Prescrições -->
+        <!-- SEÇÃO 5: PRESCRIÇÕES -->
         <div id="secao-prescricoes" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
-            <div class="management-card">
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
                 <h3><i class="fas fa-pills"></i> Módulo 05: Emissão de Prescrições Médicas</h3>
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Passe receitas médicas digitais integradas com a farmácia.</p>
                 <form onsubmit="emitirPrescricao(event); return false;">
                     <div class="form-grid">
-                        <div class="form-group"><label>Nome do Paciente</label><input type="text" id="prescNome" placeholder="Nome" required></div>
-                        <div class="form-group"><label>Médico Prescritor</label><input type="text" id="prescMed" placeholder="Dr(a)..." required></div>
+                        <div class="form-group"><label>Nome do Paciente</label><input type="text" id="prescNome" placeholder="Nome" required style="width:100%; padding:10px;"></div>
+                        <div class="form-group"><label>Médico Prescritor</label><input type="text" id="prescMed" placeholder="Dr(a)..." required style="width:100%; padding:10px;"></div>
                         <div class="form-group" style="grid-column: span 2;"><label>Medicamentos e Posologia</label><textarea id="prescMedv" rows="3" placeholder="Ex: Paracetamol 500mg - 8/8h" style="width:100%; padding:10px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-color);" required></textarea></div>
                     </div>
                     <button type="submit" class="btn-primary-custom" style="margin-top: 15px;"><i class="fas fa-print"></i> Gerar Receita Médica</button>
@@ -317,26 +291,26 @@
             </div>
         </div>
 
-        <!-- 6. Exames -->
+        <!-- SEÇÃO 6: EXAMES -->
         <div id="secao-exames" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
-            <div class="management-card">
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
                 <h3><i class="fas fa-microscope"></i> Módulo 06: Solicitação e Resultados de Exames</h3>
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Registe os pedidos de análises clínicas e exames de diagnóstico.</p>
                 <form onsubmit="solicitarExame(event); return false;">
                     <div class="form-grid">
-                        <div class="form-group"><label>Paciente</label><input type="text" id="exameNome" placeholder="Nome" required></div>
-                        <div class="form-group"><label>Tipo de Exame</label><input type="text" id="exameTipo" placeholder="Ex: Hemograma completo, Malária" required></div>
+                        <div class="form-group"><label>Paciente</label><input type="text" id="exameNome" placeholder="Nome" required style="width:100%; padding:10px;"></div>
+                        <div class="form-group"><label>Tipo de Exame</label><input type="text" id="exameTipo" placeholder="Ex: Hemograma completo, Malária" required style="width:100%; padding:10px;"></div>
                     </div>
                     <button type="submit" class="btn-primary-custom" style="margin-top: 15px;"><i class="fas fa-vial"></i> Solicitar Exame</button>
                 </form>
             </div>
         </div>
 
-        <!-- 7. Internamento -->
+        <!-- SEÇÃO 7: INTERNAMENTO -->
         <div id="secao-internamento" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
-            <div class="management-card">
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
                 <h3><i class="fas fa-bed"></i> Módulo 07: Gestão de Leitos e Internamento</h3>
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Controle a ocupação de camas na ala hospitalar.</p>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
@@ -354,10 +328,10 @@
             </div>
         </div>
 
-        <!-- 8. Farmácia -->
+        <!-- SEÇÃO 8: FARMÁCIA -->
         <div id="secao-farmacia" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
-            <div class="management-card">
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
                 <h3><i class="fas fa-capsules"></i> Módulo 08: Farmácia e Stock de Medicamentos</h3>
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Controle o inventário interno de produtos farmacêuticos.</p>
                 <ul style="list-style: none; padding: 0;">
@@ -369,28 +343,28 @@
             </div>
         </div>
 
-        <!-- 9. Finanças -->
+        <!-- SEÇÃO 9: FINANCEIRO -->
         <div id="secao-financeiro" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
-            <div class="management-card">
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
                 <h3><i class="fas fa-file-invoice-dollar"></i> Módulo 09: Faturação e Pagamentos</h3>
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Emissão de faturas e recibos para consultas e serviços prestados.</p>
                 <form onsubmit="emitirFatura(event); return false;">
                     <div class="form-grid">
-                        <div class="form-group"><label>Nome do Cliente / Paciente</label><input type="text" id="fatNome" placeholder="Nome" required></div>
-                        <div class="form-group"><label>Valor (Kz)</label><input type="number" id="fatValor" placeholder="Ex: 25000" required></div>
+                        <div class="form-group"><label>Nome do Cliente / Paciente</label><input type="text" id="fatNome" placeholder="Nome" required style="width:100%; padding:10px;"></div>
+                        <div class="form-group"><label>Valor (Kz)</label><input type="number" id="fatValor" placeholder="Ex: 25000" required style="width:100%; padding:10px;"></div>
                     </div>
                     <button type="submit" class="btn-primary-custom" style="margin-top: 15px;"><i class="fas fa-file-invoice"></i> Emitir Fatura-Recibo</button>
                 </form>
             </div>
         </div>
 
-        <!-- 10. AZICUDA -->
+        <!-- SEÇÃO 10: AZICUDA -->
         <div id="secao-azicuda" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
-            <div class="management-card">
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
                 <h3><i class="fas fa-shield-alt"></i> Módulo 10: Controlo e Segurança - AZICUDA</h3>
-                <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px; margin-bottom: 20px;">Sistema integrado de auditoria, validação de acessos e monitorização de conformidade hospitalar da APSAN, LDA[cite: 1].</p>
+                <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px; margin-bottom: 20px;">Sistema integrado de auditoria, criptografia de dados clínicos e monitorização de segurança da APSAN, LDA[cite: 1].</p>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 20px;">
                     <div style="background: var(--bg-color); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px;">
                         <h4 style="color: var(--primary-color); font-size: 14px; margin-bottom: 5px;"><i class="fas fa-user-shield"></i> Estado do Módulo</h4>
@@ -407,20 +381,20 @@
             </div>
         </div>
 
-        <!-- 11. Relatórios -->
+        <!-- SEÇÃO 11: RELATÓRIOS -->
         <div id="secao-relatorios" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
-            <div class="management-card">
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
                 <h3><i class="fas fa-chart-bar"></i> Módulo 11: Relatórios e Estatísticas</h3>
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Gere relatórios consolidados do fluxo hospitalar mensal.</p>
                 <button onclick="gerarRelatorioPDF()" class="btn-primary-custom"><i class="fas fa-file-pdf"></i> Descarregar Relatório Geral</button>
             </div>
         </div>
 
-        <!-- 12. Suporte & Logística -->
+        <!-- SEÇÃO 12: SUGESTÕES / SUPORTE & LOGÍSTICA -->
         <div id="secao-sugestoes" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
-            <div class="management-card">
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
                 <h3><i class="fas fa-ambulance"></i> Módulo 12: Suporte e Logística Hospitalar</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
                     <div style="background: var(--bg-color); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px;">
@@ -468,13 +442,12 @@
             const estadoClinico = document.getElementById('pacienteEstadoClinico').value;
             const patologia = document.getElementById('pacientePatologia').value;
             const especialista = document.getElementById('pacienteEspecialista').value;
-            const tipoInst = document.getElementById('pacienteTipoInst').value;
-            const local = document.getElementById('pacienteLocal').value;
 
             const tbody = document.getElementById('pacientesTableBody');
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td>#HOSP-NEW</td><td>${nome}</td><td>${genero} | ${sangue}</td><td>${patologia}</td><td>${tipoInst} (${local})</td><td>${especialista}</td><td><span class="badge in-progress">${estadoClinico}</span></td><td><button onclick="concluirAcompanhamento(this)" class="btn-action">Concluir</button></td>`;
-            tbody.insertBefore(tr, tbody.firstChild);
+            tr.style.borderBottom = "1px solid var(--border-color)";
+            tr.innerHTML = `<td>#HOSP-NEW</td><td>${nome}</td><td>${genero} | ${sangue}</td><td>${patologia}</td><td>${especialista}</td><td><span class="badge in-progress">${estadoClinico}</span></td><td><button onclick="concluirAcompanhamento(this)" class="btn-action">Concluir</button></td>`;
+            if(tbody) tbody.insertBefore(tr, tbody.firstChild);
             showToast("Sucesso", "Registo do paciente guardado com segurança.");
             event.target.reset();
         }
