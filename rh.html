@@ -379,10 +379,10 @@
             };
         });
 
-        // Array específico com os registos de funcionários conforme os dados visíveis no ecrã atual
+        // Array específico com os registos de funcionários ordenados do primeiro (#FUNC-01) para baixo
         let funcionariosCadastrados = [
-            { id: '#FUNC-02', nome: 'Maravilhoso A. Mbulandi', bi: '005567576CE043', nif: '5003948192', nasc: '1992-08-10', genero: 'Masculino', civil: 'Solteiro(a)', telefone: '934437739', email: 'maravilhoso@apsanlda.com', morada: 'Namacunde, Cunene', cargo: 'Administrador', departamento: 'Administração Geral', admissao: '2026-02-01', contrato: 'Sem Termo', salario: '200.000 Kz', banco: 'BAI - AO06 0040 ...' },
-            { id: '#FUNC-01', nome: 'Eduardo Gabriel', bi: '0055840650CE049', nif: '5002938192', nasc: '1995-05-15', genero: 'Masculino', civil: 'Solteiro(a)', telefone: '931057760', email: 'eduardo@apsanlda.com', morada: 'Namacunde, Cunene', cargo: 'Desenvolvedor de Softwares', departamento: 'TI & Software', admissao: '2026-01-01', contrato: 'Sem Termo', salario: '200.000 Kz', banco: 'BAI - AO06 0040 ...' }
+            { id: '#FUNC-01', nome: 'Eduardo Gabriel', bi: '0055840650CE049', nif: '5002938192', nasc: '1995-05-15', genero: 'Masculino', civil: 'Solteiro(a)', telefone: '931057760', email: 'eduardo@apsanlda.com', morada: 'Namacunde, Cunene', cargo: 'Desenvolvedor de Softwares', departamento: 'TI & Software', admissao: '2026-01-01', contrato: 'Sem Termo', salario: '200.000 Kz', banco: 'BAI - AO06 0040 ...' },
+            { id: '#FUNC-02', nome: 'Maravilhoso A. Mbulandi', bi: '005567576CE043', nif: '5003948192', nasc: '1992-08-10', genero: 'Masculino', civil: 'Solteiro(a)', telefone: '934437739', email: 'maravilhoso@apsanlda.com', morada: 'Namacunde, Cunene', cargo: 'Administrador', departamento: 'Administração Geral', admissao: '2026-02-01', contrato: 'Sem Termo', salario: '200.000 Kz', banco: 'BAI - AO06 0040 ...' }
         ];
 
         let moduloAtivoAtual = null;
@@ -482,7 +482,7 @@
             const novoId = `#REG-0${lista.length + 1}`;
             const agora = new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
 
-            lista.unshift({ id: novoId, descricao: texto, data: agora, estado: 'Salvo com Sucesso' });
+            lista.push({ id: novoId, descricao: texto, data: agora, estado: 'Salvo com Sucesso' });
 
             input.value = '';
             recarregarTabelaGenerica();
@@ -519,8 +519,9 @@
             }
 
             if (editIndex === -1) {
+                // Novos registos são adicionados no fim, mantendo a sequência #FUNC-01, #FUNC-02, #FUNC-03...
                 const novoId = `#FUNC-0${funcionariosCadastrados.length + 1}`;
-                funcionariosCadastrados.unshift({
+                funcionariosCadastrados.push({
                     id: novoId,
                     nome: nome,
                     bi: bi,
@@ -540,7 +541,7 @@
                 });
 
                 const listaReg = dadosModulosEstado['regfunc'].registos;
-                listaReg.unshift({
+                listaReg.push({
                     id: `#REG-0${listaReg.length + 1}`,
                     descricao: `Registo completo do funcionário: ${nome} (${cargo})`,
                     data: new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}),
@@ -584,7 +585,6 @@
             document.getElementById('modalNomeFunc').textContent = f.nome;
             document.getElementById('modalCargoFunc').textContent = f.cargo;
 
-            // Iniciais para o avatar
             const partesNome = f.nome.trim().split(' ');
             let iniciais = partesNome[0][0];
             if (partesNome.length > 1) {
@@ -679,6 +679,8 @@
         function recarregarTabelaFuncionarios() {
             const tbody = document.getElementById('tabelaFuncionariosCompletos');
             tbody.innerHTML = '';
+            
+            // Renderiza na ordem correta: #FUNC-01 em cima e os seguintes sequencialmente para baixo
             funcionariosCadastrados.forEach((f, index) => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
