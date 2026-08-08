@@ -365,7 +365,6 @@
             const selectDep = document.getElementById('funcDepartamento');
             if(!selectDep) return;
             selectDep.innerHTML = '';
-            // Preenche rigorosamente com os departamentos do segundo print (sistema geral)
             departamentosGlobaisSistema.forEach(depNome => {
                 const opt = document.createElement('option');
                 opt.value = depNome;
@@ -478,7 +477,6 @@
             }
 
             if (editIndex === -1) {
-                // Criar Novo Registo
                 const novoId = `#FUNC-0${funcionariosCadastrados.length + 1}`;
                 funcionariosCadastrados.unshift({
                     id: novoId,
@@ -509,7 +507,6 @@
 
                 showToast("Sucesso", "Funcionário registado e salvo com sucesso no sistema!");
             } else {
-                // Atualizar Registo Existente
                 let f = funcionariosCadastrados[editIndex];
                 f.nome = nome;
                 f.bi = bi;
@@ -556,7 +553,6 @@
             document.getElementById('funcSalario').value = f.salario ? f.salario.replace(' Kz', '') : '';
             document.getElementById('funcBanco').value = f.banco !== 'N/A' ? f.banco : '';
 
-            // Alterar rótulos para modo de edição
             document.getElementById('formTituloModo').innerHTML = `<i class="fas fa-user-edit"></i> Editar Registo de Funcionário: ${f.nome}`;
             document.getElementById('btnSalvarFunc').innerHTML = `<i class="fas fa-sync-alt"></i> Atualizar Dados do Funcionário`;
             document.getElementById('btnCancelarEdicao').style.display = 'inline-flex';
@@ -623,30 +619,28 @@
         function atualizarContadorCardModulo(id) {
             const contadorEl = document.getElementById(`contador-${id}`);
             if(contadorEl) {
-                const qtd = dadosModulosEstado[id].registos.length;
-                contadorEl.textContent = `${qtd} ${qtd === 1 ? 'item' : 'itens'}`;
+                const q = dadosModulosEstado[id].registos.length;
+                contadorEl.textContent = `${q} ${q === 1 ? 'item' : 'itens'}`;
             }
         }
 
-        // Funções de Exportação em PDF e Word para Registos Completos de Todos os Funcionários
+        // CORREÇÃO DA EXPORTAÇÃO PDF: Substituído o tipo application/pdf (que criava ficheiro corrompido sem motor de PDF) 
+        // por janela de impressão nativa otimizada (`window.print()`), garantindo compatibilidade imediata e opção perfeita "Guardar como PDF".
         function exportarRelatorioPDF() {
-            let conteudoHTML = `<html><head><meta charset="utf-8"><title>Relatório de Funcionários - APSAN, LDA</title><style>body{font-family:Arial,sans-serif;padding:20px;color:#333;}h2{color:#004080;border-bottom:2px solid #004080;padding-bottom:8px;}table{width:100%;border-collapse:collapse;margin-top:20px;}th,td{border:1px solid #ccc;padding:8px;font-size:12px;text-align:left;}th{background:#004080;color:#white;}</style></head><body>`;
+            const janelaImpressao = window.open('', '_blank');
+            let conteudoHTML = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Relatório de Funcionários - APSAN, LDA</title><style>body{font-family:Arial,sans-serif;padding:20px;color:#333;}h2{color:#004080;border-bottom:2px solid #004080;padding-bottom:8px;}table{width:100%;border-collapse:collapse;margin-top:20px;}th,td{border:1px solid #ccc;padding:8px;font-size:12px;text-align:left;}th{background:#004080;color:#fff;}</style></head><body>`;
             conteudoHTML += `<h2>APSAN, LDA - Relatório Completo de Funcionários (RH)</h2>`;
-            conteudoHTML += `<p>Data de Emissão: ${new Date().toLocaleDateString('pt-BR')}</p>`;
+            conteudoHTML += `<p><b>Data de Emissão:</b> ${new Date().toLocaleDateString('pt-BR')}</p>`;
             conteudoHTML += `<table><thead><tr><th>ID</th><th>Nome Completo</th><th>BI</th><th>NIF</th><th>Género</th><th>Cargo</th><th>Departamento</th><th>Contacto</th><th>Salário Base</th></tr></thead><tbody>`;
             
             funcionariosCadastrados.forEach(f => {
                 conteudoHTML += `<tr><td>${f.id}</td><td>${f.nome}</td><td>${f.bi}</td><td>${f.nif}</td><td>${f.genero}</td><td>${f.cargo}</td><td>${f.departamento}</td><td>${f.telefone}</td><td>${f.salario}</td></tr>`;
             });
-            conteudoHTML += `</tbody></table></body></html>`;
+            conteudoHTML += `</tbody></table><script>window.onload = function() { window.print(); window.close(); }</script></body></html>`;
 
-            const blob = new Blob([conteudoHTML], { type: 'application/pdf' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'Relatorio_Funcionarios_APSAN.pdf';
-            a.click();
-            showToast("PDF Exportado", "O relatório completo de funcionários foi descarregado com sucesso.");
+            janelaImpressao.document.write(conteudoHTML);
+            janelaImpressao.document.close();
+            showToast("PDF Pronto", "Janela de impressão aberta. Selecione 'Guardar como PDF' para descarregar.");
         }
 
         function exportarRelatorioWord() {
@@ -695,7 +689,7 @@
             chartHBarInstance = new Chart(ctxHBar, {
                 type: 'bar',
                 data: { labels: labels, datasets: [{ label: 'Volume Registos', data: dataCounts, backgroundColor: paletaExecutiva, borderRadius: 3 }] },
-                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } }, y: { ticks: { font: { size: 10, weight: '500' } } } } }
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } }, y: { ticks: { font: { size: 10,weight: '500' } } } } }
             });
         }
 
