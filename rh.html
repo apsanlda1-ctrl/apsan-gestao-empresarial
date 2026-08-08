@@ -624,36 +624,111 @@
             }
         }
 
-        // CORREÇÃO DA EXPORTAÇÃO PDF: Substituído o tipo application/pdf (que criava ficheiro corrompido sem motor de PDF) 
-        // por janela de impressão nativa otimizada (`window.print()`), garantindo compatibilidade imediata e opção perfeita "Guardar como PDF".
+        // CORREÇÃO DEFINITIVA DA EXPORTAÇÃO PDF: Correção correta de templates strings em JavaScript criadas dentro da página gerada, 
+        // evitando conflito de sintaxe e garantindo que o comando window.print() execute com perfeição total.
         function exportarRelatorioPDF() {
             const janelaImpressao = window.open('', '_blank');
-            let conteudoHTML = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Relatório de Funcionários - APSAN, LDA</title><style>body{font-family:Arial,sans-serif;padding:20px;color:#333;}h2{color:#004080;border-bottom:2px solid #004080;padding-bottom:8px;}table{width:100%;border-collapse:collapse;margin-top:20px;}th,td{border:1px solid #ccc;padding:8px;font-size:12px;text-align:left;}th{background:#004080;color:#fff;}</style></head><body>`;
-            conteudoHTML += `<h2>APSAN, LDA - Relatório Completo de Funcionários (RH)</h2>`;
-            conteudoHTML += `<p><b>Data de Emissão:</b> ${new Date().toLocaleDateString('pt-BR')}</p>`;
-            conteudoHTML += `<table><thead><tr><th>ID</th><th>Nome Completo</th><th>BI</th><th>NIF</th><th>Género</th><th>Cargo</th><th>Departamento</th><th>Contacto</th><th>Salário Base</th></tr></thead><tbody>`;
-            
+            if (!janelaImpressao) {
+                showToast("Erro", "O bloqueador de pop-ups impediu a abertura da janela de impressão. Permita pop-ups para este site.");
+                return;
+            }
+
+            let linhasTabela = '';
             funcionariosCadastrados.forEach(f => {
-                conteudoHTML += `<tr><td>${f.id}</td><td>${f.nome}</td><td>${f.bi}</td><td>${f.nif}</td><td>${f.genero}</td><td>${f.cargo}</td><td>${f.departamento}</td><td>${f.telefone}</td><td>${f.salario}</td></tr>`;
+                linhasTabela += `<tr>
+                    <td>${f.id}</td>
+                    <td>${f.nome}</td>
+                    <td>${f.bi}</td>
+                    <td>${f.nif}</td>
+                    <td>${f.genero}</td>
+                    <td>${f.cargo}</td>
+                    <td>${f.departamento}</td>
+                    <td>${f.telefone}</td>
+                    <td>${f.salario}</td>
+                </tr>`;
             });
-            conteudoHTML += `</tbody></table><script>window.onload = function() { window.print(); window.close(); }</script></body></html>`;
+
+            const dataHoje = new Date().toLocaleDateString('pt-BR');
+
+            const conteudoHTML = `<!DOCTYPE html>
+            <html lang="pt">
+            <head>
+                <meta charset="utf-8">
+                <title>Relatório de Funcionários - APSAN, LDA</title>
+                <style>
+                    body { font-family: Arial, sans-serif; padding: 20px; color: #333; }
+                    h2 { color: #004080; border-bottom: 2px solid #004080; padding-bottom: 8px; margin-bottom: 5px; }
+                    p { font-size: 13px; color: #555; margin-bottom: 20px; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+                    th, td { border: 1px solid #ccc; padding: 8px; font-size: 11px; text-align: left; }
+                    th { background: #004080; color: #fff; }
+                </style>
+            </head>
+            <body>
+                <h2>APSAN, LDA - Relatório Completo de Funcionários (RH)</h2>
+                <p><b>Data de Emissão:</b> ${dataHoje}</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome Completo</th>
+                            <th>BI</th>
+                            <th>NIF</th>
+                            <th>Género</th>
+                            <th>Cargo</th>
+                            <th>Departamento</th>
+                            <th>Contacto</th>
+                            <th>Salário Base</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${linhasTabela}
+                    </tbody>
+                </table>
+                <script>
+                    window.onload = function() {
+                        window.print();
+                        setTimeout(function() { window.close(); }, 500);
+                    };
+                <\/script>
+            </body>
+            </html>`;
 
             janelaImpressao.document.write(conteudoHTML);
             janelaImpressao.document.close();
-            showToast("PDF Pronto", "Janela de impressão aberta. Selecione 'Guardar como PDF' para descarregar.");
+            showToast("PDF Pronto", "Janela de impressão aberta. Escolha 'Guardar como PDF'.");
         }
 
         function exportarRelatorioWord() {
-            let conteudoHTML = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Relatório de Funcionários</title></head><body>`;
-            conteudoHTML += `<h2 style="color:#004080;">APSAN, LDA - Registo de Recursos Humanos</h2>`;
-            conteudoHTML += `<p><b>Data do Relatório:</b> ${new Date().toLocaleDateString('pt-BR')}</p>`;
-            conteudoHTML += `<table border="1" cellspacing="0" cellpadding="6" style="width:100%;border-collapse:collapse;font-size:12px;">`;
-            conteudoHTML += `<tr style="background:#004080;color:#ffffff;"><th>ID</th><th>Nome Completo</th><th>BI</th><th>Cargo</th><th>Departamento</th><th>Telefone</th><th>E-mail</th><th>Salário</th></tr>`;
-            
+            let linhasTabelaWord = '';
             funcionariosCadastrados.forEach(f => {
-                conteudoHTML += `<tr><td>${f.id}</td><td>${f.nome}</td><td>${f.bi}</td><td>${f.cargo}</td><td>${f.departamento}</td><td>${f.telefone}</td><td>${f.email}</td><td>${f.salario}</td></tr>`;
+                linhasTabelaWord += `<tr>
+                    <td>${f.id}</td>
+                    <td>${f.nome}</td>
+                    <td>${f.bi}</td>
+                    <td>${f.cargo}</td>
+                    <td>${f.departamento}</td>
+                    <td>${f.telefone}</td>
+                    <td>${f.email}</td>
+                    <td>${f.salario}</td>
+                </tr>`;
             });
-            conteudoHTML += `</table></body></html>`;
+
+            const dataHoje = new Date().toLocaleDateString('pt-BR');
+
+            const conteudoHTML = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+            <head><meta charset='utf-8'><title>Relatório de Funcionários</title></head>
+            <body>
+                <h2 style="color:#004080;">APSAN, LDA - Registo de Recursos Humanos</h2>
+                <p><b>Data do Relatório:</b> ${dataHoje}</p>
+                <table border="1" cellspacing="0" cellpadding="6" style="width:100%;border-collapse:collapse;font-size:11px;">
+                    <tr style="background:#004080;color:#ffffff;">
+                        <th>ID</th><th>Nome Completo</th><th>BI</th><th>Cargo</th><th>Departamento</th><th>Telefone</th><th>E-mail</th><th>Salário</th>
+                    </tr>
+                    ${linhasTabelaWord}
+                </table>
+            </body>
+            </html>`;
 
             const blob = new Blob(['\ufeff' + conteudoHTML], { type: 'application/msword' });
             const url = window.URL.createObjectURL(blob);
@@ -661,7 +736,7 @@
             a.href = url;
             a.download = 'Relatorio_Funcionarios_APSAN.doc';
             a.click();
-            showToast("Word Exportado", "O documento Word (.doc) com os registos completos foi descarregado com sucesso.");
+            showToast("Word Exportado", "O documento Word (.doc) foi descarregado com sucesso.");
         }
 
         function inicializarGraficosExecutivos() {
@@ -689,7 +764,7 @@
             chartHBarInstance = new Chart(ctxHBar, {
                 type: 'bar',
                 data: { labels: labels, datasets: [{ label: 'Volume Registos', data: dataCounts, backgroundColor: paletaExecutiva, borderRadius: 3 }] },
-                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } }, y: { ticks: { font: { size: 10,weight: '500' } } } } }
+                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } }, y: { ticks: { font: { size: 10, weight: '500' } } } } }
             });
         }
 
