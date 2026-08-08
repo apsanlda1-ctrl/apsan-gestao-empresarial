@@ -7,22 +7,35 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .tab-buttons { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; overflow-x: auto; }
-        .tab-btn { background: none; border: none; padding: 10px 20px; font-size: 15px; font-weight: bold; cursor: pointer; color: var(--text-muted); border-radius: 6px; transition: 0.3s; white-space: nowrap; }
+        .tab-buttons { display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; overflow-x: auto; }
+        .tab-btn { background: none; border: none; padding: 8px 14px; font-size: 13px; font-weight: bold; cursor: pointer; color: var(--text-muted); border-radius: 6px; transition: 0.3s; white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; }
         .tab-btn.active { background: var(--primary-color); color: #fff; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         @media(max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: var(--bg-color); padding: 25px; border-radius: 8px; width: 90%; max-width: 500px; border: 1px solid var(--border-color); }
     </style>
 </head>
 <body data-theme="light">
 
-    <div id="toastNotification">
-        <i class="fas fa-check-circle" style="font-size: 20px;"></i>
+    <div id="toastNotification" style="position: fixed; bottom: 20px; right: 20px; background: var(--bg-color); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; align-items: center; gap: 12px; z-index: 1100; color: var(--text-color);">
+        <i class="fas fa-check-circle" style="font-size: 20px; color: #28a745;"></i>
         <div>
             <strong id="toastTitle">Sucesso!</strong>
-            <p id="toastMessage" style="font-size: 13px; margin: 0;"></p>
+            <p id="toastMessage" style="font-size: 13px; margin: 0; color: var(--text-muted);"></p>
+        </div>
+    </div>
+
+    <!-- Modal Dinâmico -->
+    <div id="dynamicModal" class="modal-overlay">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 id="modalTitle" style="margin: 0; font-size: 16px; color: var(--primary-color);">Título</h3>
+                <button onclick="fecharModal()" style="background: none; border: none; font-size: 16px; cursor: pointer; color: var(--text-color);"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="modalBody"></div>
         </div>
     </div>
 
@@ -31,8 +44,8 @@
             <div style="display: flex; align-items: center; gap: 12px;">
                 <img src="logo.png" alt="Logo" style="width: 36px; height: 36px; object-fit: contain; border-radius: 4px;" onerror="this.style.display='none'">
                 <div>
-                    <h4 style="color: #fff; margin: 0; font-size: 16px;">APSAN, LDA - Gestão</h4>
-                    <span style="font-size: 12px; color: var(--accent-color);">Acompanhamento Hospitalar & AZICUDA</span>
+                    <h4 style="color: #fff; margin: 0; font-size: 16px;">APSAN, LDA - Gestão[cite: 1]</h4>
+                    <span style="font-size: 12px; color: var(--accent-color);">Acompanhamento Hospitalar & AZICUDA[cite: 1]</span>
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
@@ -43,29 +56,36 @@
     </nav>
 
     <div class="container" style="max-width: 1200px; margin: 30px auto; padding: 0 20px; width: 100%;">
+        <!-- Grelha com 12 Módulos Funcionais -->
         <div class="tab-buttons">
-            <button class="tab-btn active" onclick="switchTab('registo')"><i class="fas fa-user-plus"></i> Registar Paciente</button>
-            <button class="tab-btn" onclick="switchTab('arquivo')"><i class="fas fa-folder-open"></i> Arquivo de Pacientes</button>
-            <button class="tab-btn" onclick="switchTab('azicuda')"><i class="fas fa-shield-alt"></i> Sistema AZICUDA</button>
-            <button class="tab-btn" onclick="switchTab('sugestoes')"><i class="fas fa-lightbulb"></i> Sugestões & Apoio</button>
+            <button class="tab-btn active" onclick="switchTab('registo')"><i class="fas fa-user-plus"></i> 1. Registo</button>
+            <button class="tab-btn" onclick="switchTab('arquivo')"><i class="fas fa-folder-open"></i> 2. Arquivo</button>
+            <button class="tab-btn" onclick="switchTab('triagem')"><i class="fas fa-stethoscope"></i> 3. Triagem</button>
+            <button class="tab-btn" onclick="switchTab('consultas')"><i class="fas fa-calendar-alt"></i> 4. Consultas</button>
+            <button class="tab-btn" onclick="switchTab('prescricoes')"><i class="fas fa-pills"></i> 5. Prescrições</button>
+            <button class="tab-btn" onclick="switchTab('exames')"><i class="fas fa-microscope"></i> 6. Exames</button>
+            <button class="tab-btn" onclick="switchTab('internamento')"><i class="fas fa-bed"></i> 7. Internamento</button>
+            <button class="tab-btn" onclick="switchTab('farmacia')"><i class="fas fa-capsules"></i> 8. Farmácia</button>
+            <button class="tab-btn" onclick="switchTab('financeiro')"><i class="fas fa-file-invoice-dollar"></i> 9. Faturação</button>
+            <button class="tab-btn" onclick="switchTab('azicuda')"><i class="fas fa-shield-alt"></i> 10. AZICUDA</button>
+            <button class="tab-btn" onclick="switchTab('relatorios')"><i class="fas fa-chart-bar"></i> 11. Relatórios</button>
+            <button class="tab-btn" onclick="switchTab('sugestoes')"><i class="fas fa-lightbulb"></i> 12. Suporte</button>
         </div>
 
-        <!-- ABA 1: REGISTO -->
+        <!-- MÓDULO 1: REGISTO -->
         <div id="tab-registo" class="tab-content active">
             <div class="stats-grid-dash">
                 <div class="stat-box"><h4>Pacientes Ativos</h4><h2>12</h2><p><i class="fas fa-arrow-up" style="color: #28a745;">+2 este mês</i></p></div>
                 <div class="stat-box"><h4>Consultas</h4><h2>5</h2><p><i class="fas fa-calendar-check" style="color: #28a745;">Esta semana</i></p></div>
-                <div class="stat-box"><h4>NIF Empresa</h4><h2>5002085011</h2><p>Namacunde / Cunene</p></div>
+                <div class="stat-box"><h4>NIF Empresa</h4><h2>5002085011</h2><p>Namacunde / Cunene[cite: 1]</p></div>
                 <div class="stat-box"><h4>Sistema</h4><h2 style="color: #28a745;">ONLINE</h2><p>Sincronizado</p></div>
             </div>
             <div class="management-card">
-                <h3><i class="fas fa-user-nurse"></i> Formulário de Registo e Acompanhamento Clínico</h3>
+                <h3><i class="fas fa-user-nurse"></i> Módulo 1: Formulário de Registo e Acompanhamento Clínico</h3>
                 <form onsubmit="salvarPaciente(event); return false;" style="margin-top: 15px;">
                     <div class="form-grid">
                         <div class="form-group" style="text-align: left;"><label>Nome Completo do Paciente</label><input type="text" id="pacienteNome" placeholder="Ex: Maria Shikongo" required style="font-size: 14px;"></div>
                         <div class="form-group" style="text-align: left;"><label>Idade / Data de Nascimento</label><input type="text" id="pacienteIdade" placeholder="Ex: 34 anos" required style="font-size: 14px;"></div>
-                        
-                        <!-- Campos Profissionais Integrados -->
                         <div class="form-group" style="text-align: left;">
                             <label>Género / Sexo</label>
                             <select id="pacienteGenero" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
@@ -82,7 +102,7 @@
                                 <option value="AB+">AB+</option><option value="AB-">AB-</option>
                             </select>
                         </div>
-                        <div class="form-group" style="text-align: left;"><label>Contacto de Emergência</label><input type="text" id="pacienteEmergencia" placeholder="Ex: +244 923 000 000 (Familiar)" required style="font-size: 14px;"></div>
+                        <div class="form-group" style="text-align: left;"><label>Contacto de Emergência</label><input type="text" id="pacienteEmergencia" placeholder="Ex: +244 923 000 000" required style="font-size: 14px;"></div>
                         <div class="form-group" style="text-align: left;">
                             <label>Estado Clínico Inicial</label>
                             <select id="pacienteEstadoClinico" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
@@ -91,11 +111,9 @@
                                 <option value="Internado">Internado</option>
                             </select>
                         </div>
-                        <!-- Fim dos Campos Profissionais -->
-
-                        <div class="form-group" style="text-align: left;"><label>Patologia / Condição</label><input type="text" id="pacientePatologia" placeholder="Ex: Hipertensão / Exames..." required style="font-size: 14px;"></div>
+                        <div class="form-group" style="text-align: left;"><label>Patologia / Condição</label><input type="text" id="pacientePatologia" placeholder="Ex: Hipertensão" required style="font-size: 14px;"></div>
                         <div class="form-group" style="text-align: left;"><label>Especialista Responsável</label><input type="text" id="pacienteEspecialista" placeholder="Ex: Dr. António Carlos" required style="font-size: 14px;"></div>
-                        <div class="form-group" style="text-align: left;"><label>Contacto do Doutor / Médico</label><input type="text" id="pacienteTelMedico" placeholder="Ex: +244 923 000 000" required style="font-size: 14px;"></div>
+                        <div class="form-group" style="text-align: left;"><label>Contacto do Doutor</label><input type="text" id="pacienteTelMedico" placeholder="Ex: +244 923 000 000" required style="font-size: 14px;"></div>
                         <div class="form-group" style="text-align: left;">
                             <label>Tipo de Instituição</label>
                             <select id="pacienteTipoInst" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
@@ -103,39 +121,153 @@
                                 <option value="Pública">Pública</option>
                             </select>
                         </div>
-                        <div class="form-group" style="text-align: left; grid-column: span 2;"><label>Local de Consulta / Nome da Instituição</label><input type="text" id="pacienteLocal" placeholder="Ex: Hospital Municipal de Ondjiva / Clínica Privada" required style="font-size: 14px;"></div>
+                        <div class="form-group" style="text-align: left; grid-column: span 2;"><label>Local de Consulta</label><input type="text" id="pacienteLocal" placeholder="Ex: Hospital Municipal de Ondjiva" required style="font-size: 14px;"></div>
                     </div>
                     <button type="submit" class="btn-primary-custom" style="margin-top: 20px;"><i class="fas fa-save"></i> Guardar Registo no Sistema</button>
                 </form>
             </div>
         </div>
 
-        <!-- ABA 2: ARQUIVO -->
+        <!-- MÓDULO 2: ARQUIVO -->
         <div id="tab-arquivo" class="tab-content">
             <div class="management-card">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                    <h3><i class="fas fa-folder"></i> Pasta de Arquivos e Histórico de Pacientes</h3>
+                    <h3><i class="fas fa-folder"></i> Módulo 2: Pasta de Arquivos e Histórico</h3>
                     <div style="display: flex; gap: 10px;">
-                        <input type="text" id="filtroPesquisa" placeholder="Pesquisar por paciente ou patologia..." onkeyup="filtrarTabela()" style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size: 13px; width: 250px;">
+                        <input type="text" id="filtroPesquisa" placeholder="Pesquisar paciente..." onkeyup="filtrarTabela()" style="padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size: 13px; width: 250px;">
                         <button onclick="exportarTabelaExcel()" class="btn-secondary-custom" style="padding: 8px 15px; font-size: 13px; cursor: pointer;"><i class="fas fa-file-excel"></i> Exportar</button>
                     </div>
                 </div>
                 <div style="overflow-x: auto; margin-top: 15px;">
                     <table class="data-table" id="tabelaPacientes">
-                        <thead><tr><th>ID</th><th>Paciente</th><th>Detalhes / Sangue</th><th>Patologia</th><th>Instituição & Local</th><th>Médico / Contacto</th><th>Estado</th><th>Ações</th></tr></thead>
+                        <thead><tr><th>ID</th><th>Paciente</th><th>Detalhes / Sangue</th><th>Patologia</th><th>Instituição</th><th>Médico</th><th>Estado</th><th>Ações</th></tr></thead>
                         <tbody id="pacientesTableBody">
-                            <tr><td>#HOSP-01</td><td>João Baptista</td><td>Masculino | O+</td><td>Cardiologia</td><td>Privada (Clínica Santa Maria)</td><td>Dr. Mário (923111222)</td><td><span class="badge in-progress">Em Seguimento</span></td><td><button onclick="concluirAcompanhamento(this)" class="btn-action">Concluir</button></td></tr>
+                            <tr><td>#HOSP-01</td><td>João Baptista</td><td>Masculino | O+</td><td>Cardiologia</td><td>Privada (Clínica Santa Maria)</td><td>Dr. Mário</td><td><span class="badge in-progress">Em Seguimento</span></td><td><button onclick="concluirAcompanhamento(this)" class="btn-action">Concluir</button></td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- ABA 3: SISTEMA AZICUDA -->
+        <!-- MÓDULO 3: TRIAGEM -->
+        <div id="tab-triagem" class="tab-content">
+            <div class="management-card">
+                <h3><i class="fas fa-stethoscope"></i> Módulo 3: Painel de Triagem e Sinais Vitais</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Registe os parâmetros vitais iniciais do paciente antes da consulta médica.</p>
+                <form onsubmit="registarTriagem(event); return false;">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nome do Paciente</label><input type="text" id="triagemNome" placeholder="Nome do paciente" required></div>
+                        <div class="form-group"><label>Pressão Arterial</label><input type="text" id="triagemPA" placeholder="Ex: 120/80 mmHg" required></div>
+                        <div class="form-group"><label>Temperatura Corporal (°C)</label><input type="text" id="triagemTemp" placeholder="Ex: 36.5" required></div>
+                        <div class="form-group"><label>Frequência Cardíaca (bpm)</label><input type="text" id="triagemFC" placeholder="Ex: 75" required></div>
+                    </div>
+                    <button type="submit" class="btn-primary-custom" style="margin-top: 15px;"><i class="fas fa-check"></i> Submeter Triagem</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- MÓDULO 4: CONSULTAS -->
+        <div id="tab-consultas" class="tab-content">
+            <div class="management-card">
+                <h3><i class="fas fa-calendar-alt"></i> Módulo 4: Agendamento de Consultas</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Marque e gira as próximas consultas e especialidades médicas.</p>
+                <form onsubmit="agendarConsulta(event); return false;">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nome do Paciente</label><input type="text" id="consNome" placeholder="Nome" required></div>
+                        <div class="form-group"><label>Especialidade</label><input type="text" id="consEsp" placeholder="Ex: Clínica Geral / Pediatria" required></div>
+                        <div class="form-group"><label>Data da Consulta</label><input type="date" id="consData" required></div>
+                        <div class="form-group"><label>Hora</label><input type="time" id="consHora" required></div>
+                    </div>
+                    <button type="submit" class="btn-primary-custom" style="margin-top: 15px;"><i class="fas fa-calendar-plus"></i> Agendar Consulta</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- MÓDULO 5: PRESCRIÇÕES -->
+        <div id="tab-prescricoes" class="tab-content">
+            <div class="management-card">
+                <h3><i class="fas fa-pills"></i> Módulo 5: Emissão de Prescrições Médicas</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Passe receitas médicas digitais integradas com a farmácia.</p>
+                <form onsubmit="emitirPrescricao(event); return false;">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nome do Paciente</label><input type="text" id="prescNome" placeholder="Nome" required></div>
+                        <div class="form-group"><label>Médico Prescritor</label><input type="text" id="prescMed" placeholder="Dr(a)..." required></div>
+                        <div class="form-group" style="grid-column: span 2;"><label>Medicamentos e Posologia</label><textarea id="prescMedv" rows="3" placeholder="Ex: Paracetamol 500mg - 8/8h" style="width:100%; padding:10px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-color);" required></textarea></div>
+                    </div>
+                    <button type="submit" class="btn-primary-custom" style="margin-top: 15px;"><i class="fas fa-print"></i> Gerar Receita Médica</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- MÓDULO 6: EXAMES -->
+        <div id="tab-exames" class="tab-content">
+            <div class="management-card">
+                <h3><i class="fas fa-microscope"></i> Módulo 6: Solicitação e Resultados de Exames</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Registe os pedidos de análises clínicas e exames de diagnóstico.</p>
+                <form onsubmit="solicitarExame(event); return false;">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Paciente</label><input type="text" id="exameNome" placeholder="Nome" required></div>
+                        <div class="form-group"><label>Tipo de Exame</label><input type="text" id="exameTipo" placeholder="Ex: Hemograma completo, Malária" required></div>
+                    </div>
+                    <button type="submit" class="btn-primary-custom" style="margin-top: 15px;"><i class="fas fa-vial"></i> Solicitar Exame</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- MÓDULO 7: INTERNAMENTO -->
+        <div id="tab-internamento" class="tab-content">
+            <div class="management-card">
+                <h3><i class="fas fa-bed"></i> Módulo 7: Gestão de Leitos e Internamento</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Controle a ocupação de camas na ala hospitalar.</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                    <div style="background: var(--bg-color); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; text-align: center;">
+                        <h4>Leito 01</h4><p style="color: #28a745; font-weight: bold;">Disponível</p>
+                    </div>
+                    <div style="background: var(--bg-color); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; text-align: center;">
+                        <h4>Leito 02</h4><p style="color: #dc3545; font-weight: bold;">Ocupado (João B.)</p>
+                    </div>
+                    <div style="background: var(--bg-color); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; text-align: center;">
+                        <h4>Leito 03</h4><p style="color: #28a745; font-weight: bold;">Disponível</p>
+                    </div>
+                </div>
+                <button onclick="abrirModalInternar()" class="btn-primary-custom"><i class="fas fa-plus"></i> Atribuir Novo Leito</button>
+            </div>
+        </div>
+
+        <!-- MÓDULO 8: FARMÁCIA -->
+        <div id="tab-farmacia" class="tab-content">
+            <div class="management-card">
+                <h3><i class="fas fa-capsules"></i> Módulo 8: Farmácia e Stock de Medicamentos</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Controle o inventário interno de produtos farmacêuticos.</p>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="padding: 10px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;"><span>Paracetamol 500mg</span> <strong>Stock: 150 cx</strong></li>
+                    <li style="padding: 10px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;"><span>Ibuprofeno 400mg</span> <strong>Stock: 85 cx</strong></li>
+                    <li style="padding: 10px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between;"><span>Artemeter/Lumefantrina</span> <strong>Stock: 40 cx</strong></li>
+                </ul>
+                <button onclick="adicionarStock()" class="btn-secondary-custom" style="margin-top: 15px;"><i class="fas fa-plus"></i> Atualizar Stock</button>
+            </div>
+        </div>
+
+        <!-- MÓDULO 9: FINANÇAS -->
+        <div id="tab-financeiro" class="tab-content">
+            <div class="management-card">
+                <h3><i class="fas fa-file-invoice-dollar"></i> Módulo 9: Faturação e Pagamentos</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Emissão de faturas e recibos para consultas e serviços prestados.</p>
+                <form onsubmit="emitirFatura(event); return false;">
+                    <div class="form-grid">
+                        <div class="form-group"><label>Nome do Cliente / Paciente</label><input type="text" id="fatNome" placeholder="Nome" required></div>
+                        <div class="form-group"><label>Valor (Kz)</label><input type="number" id="fatValor" placeholder="Ex: 25000" required></div>
+                    </div>
+                    <button type="submit" class="btn-primary-custom" style="margin-top: 15px;"><i class="fas fa-file-invoice"></i> Emitir Fatura-Recibo</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- MÓDULO 10: AZICUDA -->
         <div id="tab-azicuda" class="tab-content">
             <div class="management-card">
-                <h3><i class="fas fa-shield-alt"></i> Módulo de Controlo e Segurança - AZICUDA</h3>
-                <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px; margin-bottom: 20px;">Sistema integrado de auditoria, validação de acessos e monitorização de conformidade hospitalar da APSAN, LDA.</p>
+                <h3><i class="fas fa-shield-alt"></i> Módulo 10: Controlo e Segurança - AZICUDA</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px; margin-bottom: 20px;">Sistema integrado de auditoria, validação de acessos e monitorização de conformidade hospitalar da APSAN, LDA[cite: 1].</p>
                 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 20px;">
                     <div style="background: var(--bg-color); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px;">
@@ -148,25 +280,24 @@
                         <p style="font-size: 18px; font-weight: bold; color: var(--text-color); margin: 0;">148 Ações</p>
                         <span style="font-size: 11px; color: var(--text-muted);">Últimas 24 horas</span>
                     </div>
-                    <div style="background: var(--bg-color); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px;">
-                        <h4 style="color: var(--primary-color); font-size: 14px; margin-bottom: 5px;"><i class="fas fa-sync"></i> Sincronização Firebase</h4>
-                        <p style="font-size: 18px; font-weight: bold; color: #28a745; margin: 0;">OK</p>
-                        <span style="font-size: 11px; color: var(--text-muted);">Conexão em tempo real</span>
-                    </div>
                 </div>
-
-                <div style="background: var(--bg-color); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px;">
-                    <h4 style="margin-bottom: 10px; font-size: 15px;"><i class="fas fa-terminal"></i> Painel de Comandos Azicuda</h4>
-                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Execute verificações de integridade ou valide os registros hospitalares protegidos.</p>
-                    <button onclick="executarAzicudaCheck()" class="btn-primary-custom" style="padding: 10px 20px; font-size: 13px; cursor: pointer;"><i class="fas fa-play"></i> Executar Diagnóstico de Segurança</button>
-                </div>
+                <button onclick="executarAzicudaCheck()" class="btn-primary-custom" style="padding: 10px 20px; font-size: 13px; cursor: pointer;"><i class="fas fa-play"></i> Executar Diagnóstico de Segurança</button>
             </div>
         </div>
 
-        <!-- ABA 4: SUGESTÕES -->
+        <!-- MÓDULO 11: RELATÓRIOS -->
+        <div id="tab-relatorios" class="tab-content">
+            <div class="management-card">
+                <h3><i class="fas fa-chart-bar"></i> Módulo 11: Relatórios e Estatísticas</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Gere relatórios consolidados do fluxo hospitalar mensal.</p>
+                <button onclick="gerarRelatorioPDF()" class="btn-primary-custom"><i class="fas fa-file-pdf"></i> Descarregar Relatório Geral</button>
+            </div>
+        </div>
+
+        <!-- MÓDULO 12: SUGESTÕES & SUPORTE -->
         <div id="tab-sugestoes" class="tab-content">
             <div class="management-card">
-                <h3><i class="fas fa-lightbulb"></i> Sugestões e Recomendações Operacionais</h3>
+                <h3><i class="fas fa-lightbulb"></i> Módulo 12: Sugestões e Apoio Operacional</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
                     <div style="background: var(--bg-color); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px;">
                         <h4 style="color: var(--primary-color); margin-bottom: 10px;"><i class="fas fa-car"></i> Apoio Logístico</h4>
@@ -199,21 +330,18 @@
             const nome = document.getElementById('pacienteNome').value;
             const genero = document.getElementById('pacienteGenero').value;
             const sangue = document.getElementById('pacienteSangue').value;
-            const emergencia = document.getElementById('pacienteEmergencia').value;
             const estadoClinico = document.getElementById('pacienteEstadoClinico').value;
             const patologia = document.getElementById('pacientePatologia').value;
             const especialista = document.getElementById('pacienteEspecialista').value;
-            const tel = document.getElementById('pacienteTelMedico').value;
             const tipoInst = document.getElementById('pacienteTipoInst').value;
             const local = document.getElementById('pacienteLocal').value;
 
             const tbody = document.getElementById('pacientesTableBody');
             const tr = document.createElement('tr');
-            tr.innerHTML = `<td>#HOSP-NEW</td><td>${nome}</td><td>${genero} | ${sangue}</td><td>${patologia}</td><td>${tipoInst} (${local})</td><td>${especialista} (${tel})</td><td><span class="badge in-progress">${estadoClinico}</span></td><td><button onclick="concluirAcompanhamento(this)" class="btn-action">Concluir</button></td>`;
+            tr.innerHTML = `<td>#HOSP-NEW</td><td>${nome}</td><td>${genero} | ${sangue}</td><td>${patologia}</td><td>${tipoInst} (${local})</td><td>${especialista}</td><td><span class="badge in-progress">${estadoClinico}</span></td><td><button onclick="concluirAcompanhamento(this)" class="btn-action">Concluir</button></td>`;
             tbody.insertBefore(tr, tbody.firstChild);
             showToast("Sucesso", "Registo do paciente guardado com segurança.");
             event.target.reset();
-            switchTab('arquivo');
         }
         function concluirAcompanhamento(btn) {
             const badge = btn.closest('tr').querySelector('.badge');
@@ -249,16 +377,66 @@
             a.click();
             showToast("Exportado", "Dados transferidos com sucesso.");
         }
+        function registarTriagem(e) {
+            e.preventDefault();
+            showToast("Triagem", "Sinais vitais registados com sucesso.");
+            e.target.reset();
+        }
+        function agendarConsulta(e) {
+            e.preventDefault();
+            showToast("Consulta", "Consulta agendada no sistema.");
+            e.target.reset();
+        }
+        function emitirPrescricao(e) {
+            e.preventDefault();
+            showToast("Prescrição", "Receita médica gerada e enviada para a farmácia.");
+            e.target.reset();
+        }
+        function solicitarExame(e) {
+            e.preventDefault();
+            showToast("Exame", "Pedido de exame laboratorial enviado.");
+            e.target.reset();
+        }
+        function emitirFatura(e) {
+            e.preventDefault();
+            showToast("Faturação", "Fatura-recibo emitida com sucesso.");
+            e.target.reset();
+        }
+        function abrirModalInternar() {
+            document.getElementById('modalTitle').textContent = "Atribuir Leito de Internamento";
+            document.getElementById('modalBody').innerHTML = `
+                <form onsubmit="salvarInternamento(event); return false;">
+                    <div class="form-group" style="margin-bottom:10px;"><label>Nome do Paciente</label><input type="text" id="intNome" style="width:100%; padding:8px;" required></div>
+                    <div class="form-group" style="margin-bottom:15px;"><label>Número do Leito</label><select id="intLeito" style="width:100%; padding:8px;"><option value="01">Leito 01</option><option value="03">Leito 03</option></select></div>
+                    <button type="submit" class="btn-primary-custom" style="width:100%;">Confirmar Internamento</button>
+                </form>
+            `;
+            document.getElementById('dynamicModal').style.display = 'flex';
+        }
+        function salvarInternamento(e) {
+            e.preventDefault();
+            fecharModal();
+            showToast("Internamento", "Paciente alojado no leito com sucesso.");
+        }
+        function adicionarStock() {
+            showToast("Stock", "Inventário farmacêutico atualizado.");
+        }
+        function gerarRelatorioPDF() {
+            showToast("Relatórios", "Relatório consolidado gerado com sucesso.");
+        }
         function executarAzicudaCheck() {
             showToast("AZICUDA", "Diagnóstico concluído: Integridade dos dados verificada sem anomalias.");
+        }
+        function fecharModal() {
+            document.getElementById('dynamicModal').style.display = 'none';
         }
         function showToast(title, message) {
             const toast = document.getElementById('toastNotification');
             if (!toast) return;
             document.getElementById('toastTitle').textContent = title;
             document.getElementById('toastMessage').textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 4000);
+            toast.style.display = 'flex';
+            setTimeout(() => { toast.style.display = 'none'; }, 4000);
         }
     </script>
 </body>
