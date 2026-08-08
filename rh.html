@@ -49,20 +49,61 @@
 
         /* Botões de Ação na Tabela */
         .btn-table-action { background: none; border: none; cursor: pointer; font-size: 14px; padding: 4px 6px; border-radius: 4px; transition: 0.2s; }
+        .btn-view { color: #17a2b8; }
+        .btn-view:hover { background: rgba(23, 162, 184, 0.1); }
         .btn-edit { color: #007bff; }
         .btn-edit:hover { background: rgba(0, 123, 255, 0.1); }
         .btn-delete { color: #dc3545; }
         .btn-delete:hover { background: rgba(220, 53, 69, 0.1); }
+
+        /* Estilo do Modal de Visualização de Detalhes do Funcionário */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1200; padding: 20px; }
+        .modal-overlay.active { display: flex; }
+        .modal-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; width: 100%; max-width: 700px; max-height: 90vh; overflow-y: auto; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; }
+        .modal-close { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 18px; color: var(--text-muted); cursor: pointer; }
+        .modal-close:hover { color: var(--text-color); }
+        .profile-header-modal { display: flex; align-items: center; gap: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px; }
+        .profile-avatar-placeholder { width: 64px; height: 64px; border-radius: 50%; background: var(--primary-color); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: bold; }
+        .profile-details-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        @media(max-width: 600px) { .profile-details-grid { grid-template-columns: 1fr; } }
+        .detail-item { background: rgba(0,0,0,0.02); border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; }
+        .detail-item label { display: block; font-size: 11px; font-weight: bold; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+        .detail-item span { font-size: 14px; font-weight: 600; color: var(--text-color); }
     </style>
 </head>
 <body data-theme="light">
 
     <!-- Toast Notification -->
-    <div id="toastNotification" style="position: fixed; bottom: 20px; right: 20px; background: var(--bg-color); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; align-items: center; gap: 12px; z-index: 1100; color: var(--text-color);">
+    <div id="toastNotification" style="position: fixed; bottom: 20px; right: 20px; background: var(--bg-color); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; align-items: center; gap: 12px; z-index: 1300; color: var(--text-color);">
         <i class="fas fa-check-circle" style="font-size: 20px; color: #28a745;"></i>
         <div>
             <strong id="toastTitle">Sucesso!</strong>
             <p id="toastMessage" style="font-size: 13px; margin: 0; color: var(--text-muted);"></p>
+        </div>
+    </div>
+
+    <!-- MODAL DE VISUALIZAÇÃO DETALHADA DO FUNCIONÁRIO -->
+    <div id="modalDetalhesFuncionario" class="modal-overlay">
+        <div class="modal-card">
+            <button class="modal-close" onclick="fecharModalDetalhes()"><i class="fas fa-times"></i></button>
+            <div class="profile-header-modal">
+                <div class="profile-avatar-placeholder" id="modalAvatarInicial">EF</div>
+                <div>
+                    <h3 id="modalNomeFunc" style="margin: 0 0 5px 0; font-size: 20px; color: var(--text-color);">Nome Completo</h3>
+                    <span id="modalCargoFunc" style="font-size: 13px; color: var(--primary-color); font-weight: bold;">Cargo</span>
+                    <span style="display: block; font-size: 11px; color: var(--text-muted); margin-top: 2px;" id="modalIdFunc">ID: #FUNC-01</span>
+                </div>
+            </div>
+            
+            <h4 style="font-size: 13px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 0.5px;"><i class="fas id-badge fa-id-card"></i> Ficha Completa de Dados Pessoais & Profissionais</h4>
+            
+            <div class="profile-details-grid" id="modalGridConteudo">
+                <!-- Preenchido dinamicamente -->
+            </div>
+
+            <div style="margin-top: 25px; display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--border-color); padding-top: 15px;">
+                <button onclick="fecharModalDetalhes()" class="btn-secondary-custom" style="padding: 8px 16px;"><i class="fas fa-times"></i> Fechar</button>
+            </div>
         </div>
     </div>
 
@@ -155,7 +196,7 @@
             </div>
         </div>
 
-        <!-- SEÇÃO DE TRABALHO ESPECIAL: REGISTRAR FUNCIONÁRIO (FORMULÁRIO COMPLETO + EDIÇÃO/ELIMINAÇÃO + EXPORTAÇÃO) -->
+        <!-- SEÇÃO DE TRABALHO ESPECIAL: REGISTRAR FUNCIONÁRIO (FORMULÁRIO COMPLETO + VISUALIZAÇÃO/EDIÇÃO/ELIMINAÇÃO + EXPORTAÇÃO) -->
         <div id="secao-workspace-regfunc" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
             <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
@@ -218,7 +259,7 @@
                     <div class="form-group">
                         <label>Departamento</label>
                         <select id="funcDepartamento">
-                            <!-- Preenchido dinamicamente com os departamentos do segundo print -->
+                            <!-- Preenchido dinamicamente com os departamentos do sistema -->
                         </select>
                     </div>
                     <div class="form-group">
@@ -311,7 +352,7 @@
             { id: 'auditoria', nome: 'Auditoria & Conformidade', icon: 'fas fa-balance-scale', desc: 'Verificação com a Lei Geral do Trabalho.' }
         ];
 
-        // Departamentos exatos provenientes do segundo print geral do sistema (index.html)
+        // Departamentos exatos provenientes do sistema geral (index.html)
         const departamentosGlobaisSistema = [
             "Finanças & Contabilidade",
             "Limpeza Institucional",
@@ -333,14 +374,15 @@
             dadosModulosEstado[m.id] = {
                 nome: m.nome,
                 registos: [
-                    { id: '#REG-01', descricao: `Registo inicial padrão em ${m.nome}`, data: '08/08/2026 11:38', estado: 'Salvo' }
+                    { id: '#REG-01', descricao: `Registo inicial padrão em ${m.nome}`, data: '08/08/2026 12:30', estado: 'Salvo' }
                 ]
             };
         });
 
-        // Array específico para guardar os registos completos do funcionário
+        // Array específico com os registos de funcionários conforme os dados visíveis no ecrã atual
         let funcionariosCadastrados = [
-            { id: '#FUNC-01', nome: 'Eduardo Ngongoyove Gabriel', bi: '003892832LA041', nif: '5002938192', nasc: '1995-05-15', genero: 'Masculino', civil: 'Solteiro(a)', telefone: '+244 923 000 000', email: 'eduardo@apsanlda.com', morada: 'Namacunde, Cunene', cargo: 'Desenvolvedor Software', departamento: 'TI & Software', admissao: '2026-01-01', contrato: 'Sem Termo', salario: '350.000,00 Kz', banco: 'BAI - AO06 0040 ...' }
+            { id: '#FUNC-02', nome: 'Maravilhoso A. Mbulandi', bi: '005567576CE043', nif: '5003948192', nasc: '1992-08-10', genero: 'Masculino', civil: 'Solteiro(a)', telefone: '934437739', email: 'maravilhoso@apsanlda.com', morada: 'Namacunde, Cunene', cargo: 'Administrador', departamento: 'Administração Geral', admissao: '2026-02-01', contrato: 'Sem Termo', salario: '200.000 Kz', banco: 'BAI - AO06 0040 ...' },
+            { id: '#FUNC-01', nome: 'Eduardo Gabriel', bi: '0055840650CE049', nif: '5002938192', nasc: '1995-05-15', genero: 'Masculino', civil: 'Solteiro(a)', telefone: '931057760', email: 'eduardo@apsanlda.com', morada: 'Namacunde, Cunene', cargo: 'Desenvolvedor de Softwares', departamento: 'TI & Software', admissao: '2026-01-01', contrato: 'Sem Termo', salario: '200.000 Kz', banco: 'BAI - AO06 0040 ...' }
         ];
 
         let moduloAtivoAtual = null;
@@ -483,7 +525,7 @@
                     nome: nome,
                     bi: bi,
                     nif: document.getElementById('funcNIF').value || 'N/A',
-                    nasc: document.getElementById('funcNasc').value || '',
+                    nasc: document.getElementById('funcNasc').value || 'N/A',
                     genero: document.getElementById('funcGenero').value,
                     civil: document.getElementById('funcEstadoCivil').value,
                     telefone: telefone || 'N/A',
@@ -491,9 +533,9 @@
                     morada: document.getElementById('funcMorada').value || 'N/A',
                     cargo: cargo,
                     departamento: departamento,
-                    admissao: document.getElementById('funcAdmissao').value || '',
+                    admissao: document.getElementById('funcAdmissao').value || 'N/A',
                     contrato: document.getElementById('funcContrato').value,
-                    salario: salario ? salario + ' Kz' : '0,00 Kz',
+                    salario: salario ? (salario.includes('Kz') ? salario : salario + ' Kz') : '0,00 Kz',
                     banco: document.getElementById('funcBanco').value || 'N/A'
                 });
 
@@ -511,7 +553,7 @@
                 f.nome = nome;
                 f.bi = bi;
                 f.nif = document.getElementById('funcNIF').value || 'N/A';
-                f.nasc = document.getElementById('funcNasc').value || '';
+                f.nasc = document.getElementById('funcNasc').value || 'N/A';
                 f.genero = document.getElementById('funcGenero').value;
                 f.civil = document.getElementById('funcEstadoCivil').value;
                 f.telefone = telefone || 'N/A';
@@ -519,7 +561,7 @@
                 f.morada = document.getElementById('funcMorada').value || 'N/A';
                 f.cargo = cargo;
                 f.departamento = departamento;
-                f.admissao = document.getElementById('funcAdmissao').value || '';
+                f.admissao = document.getElementById('funcAdmissao').value || 'N/A';
                 f.contrato = document.getElementById('funcContrato').value;
                 f.salario = salario ? (salario.includes('Kz') ? salario : salario + ' Kz') : '0,00 Kz';
                 f.banco = document.getElementById('funcBanco').value || 'N/A';
@@ -534,13 +576,53 @@
             atualizarGraficosDinamicos();
         }
 
+        // FUNÇÃO DE VISUALIZAÇÃO DETALHADA DO REGISTO DE FUNCIONÁRIO
+        function visualizarDetalhesFuncionario(index) {
+            const f = funcionariosCadastrados[index];
+            
+            document.getElementById('modalIdFunc').textContent = `ID: ${f.id}`;
+            document.getElementById('modalNomeFunc').textContent = f.nome;
+            document.getElementById('modalCargoFunc').textContent = f.cargo;
+
+            // Iniciais para o avatar
+            const partesNome = f.nome.trim().split(' ');
+            let iniciais = partesNome[0][0];
+            if (partesNome.length > 1) {
+                iniciais += partesNome[partesNome.length - 1][0];
+            }
+            document.getElementById('modalAvatarInicial').textContent = iniciais.toUpperCase();
+
+            const grid = document.getElementById('modalGridConteudo');
+            grid.innerHTML = `
+                <div class="detail-item"><label>Bilhete de Identidade (BI)</label><span>${f.bi}</span></div>
+                <div class="detail-item"><label>NIF (Número Fiscal)</label><span>${f.nif}</span></div>
+                <div class="detail-item"><label>Data de Nascimento</label><span>${f.nasc}</span></div>
+                <div class="detail-item"><label>Género</label><span>${f.genero}</span></div>
+                <div class="detail-item"><label>Estado Civil</label><span>${f.civil}</span></div>
+                <div class="detail-item"><label>Telefone / Telemóvel</label><span>${f.telefone}</span></div>
+                <div class="detail-item"><label>E-mail Corporativo/Pessoal</label><span>${f.email}</span></div>
+                <div class="detail-item"><label>Morada / Endereço</label><span>${f.morada}</span></div>
+                <div class="detail-item"><label>Departamento</label><span>${f.departamento}</span></div>
+                <div class="detail-item"><label>Data de Admissão</label><span>${f.admissao}</span></div>
+                <div class="detail-item"><label>Tipo de Contrato</label><span>${f.contrato}</span></div>
+                <div class="detail-item"><label>Salário Base</label><span>${f.salario}</span></div>
+                <div class="detail-item" style="grid-column: span 2;"><label>Banco & Nº de Conta (IBAN)</label><span>${f.banco}</span></div>
+            `;
+
+            document.getElementById('modalDetalhesFuncionario').classList.add('active');
+        }
+
+        function fecharModalDetalhes() {
+            document.getElementById('modalDetalhesFuncionario').classList.remove('active');
+        }
+
         function preencherFormularioParaEditar(index) {
             const f = funcionariosCadastrados[index];
             document.getElementById('funcEditIndex').value = index;
             document.getElementById('funcNome').value = f.nome;
             document.getElementById('funcBI').value = f.bi;
             document.getElementById('funcNIF').value = f.nif !== 'N/A' ? f.nif : '';
-            document.getElementById('funcNasc').value = f.nasc || '';
+            document.getElementById('funcNasc').value = f.nasc !== 'N/A' ? f.nasc : '';
             document.getElementById('funcGenero').value = f.genero;
             document.getElementById('funcEstadoCivil').value = f.civil;
             document.getElementById('funcTelefone').value = f.telefone !== 'N/A' ? f.telefone : '';
@@ -548,7 +630,7 @@
             document.getElementById('funcMorada').value = f.morada !== 'N/A' ? f.morada : '';
             document.getElementById('funcCargo').value = f.cargo;
             document.getElementById('funcDepartamento').value = f.departamento;
-            document.getElementById('funcAdmissao').value = f.admissao || '';
+            document.getElementById('funcAdmissao').value = f.admissao !== 'N/A' ? f.admissao : '';
             document.getElementById('funcContrato').value = f.contrato;
             document.getElementById('funcSalario').value = f.salario ? f.salario.replace(' Kz', '') : '';
             document.getElementById('funcBanco').value = f.banco !== 'N/A' ? f.banco : '';
@@ -608,6 +690,7 @@
                     <td>${f.telefone}</td>
                     <td>${f.salario}</td>
                     <td style="text-align: center; white-space: nowrap;">
+                        <button class="btn-table-action btn-view" title="Visualizar Detalhes do Registo" onclick="visualizarDetalhesFuncionario(${index})"><i class="fas fa-eye"></i></button>
                         <button class="btn-table-action btn-edit" title="Editar Funcionário" onclick="preencherFormularioParaEditar(${index})"><i class="fas fa-edit"></i></button>
                         <button class="btn-table-action btn-delete" title="Eliminar Funcionário" onclick="eliminarFuncionario(${index})"><i class="fas fa-trash-alt"></i></button>
                     </td>
@@ -624,12 +707,10 @@
             }
         }
 
-        // CORREÇÃO DEFINITIVA DA EXPORTAÇÃO PDF: Correção correta de templates strings em JavaScript criadas dentro da página gerada, 
-        // evitando conflito de sintaxe e garantindo que o comando window.print() execute com perfeição total.
         function exportarRelatorioPDF() {
             const janelaImpressao = window.open('', '_blank');
             if (!janelaImpressao) {
-                showToast("Erro", "O bloqueador de pop-ups impediu a abertura da janela de impressão. Permita pop-ups para este site.");
+                showToast("Erro", "O bloqueador de pop-ups impediu a abertura da janela de impressão.");
                 return;
             }
 
@@ -670,15 +751,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Nome Completo</th>
-                            <th>BI</th>
-                            <th>NIF</th>
-                            <th>Género</th>
-                            <th>Cargo</th>
-                            <th>Departamento</th>
-                            <th>Contacto</th>
-                            <th>Salário Base</th>
+                            <th>ID</th><th>Nome Completo</th><th>BI</th><th>NIF</th><th>Género</th><th>Cargo</th><th>Departamento</th><th>Contacto</th><th>Salário Base</th>
                         </tr>
                     </thead>
                     <tbody>
