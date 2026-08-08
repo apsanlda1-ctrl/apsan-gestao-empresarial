@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acompanhamento Hospitalar & AZICUDA - APSAN, LDA</title>
+    <title>Acompanhamento Hospitalar - APSAN, LDA</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -56,7 +56,7 @@
                 <img src="logo.png" alt="Logo" style="width: 36px; height: 36px; object-fit: contain; border-radius: 4px;" onerror="this.style.display='none'">
                 <div>
                     <h4 style="color: #fff; margin: 0; font-size: 16px;">APSAN, LDA - Gestão[cite: 1]</h4>
-                    <span style="font-size: 12px; color: var(--accent-color);">Acompanhamento Hospitalar & AZICUDA[cite: 1]</span>
+                    <span style="font-size: 12px; color: var(--accent-color);">Acompanhamento Hospitalar</span>
                 </div>
             </div>
             <div style="display: flex; align-items: center; gap: 15px;">
@@ -68,11 +68,11 @@
 
     <div class="container" style="max-width: 1200px; margin: 30px auto; padding: 0 20px; width: 100%;">
         
-        <!-- HUB PRINCIPAL: GRELHA DOS 12 MÓDULOS -->
+        <!-- HUB PRINCIPAL: GRELHA DOS 11 MÓDULOS -->
         <div id="hub-modulos" class="workspace-section active">
             <div style="margin-bottom: 25px;">
                 <h2 style="font-size: 22px; margin-bottom: 5px; color: var(--text-color);"><i class="fas fa-hospital-user"></i> Departamento de Acompanhamento Hospitalar</h2>
-                <p style="font-size: 14px; color: var(--text-muted);">Selecione abaixo um dos 12 módulos especializados para gerir a prestação de serviços de saúde e acompanhamento de pacientes.</p>
+                <p style="font-size: 14px; color: var(--text-muted);">Selecione abaixo um dos módulos especializados para gerir a prestação de serviços de saúde e acompanhamento de pacientes.</p>
             </div>
 
             <div class="modules-grid">
@@ -150,15 +150,7 @@
 
                 <div class="module-card">
                     <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-shield-alt"></i></div><span class="module-badge">Módulo 10</span></div>
-                        <div class="module-body"><h3>Controlo AZICUDA</h3><p>Sistema interno de auditoria, criptografia de dados clínicos e monitorização de segurança.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('azicuda')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-chart-bar"></i></div><span class="module-badge">Módulo 11</span></div>
+                        <div class="module-header"><div class="module-icon"><i class="fas fa-chart-bar"></i></div><span class="module-badge">Módulo 10</span></div>
                         <div class="module-body"><h3>Relatórios Estatísticos</h3><p>Geração de relatórios mensais de fluxo de pacientes, patologias comuns e produtividade médica.</p></div>
                     </div>
                     <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('relatorios')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
@@ -166,7 +158,7 @@
 
                 <div class="module-card">
                     <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-ambulance"></i></div><span class="module-badge">Módulo 12</span></div>
+                        <div class="module-header"><div class="module-icon"><i class="fas fa-ambulance"></i></div><span class="module-badge">Módulo 11</span></div>
                         <div class="module-body"><h3>Suporte & Logística</h3><p>Coordenação com transportes/ambulâncias para evacuações e ligações com outras unidades.</p></div>
                     </div>
                     <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('sugestoes')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
@@ -359,43 +351,21 @@
             </div>
         </div>
 
-        <!-- SEÇÃO 10: AZICUDA -->
-        <div id="secao-azicuda" class="workspace-section">
-            <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
-            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
-                <h3><i class="fas fa-shield-alt"></i> Módulo 10: Controlo e Segurança - AZICUDA</h3>
-                <p style="font-size: 13px; color: var(--text-muted); margin-top: 5px; margin-bottom: 20px;">Sistema integrado de auditoria, criptografia de dados clínicos e monitorização de segurança da APSAN, LDA[cite: 1].</p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; margin-bottom: 20px;">
-                    <div style="background: var(--bg-color); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px;">
-                        <h4 style="color: var(--primary-color); font-size: 14px; margin-bottom: 5px;"><i class="fas fa-user-shield"></i> Estado do Módulo</h4>
-                        <p style="font-size: 18px; font-weight: bold; color: #28a745; margin: 0;">ATIVO & SEGURO</p>
-                        <span style="font-size: 11px; color: var(--text-muted);">Firewall & Criptografia Interna</span>
-                    </div>
-                    <div style="background: var(--bg-color); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px;">
-                        <h4 style="color: var(--primary-color); font-size: 14px; margin-bottom: 5px;"><i class="fas fa-fingerprint"></i> Registos de Auditoria</h4>
-                        <p style="font-size: 18px; font-weight: bold; color: var(--text-color); margin: 0;">148 Ações</p>
-                        <span style="font-size: 11px; color: var(--text-muted);">Últimas 24 horas</span>
-                    </div>
-                </div>
-                <button onclick="executarAzicudaCheck()" class="btn-primary-custom" style="padding: 10px 20px; font-size: 13px; cursor: pointer;"><i class="fas fa-play"></i> Executar Diagnóstico de Segurança</button>
-            </div>
-        </div>
-
-        <!-- SEÇÃO 11: RELATÓRIOS -->
+        <!-- SEÇÃO 10: RELATÓRIOS -->
         <div id="secao-relatorios" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
             <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
-                <h3><i class="fas fa-chart-bar"></i> Módulo 11: Relatórios e Estatísticas</h3>
+                <h3><i class="fas fa-chart-bar"></i> Módulo 10: Relatórios e Estatísticas</h3>
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Gere relatórios consolidados do fluxo hospitalar mensal.</p>
                 <button onclick="gerarRelatorioPDF()" class="btn-primary-custom"><i class="fas fa-file-pdf"></i> Descarregar Relatório Geral</button>
             </div>
         </div>
 
-        <!-- SEÇÃO 12: SUGESTÕES / SUPORTE & LOGÍSTICA -->
+        <!-- SEÇÃO 11: SUGESTÕES / SUPORTE & LOGÍSTICA -->
         <div id="secao-sugestoes" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
             <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
-                <h3><i class="fas fa-ambulance"></i> Módulo 12: Suporte e Logística Hospitalar</h3>
+                <h3><i class="fas fa-ambulance"></i> Módulo 11: Suporte e Logística Hospitalar</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
                     <div style="background: var(--bg-color); border: 1px solid var(--border-color); padding: 20px; border-radius: 8px;">
                         <h4 style="color: var(--primary-color); margin-bottom: 10px;"><i class="fas fa-car"></i> Apoio Logístico</h4>
@@ -469,7 +439,7 @@
                 let tdPatologia = tr[i].getElementsByTagName('td')[3];
                 if (tdPaciente || tdPatologia) {
                     let txtPaciente = tdPaciente.textContent || tdPaciente.innerText;
-                    let txtPatologia = tdPatologia.textContent || tdPatologia.innerText;
+                    let txtPatologia = tdPatologia.textContent || tdPatology.innerText || '';
                     if (txtPaciente.toLowerCase().indexOf(filter) > -1 || txtPatologia.toLowerCase().indexOf(filter) > -1) {
                         tr[i].style.display = "";
                     } else {
@@ -543,10 +513,6 @@
 
         function gerarRelatorioPDF() {
             showToast("Relatórios", "Relatório consolidado gerado com sucesso.");
-        }
-
-        function executarAzicudaCheck() {
-            showToast("AZICUDA", "Diagnóstico concluído: Integridade dos dados verificada sem anomalias.");
         }
 
         function fecharModal() {
