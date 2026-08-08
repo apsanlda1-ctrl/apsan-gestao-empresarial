@@ -218,7 +218,7 @@
                     <div class="form-group">
                         <label>Departamento</label>
                         <select id="funcDepartamento">
-                            <!-- Preenchido dinamicamente com todos os departamentos/módulos do sistema -->
+                            <!-- Preenchido dinamicamente com os departamentos do segundo print -->
                         </select>
                     </div>
                     <div class="form-group">
@@ -311,6 +311,22 @@
             { id: 'auditoria', nome: 'Auditoria & Conformidade', icon: 'fas fa-balance-scale', desc: 'Verificação com a Lei Geral do Trabalho.' }
         ];
 
+        // Departamentos exatos provenientes do segundo print geral do sistema (index.html)
+        const departamentosGlobaisSistema = [
+            "Finanças & Contabilidade",
+            "Limpeza Institucional",
+            "Material & Logística",
+            "Catering & Eventos",
+            "TI & Software",
+            "Transportes & Frota",
+            "Importação & Namíbia",
+            "Recursos Humanos (RH)",
+            "Acompanhamento Hospitalar",
+            "Tradução Juramentada",
+            "Envio & Recepção de Encomendas",
+            "Administração Geral"
+        ];
+
         // Estado global de dados salvos por módulo e lista detalhada de funcionários
         let dadosModulosEstado = {};
         modulosData.forEach(m => {
@@ -324,7 +340,7 @@
 
         // Array específico para guardar os registos completos do funcionário
         let funcionariosCadastrados = [
-            { id: '#FUNC-01', nome: 'Eduardo Ngongoyove Gabriel', bi: '003892832LA041', nif: '5002938192', nasc: '1995-05-15', genero: 'Masculino', civil: 'Solteiro(a)', telefone: '+244 923 000 000', email: 'eduardo@apsanlda.com', morada: 'Namacunde, Cunene', cargo: 'Desenvolvedor Software', departamento: 'Tecnologia & Sistemas', admissao: '2026-01-01', contrato: 'Sem Termo', salario: '350.000,00 Kz', banco: 'BAI - AO06 0040 ...' }
+            { id: '#FUNC-01', nome: 'Eduardo Ngongoyove Gabriel', bi: '003892832LA041', nif: '5002938192', nasc: '1995-05-15', genero: 'Masculino', civil: 'Solteiro(a)', telefone: '+244 923 000 000', email: 'eduardo@apsanlda.com', morada: 'Namacunde, Cunene', cargo: 'Desenvolvedor Software', departamento: 'TI & Software', admissao: '2026-01-01', contrato: 'Sem Termo', salario: '350.000,00 Kz', banco: 'BAI - AO06 0040 ...' }
         ];
 
         let moduloAtivoAtual = null;
@@ -349,11 +365,11 @@
             const selectDep = document.getElementById('funcDepartamento');
             if(!selectDep) return;
             selectDep.innerHTML = '';
-            // Filtra e lista todos os departamentos/módulos existentes no sistema
-            modulosData.forEach(mod => {
+            // Preenche rigorosamente com os departamentos do segundo print (sistema geral)
+            departamentosGlobaisSistema.forEach(depNome => {
                 const opt = document.createElement('option');
-                opt.value = mod.nome;
-                opt.textContent = mod.nome;
+                opt.value = depNome;
+                opt.textContent = depNome;
                 selectDep.appendChild(opt);
             });
         }
