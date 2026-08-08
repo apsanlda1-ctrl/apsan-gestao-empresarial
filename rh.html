@@ -65,7 +65,7 @@
     <!-- CONTEÚDO PRINCIPAL -->
     <div class="container" style="max-width: 1200px; margin: 30px auto; padding: 0 20px; width: 100%;">
         
-        <!-- PAINEL EXECUTIVO MULTI-GRÁFICO (ESTILO DASHBOARD PROFISSIONAL DE EXCEL COM ROSCA E BARRAS HORIZONTAIS) -->
+        <!-- PAINEL EXECUTIVO MULTI-GRÁFICO -->
         <div class="executive-dashboard-grid">
             
             <!-- Coluna Esquerda: Gráfico de Rosca (Distribuição) + Linha do Tempo Consolidada -->
@@ -84,28 +84,28 @@
                 </div>
             </div>
 
-            <!-- Coluna Direta: Gráfico de Barras Horizontais (Estilo Exato da Imagem de Referência) -->
+            <!-- Coluna Direita: Gráfico de Barras Horizontais (Estilo Executivo) -->
             <div class="exec-card" style="display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
                     <h4><i class="fas fa-chart-bar" style="color: #0056b3;"></i> Top Módulos com Maior Volume de Registos</h4>
                     <p style="font-size: 12px; color: var(--text-muted); margin-top: -5px; margin-bottom: 15px;">Ranking analítico horizontal por atividade salva.</p>
                 </div>
-                <div style="position: relative; height: 380px; width: 100%;">
+                <div style="position: relative; height: 420px; width: 100%;">
                     <canvas id="horizontalBarChart"></canvas>
                 </div>
             </div>
 
         </div>
 
-        <!-- HUB PRINCIPAL: GRELHA DOS 24 MÓDULOS DE RH -->
+        <!-- HUB PRINCIPAL: GRELHA DOS MÓDULOS DE RH (COM REGISTRAR FUNCIONÁRIO EM 1º LUGAR) -->
         <div id="hub-modulos" class="workspace-section active">
             <div style="margin-bottom: 25px;">
                 <h2 style="font-size: 22px; margin-bottom: 5px; color: var(--text-color);"><i class="fas fa-users-cog"></i> Painel Central de Recursos Humanos</h2>
-                <p style="font-size: 14px; color: var(--text-muted);">Qualquer registo ou alteração efetuada em qualquer um dos 24 módulos atualizará automaticamente os gráficos executivos acima.</p>
+                <p style="font-size: 14px; color: var(--text-muted);">Qualquer registo ou alteração efetuada em qualquer um dos módulos atualizará automaticamente os gráficos executivos acima.</p>
             </div>
 
             <div class="modules-grid" id="modulesGridContainer">
-                <!-- Gerado dinamicamente via Script para garantir cobertura total dos 24 módulos -->
+                <!-- Gerado dinamicamente via Script -->
             </div>
         </div>
 
@@ -117,7 +117,7 @@
                 <p id="workspaceDesc" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;"></p>
                 
                 <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-                    <input type="text" id="novoRegistoInput" placeholder="Descreva a ação, tarefa ou documento a salvar..." style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size: 14px;">
+                    <input type="text" id="novoRegistoInput" placeholder="Descreva a ação, tarefa ou funcionário a registar..." style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size: 14px;">
                     <button onclick="salvarAcaoNoModulo()" class="btn-primary-custom" style="width: auto; padding: 10px 20px;"><i class="fas fa-plus"></i> Registar & Salvar no Módulo</button>
                 </div>
 
@@ -143,9 +143,10 @@
     </div>
 
     <script>
-        // Dados dos 24 Módulos
+        // Lista completa com "Registrar Funcionário" rigorosamente na 1ª posição (Totalizando agora 25 módulos refletidos nos gráficos)
         const modulosData = [
-            { id: 'pessoal', nome: 'Gestão de Pessoal', icon: 'fas fa-user-plus', desc: 'Registo inicial, listagem geral de funcionários, cargos e funções.' },
+            { id: 'regfunc', nome: 'Registrar Funcionário', icon: 'fas fa-user-plus', desc: 'Registo inicial e cadastro completo de novos colaboradores na empresa.' },
+            { id: 'pessoal', nome: 'Gestão de Pessoal', icon: 'fas fa-users', desc: 'Listagem geral de funcionários, cargos e funções ativas.' },
             { id: 'contratos', nome: 'Contratos & Admissões', icon: 'fas fa-file-contract', desc: 'Emissão de contratos de trabalho e arquivo legal.' },
             { id: 'salarios', nome: 'Processamento Salarial', icon: 'fas fa-money-check-alt', desc: 'Cálculo de vencimentos base, subsídios e descontos.' },
             { id: 'assiduidade', nome: 'Controlo de Assiduidade', icon: 'fas fa-clock', desc: 'Registo diário de entradas, saídas e horas extras.' },
@@ -177,7 +178,7 @@
             dadosModulosEstado[m.id] = {
                 nome: m.nome,
                 registos: [
-                    { id: '#REG-01', descricao: `Registo inicial padrão em ${m.nome}`, data: '08/08/2026 11:25', estado: 'Salvo' }
+                    { id: '#REG-01', descricao: `Registo inicial padrão em ${m.nome}`, data: '08/08/2026 11:32', estado: 'Salvo' }
                 ]
             };
         });
@@ -187,12 +188,12 @@
         let chartLineInstance = null;
         let chartHBarInstance = null;
 
-        // Paleta profissional em tons corporativos azuis/petróleo/cinza (estilo Excel executivo)
+        // Paleta de cores corporativas profissionais expandida para 25 módulos
         const paletaExecutiva = [
             '#004080', '#0056b3', '#007bff', '#3399ff', '#66b2ff', '#99ccff',
             '#006666', '#008080', '#009999', '#00b3b3', '#20b2aa', '#48d1cc',
             '#4169e1', '#6495ed', '#4682b4', '#5f9ea0', '#708090', '#778899',
-            '#2e8b57', '#3cb371', '#20b2aa', '#008b8b', '#008080', '#1e90ff'
+            '#2e8b57', '#3cb371', '#20b2aa', '#008b8b', '#008080', '#1e90ff', '#2575fc'
         ];
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -250,7 +251,7 @@
             const input = document.getElementById('novoRegistoInput');
             const texto = input.value.trim();
             if(!texto) {
-                showToast("Aviso", "Por favor, insira a descrição da atividade a salvar.");
+                showToast("Aviso", "Por favor, insira a descrição ou dados para salvar.");
                 return;
             }
 
@@ -270,7 +271,7 @@
             atualizarContadorCardModulo(moduloAtivoAtual.id);
             atualizarGraficosDinamicos();
 
-            showToast("Sucesso", `Atividade salva em ${moduloAtivoAtual.nome} e registada no painel executivo.`);
+            showToast("Sucesso", `Registo guardado em ${moduloAtivoAtual.nome} e atualizado no gráfico.`);
         }
 
         function recarregarTabelaModulo() {
@@ -329,7 +330,7 @@
             chartLineInstance = new Chart(ctxLine, {
                 type: 'line',
                 data: {
-                    labels: labels.map(l => l.length > 10 ? l.substring(0, 10) + '...' : l),
+                    labels: labels.map(l => l.length > 12 ? l.substring(0, 12) + '...' : l),
                     datasets: [{
                         label: 'Atividades',
                         data: dataCounts,
@@ -353,7 +354,7 @@
                 }
             });
 
-            // 3. Gráfico de Barras Horizontais (Estilo Exato da Imagem de Referência)
+            // 3. Gráfico de Barras Horizontais (Refletindo todos os 25 módulos)
             const ctxHBar = document.getElementById('horizontalBarChart').getContext('2d');
             chartHBarInstance = new Chart(ctxHBar, {
                 type: 'bar',
@@ -362,12 +363,12 @@
                     datasets: [{
                         label: 'Volume Registos',
                         data: dataCounts,
-                        backgroundColor: '#0056b3',
+                        backgroundColor: paletaExecutiva,
                         borderRadius: 3
                     }]
                 },
                 options: {
-                    indexAxis: 'y', // Transforma em barras horizontais idênticas à referência
+                    indexAxis: 'y', // Barras horizontais
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: { 
@@ -376,7 +377,7 @@
                     },
                     scales: { 
                         x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(0,0,0,0.04)' } },
-                        y: { ticks: { font: { size: 11, weight: '500' } }, grid: { display: false } }
+                        y: { ticks: { font: { size: 10, weight: '500' } }, grid: { display: false } }
                     }
                 }
             });
