@@ -6,15 +6,49 @@
     <title>Recursos Humanos - APSAN, LDA</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .module-card { background: var(--bg-color); border: 1px solid var(--border-color); border-radius: 12px; padding: 24px; position: relative; display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .module-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.08); border-color: var(--primary-color); }
+        .module-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .module-icon { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #fff; background: var(--primary-color); }
+        .module-badge { font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 20px; background: var(--border-color); color: var(--text-muted); text-transform: uppercase; }
+        .module-body h3 { font-size: 17px; margin: 0 0 8px 0; color: var(--text-color); }
+        .module-body p { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin: 0 0 20px 0; }
+        .module-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 15px; }
+        .module-action-btn { background: none; border: none; color: var(--primary-color); font-weight: bold; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; padding: 0; }
+        .module-action-btn:hover { text-decoration: underline; }
+
+        .workspace-section { display: none; margin-top: 20px; }
+        .workspace-section.active { display: block; }
+        .back-hub-btn { background: var(--border-color); border: none; padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; color: var(--text-color); margin-bottom: 20px; display: inline-flex; align-items: center; gap: 8px; font-size: 13px; }
+        .back-hub-btn:hover { background: var(--primary-color); color: #fff; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media(max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: var(--bg-color); padding: 25px; border-radius: 8px; width: 90%; max-width: 500px; border: 1px solid var(--border-color); }
+    </style>
 </head>
 <body data-theme="light">
 
     <!-- Toast Notification -->
-    <div id="toastNotification">
-        <i class="fas fa-check-circle" style="font-size: 20px;"></i>
+    <div id="toastNotification" style="position: fixed; bottom: 20px; right: 20px; background: var(--bg-color); border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); display: none; align-items: center; gap: 12px; z-index: 1100; color: var(--text-color);">
+        <i class="fas fa-check-circle" style="font-size: 20px; color: #28a745;"></i>
         <div>
             <strong id="toastTitle">Sucesso!</strong>
-            <p id="toastMessage" style="font-size: 13px; margin: 0;"></p>
+            <p id="toastMessage" style="font-size: 13px; margin: 0; color: var(--text-muted);"></p>
+        </div>
+    </div>
+
+    <!-- Modal Dinâmico -->
+    <div id="dynamicModal" class="modal-overlay">
+        <div class="modal-content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <h3 id="modalTitle" style="margin: 0; font-size: 16px; color: var(--primary-color);">Título</h3>
+                <button onclick="fecharModal()" style="background: none; border: none; font-size: 16px; cursor: pointer; color: var(--text-color);"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="modalBody"></div>
         </div>
     </div>
 
@@ -37,7 +71,7 @@
 
     <!-- CONTEÚDO PRINCIPAL -->
     <div class="container" style="max-width: 1200px; margin: 30px auto; padding: 0 20px; width: 100%;">
-        <div class="stats-grid-dash">
+        <div class="stats-grid-dash" style="margin-bottom: 30px;">
             <div class="stat-box">
                 <h4>Total Colaboradores</h4>
                 <h2>24</h2>
@@ -60,37 +94,257 @@
             </div>
         </div>
 
-        <div class="management-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
-                <h3><i class="fas fa-users"></i> Gestão de Pessoal e Colaboradores</h3>
-                <button onclick="openNewTaskModal()" class="btn-primary-custom" style="width: auto; padding: 8px 16px; font-size: 13px;"><i class="fas fa-plus"></i> Novo Colaborador</button>
+        <!-- HUB PRINCIPAL: GRELHA DOS 12 MÓDULOS DE RH -->
+        <div id="hub-modulos" class="workspace-section active">
+            <div style="margin-bottom: 25px;">
+                <h2 style="font-size: 22px; margin-bottom: 5px; color: var(--text-color);"><i class="fas fa-users-cog"></i> Painel Central de Recursos Humanos</h2>
+                <p style="font-size: 14px; color: var(--text-muted);">Selecione abaixo um dos 12 módulos especializados para gerir o pessoal, contratos, processamento salarial e desenvolvimento.</p>
             </div>
 
-            <div style="overflow-x: auto;">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>ID Colaborador</th>
-                            <th>Nome Completo</th>
-                            <th>Cargo / Função</th>
-                            <th>Tipo de Contrato</th>
-                            <th>Estado</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="rhTableBody">
-                        <tr>
-                            <td>#RH-001</td>
-                            <td>Eduardo Gabriel</td>
-                            <td>Gestor de TI & Software</td>
-                            <td>Efetivo</td>
-                            <td><span class="badge in-progress">Ativo</span></td>
-                            <td><button onclick="completeTask(this)" class="btn-action">Atualizar</button></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="modules-grid">
+                <div class="module-card">
+                    <div>
+                        <div class="module-header"><div class="module-icon"><i class="fas fa-user-plus"></i></div><span class="module-badge">Módulo 01</span></div>
+                        <div class="module-body"><h3>Gestão de Pessoal & Colaboradores</h3><p>Registo inicial, listagem geral de funcionários, cargos, funções e contactos atualizados.</p></div>
+                    </div>
+                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('pessoal')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
+                </div>
+
+                <div class="module-card">
+                    <div>
+                        <div class="module-header"><div class="module-icon"><i class="fas fa-file-contract"></i></div><span class="module-badge">Módulo 02</span></div>
+                        <div class="module-body"><h3>Contratos & Admissões</h3><p>Emissão de contratos de trabalho (efetivo, prestação de serviços, estagiários) e arquivo legal.</p></div>
+                    </div>
+                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('contratos')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
+                </div>
+
+                <div class="module-card">
+                    <div>
+                        <div class="module-header"><div class="module-icon"><i class="fas fa-money-check-alt"></i></div><span class="module-badge">Módulo 03</span></div>
+                        <div class="module-body"><h3>Processamento Salarial (Folha)</h3><p>Cálculo de vencimentos base, subsídios, descontos da Segurança Social e emissão de folhas de pagamento.</p></div>
+                    </div>
+                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('salarios')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
+                </div>
+
+                <div class="module-card">
+                    <div>
+                        <div class="module-header"><div class="module-icon"><i class="fas fa-clock"></i></div><span class="module-badge">Módulo 04</span></div>
+                        <div class="module-body"><h3>Controlo de Assiduidade & Ponto</h3><p>Registo diário de entradas, saídas, horas extras, atrasos e verificação de presenças em tempo real.</p></div>
+                    </div>
+                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('assiduidade')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
+                </div>
+
+                <div class="module-card">
+                    <div>
+                        <div class="module-header"><div class="module-icon"><i class="fas fa-calendar-minus"></i></div><span class="module-badge">Módulo 05</span></div>
+                        <div class="module-body"><h3>Gestão de Férias & Licenças</h3><p>Planeamento anual de mapas de férias, pedidos de licença médica, faltas justificadas e abonos.</p></div>
+                    </div>
+                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('ferias')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
+                </div>
+
+                <div class="module-card">
+                    <div>
+                        <div class="module-header"><div class="module-icon"><i class="fas fa-graduation-cap"></i></div><span class="module-badge">Módulo 06</span></div>
+                        <div class="module-body"><h3>Formação & Capacitação</h3><p>Programas de desenvolvimento profissional, formações internas, cursos de reciclagem e certificados.</p></div>
+                    </div>
+                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('formacao')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
+                </div>
+
+                <div class="module-card">
+                    <div>
+                        <div class="module-header"><div class="module-icon"><i class="fas fa-star"></i></div><span class="module-badge">Módulo 07</span></div>
+                        <div class="module-body"><h3>Avaliação de Desempenho</h3><p>Métricas de produtividade, KPIs por departamento, avaliações periódicas e feedback de liderança.</p></div>
+                    </div>
+                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('desempenho')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
+                </div>
+
+                <div class="module-card">
+                    <div>
+                        <div class="module-header"><div class="module-icon"><i class="fas fa-hard-hat"></i></div><span class="module-badge">Módulo 08</span></div>
+                        <div class="module-body"><h3>Segurança & Saúde no Trabalho</h3><p>Registo de EPIs entregues, relatórios de acidentes de trabalho e conformidade com normas de segurança.</p></div>
+                    </div>
+                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('sst')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
+                </div>
+
+                <div class="module-card">
+                    <div>
+                        <div class="module-header"><div class="module-icon"><i class="fas fa-user-tie"></i></div><span class="module-badge">Módulo 09</span></div>
+                        <div class="module-body"><h3>Recrutamento & Seleção</h3><p>Publicação de vagas, triagem de currículos, agendamento de entrevistas e propostas de emprego.</p></div>
+                    </div>
+                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('recrutamento')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
+                </div>
+
+                <div class="module-card">
+                    <div>
+                        <div class="module-header"><div class="module-icon"><i class="fas fa-file-invoice"></i></div><span class="module-badge">Módulo 10</span></div>
+                        <div class="module-body"><h3>Declarações & Documentos</h3><p>Emissão automatizada de declarações de serviço, comprovativos de vencimento e cartas de recomendação.</p></div>
+                    </div>
+                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('declaracoes')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
+                </div>
+
+                <div class="module-card">
+                    <div>
+                        <div class="module-header"><div class="module-icon"><i class="fas fa-chart-line"></i></div><span class="module-badge">Módulo 11</span></div>
+                        <div class="module-body"><h3>Relatórios & Indicadores (KPIs)</h3><p>Estatísticas globais de rotatividade (turnover), custos com pessoal, demografia interna e relatórios legais.</p></div>
+                    </div>
+                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('relatorios')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
+                </div>
+
+                <div class="module-card">
+                    <div>
+                        <div class="module-header"><div class="module-icon"><i class="fas fa-gavel"></i></div><span class="module-badge">Módulo 12</span></div>
+                        <div class="module-body"><h3>Processos Disciplinares</h3><p>Registo de ocorrências, advertências escritas, suspensões e comissões de inquérito interno.</p></div>
+                    </div>
+                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('disciplinar')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
+                </div>
             </div>
         </div>
+
+        <!-- SEÇÃO 1: PESSOAL -->
+        <div id="secao-pessoal" class="workspace-section">
+            <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+                    <h3><i class="fas fa-users"></i> Gestão de Pessoal e Colaboradores</h3>
+                    <button onclick="openNewTaskModal()" class="btn-primary-custom" style="width: auto; padding: 8px 16px; font-size: 13px;"><i class="fas fa-plus"></i> Novo Colaborador</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID Colaborador</th>
+                                <th>Nome Completo</th>
+                                <th>Cargo / Função</th>
+                                <th>Tipo de Contrato</th>
+                                <th>Estado</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="rhTableBody">
+                            <tr>
+                                <td>#RH-001</td>
+                                <td>Eduardo Gabriel</td>
+                                <td>Gestor de TI & Software</td>
+                                <td>Efetivo</td>
+                                <td><span class="badge in-progress">Ativo</span></td>
+                                <td><button onclick="completeTask(this)" class="btn-action">Atualizar</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 2: CONTRATOS -->
+        <div id="secao-contratos" class="workspace-section">
+            <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
+                <h3><i class="fas fa-file-contract"></i> Módulo 02: Contratos e Admissões</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Gira a vigência de contratos, termos de adesão e renovações.</p>
+                <button onclick="mostrarAvisoModulo('Contratos')" class="btn-primary-custom"><i class="fas fa-file-signature"></i> Emitir Novo Contrato</button>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 3: SALÁRIOS -->
+        <div id="secao-salarios" class="workspace-section">
+            <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
+                <h3><i class="fas fa-money-check-alt"></i> Módulo 03: Processamento Salarial (Folha)</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Processamento mensal de vencimentos da APSAN, LDA.</p>
+                <button onclick="mostrarAvisoModulo('Folha Salarial')" class="btn-primary-custom"><i class="fas fa-calculator"></i> Processar Folha de Salários</button>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 4: ASSIDUIDADE -->
+        <div id="secao-assiduidade" class="workspace-section">
+            <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
+                <h3><i class="fas fa-clock"></i> Módulo 04: Controlo de Assiduidade & Ponto</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Registo atual: 100% de presença sem faltas registadas hoje.</p>
+                <button onclick="mostrarAvisoModulo('Assiduidade')" class="btn-primary-custom"><i class="fas fa-clipboard-check"></i> Registar Folha de Ponto</button>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 5: FÉRIAS -->
+        <div id="secao-ferias" class="workspace-section">
+            <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
+                <h3><i class="fas fa-calendar-minus"></i> Módulo 05: Gestão de Férias & Licenças</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Consulta e aprovação de mapas de férias dos colaboradores.</p>
+                <button onclick="mostrarAvisoModulo('Férias')" class="btn-primary-custom"><i class="fas fa-calendar-plus"></i> Submeter Pedido de Férias</button>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 6: FORMAÇÃO -->
+        <div id="secao-formacao" class="workspace-section">
+            <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
+                <h3><i class="fas fa-graduation-cap"></i> Módulo 06: Formação & Capacitação</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Gestão de seminários e cursos internos para a equipa.</p>
+                <button onclick="mostrarAvisoModulo('Formação')" class="btn-primary-custom"><i class="fas fa-book-open"></i> Registar Nova Formação</button>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 7: DESEMPENHO -->
+        <div id="secao-desempenho" class="workspace-section">
+            <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
+                <h3><i class="fas fa-star"></i> Módulo 07: Avaliação de Desempenho</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Acompanhamento de metas e indicadores de desempenho.</p>
+                <button onclick="mostrarAvisoModulo('Desempenho')" class="btn-primary-custom"><i class="fas fa-chart-bar"></i> Iniciar Ciclo de Avaliação</button>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 8: SST -->
+        <div id="secao-sst" class="workspace-section">
+            <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
+                <h3><i class="fas fa-hard-hat"></i> Módulo 08: Segurança & Saúde no Trabalho</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Conformidade laboral e entrega de equipamentos de proteção.</p>
+                <button onclick="mostrarAvisoModulo('SST')" class="btn-primary-custom"><i class="fas fa-shield-alt"></i> Registar Ocorrência / EPI</button>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 9: RECRUTAMENTO -->
+        <div id="secao-recrutamento" class="workspace-section">
+            <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
+                <h3><i class="fas fa-user-tie"></i> Módulo 09: Recrutamento & Seleção</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Processos de recrutamento em curso para Namacunde / Cunene.</p>
+                <button onclick="mostrarAvisoModulo('Recrutamento')" class="btn-primary-custom"><i class="fas fa-bullhorn"></i> Publicar Nova Vaga</button>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 10: DECLARAÇÕES -->
+        <div id="secao-declaracoes" class="workspace-section">
+            <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
+                <h3><i class="fas fa-file-invoice"></i> Módulo 10: Declarações & Documentos</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Emissão rápida de comprovativos e declarações laborais.</p>
+                <button onclick="mostrarAvisoModulo('Declarações')" class="btn-primary-custom"><i class="fas fa-print"></i> Emitir Declaração de Serviço</button>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 11: RELATÓRIOS -->
+        <div id="secao-relatorios" class="workspace-section">
+            <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
+                <h3><i class="fas fa-chart-line"></i> Módulo 11: Relatórios & Indicadores (KPIs)</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Análise estatística e relatórios globais de recursos humanos.</p>
+                <button onclick="mostrarAvisoModulo('Relatórios')" class="btn-primary-custom"><i class="fas fa-file-pdf"></i> Gerar Relatório Consolidado</button>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 12: DISCIPLINAR -->
+        <div id="secao-disciplinar" class="workspace-section">
+            <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
+            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
+                <h3><i class="fas fa-gavel"></i> Módulo 12: Processos Disciplinares</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Gestão de registos disciplinares e advertências.</p>
+                <button onclick="mostrarAvisoModulo('Disciplinar')" class="btn-primary-custom"><i class="fas fa-exclamation-triangle"></i> Registar Ocorrência Disciplinar</button>
+            </div>
+        </div>
+
     </div>
 
     <!-- Modal Novo Colaborador -->
@@ -132,8 +386,25 @@
                 if (themeIcon) themeIcon.className = 'fas fa-moon';
             }
         }
+
+        function abrirModulo(idModulo) {
+            document.querySelectorAll('.workspace-section').forEach(el => el.classList.remove('active'));
+            const alvo = document.getElementById('secao-' + idModulo);
+            if(alvo) {
+                alvo.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function voltarAoHub() {
+            document.querySelectorAll('.workspace-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('hub-modulos').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
         function openNewTaskModal() { document.getElementById('taskModal').classList.add('active'); }
         function closeNewTaskModal() { document.getElementById('taskModal').classList.remove('active'); }
+
         function addNewCollab(event) {
             if (event) event.preventDefault();
             const name = document.getElementById('collabName').value;
@@ -149,6 +420,7 @@
             document.getElementById('collabName').value = '';
             document.getElementById('collabRole').value = '';
         }
+
         function completeTask(btn) {
             const row = btn.closest('tr');
             const statusBadge = row.querySelector('.badge');
@@ -156,13 +428,18 @@
             btn.remove();
             showToast("Atualizado", "Registo atualizado com sucesso.");
         }
+
+        function mostrarAvisoModulo(nomeModulo) {
+            showToast("Módulo de RH", `Operação executada no módulo de ${nomeModulo} com sucesso.`);
+        }
+
         function showToast(title, message) {
             const toast = document.getElementById('toastNotification');
             if (!toast) return;
             document.getElementById('toastTitle').textContent = title;
             document.getElementById('toastMessage').textContent = message;
-            toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 4000);
+            toast.style.display = 'flex';
+            setTimeout(() => { toast.style.display = 'none'; }, 4000);
         }
     </script>
 </body>
