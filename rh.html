@@ -6,7 +6,7 @@
     <title>Recursos Humanos - APSAN, LDA</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Incluindo Chart.js para os gráficos de progressão estilo Dashboard -->
+    <!-- Incluindo Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; margin-bottom: 30px; }
@@ -46,17 +46,6 @@
         </div>
     </div>
 
-    <!-- Modal Dinâmico -->
-    <div id="dynamicModal" class="modal-overlay">
-        <div class="modal-content">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                <h3 id="modalTitle" style="margin: 0; font-size: 16px; color: var(--primary-color);">Título</h3>
-                <button onclick="fecharModal()" style="background: none; border: none; font-size: 16px; cursor: pointer; color: var(--text-color);"><i class="fas fa-times"></i></button>
-            </div>
-            <div id="modalBody"></div>
-        </div>
-    </div>
-
     <!-- NAVBAR DO DEPARTAMENTO -->
     <nav class="dash-nav">
         <div class="container" style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 12px 20px; width: 100%;">
@@ -78,14 +67,14 @@
     <div class="container" style="max-width: 1200px; margin: 30px auto; padding: 0 20px; width: 100%;">
         <div class="stats-grid-dash" style="margin-bottom: 30px;">
             <div class="stat-box">
-                <h4>Total Colaboradores</h4>
-                <h2>24</h2>
-                <p><i class="fas fa-user-check" style="color: #28a745;"></i> Ativos na empresa</p>
+                <h4>Total Registos Salvos</h4>
+                <h2 id="statTotalRegistos">24</h2>
+                <p><i class="fas fa-database" style="color: var(--primary-color);"></i> Em todos os módulos</p>
             </div>
             <div class="stat-box">
-                <h4>Assiduidade</h4>
-                <h2>100%</h2>
-                <p><i class="fas fa-arrow-up" style="color: #28a745;"></i> Sem faltas hoje</p>
+                <h4>Módulos Ativos</h4>
+                <h2>24</h2>
+                <p><i class="fas fa-cubes" style="color: #28a745;"></i> Cobertura total</p>
             </div>
             <div class="stat-box">
                 <h4>NIF Empresa</h4>
@@ -95,21 +84,21 @@
             <div class="stat-box">
                 <h4>Estado do Sistema</h4>
                 <h2 style="color: #28a745;">ONLINE</h2>
-                <p>Seguro e Sincronizado</p>
+                <p>Sincronização Dinâmica</p>
             </div>
         </div>
 
-        <!-- PAINEL DE GRÁFICOS DE PROGRESSÃO (ESTILO EXCEL DASHBOARD) -->
+        <!-- PAINEL DE GRÁFICOS DINÂMICOS (VASTO E ATUALIZADO POR MÓDULO) -->
         <div class="charts-dashboard-grid">
             <div class="chart-container-box">
-                <h4><i class="fas fa-chart-line" style="color: var(--primary-color);"></i> Progressão de Trabalho e Tarefas por Módulo (Anual)</h4>
-                <div style="position: relative; height: 240px; width: 100%;">
+                <h4><i class="fas fa-chart-line" style="color: var(--primary-color);"></i> Linha do Tempo: Atividade Consolidada por Módulo</h4>
+                <div style="position: relative; height: 260px; width: 100%;">
                     <canvas id="progressionLineChart"></canvas>
                 </div>
             </div>
             <div class="chart-container-box">
-                <h4><i class="fas fa-chart-bar" style="color: var(--primary-color);"></i> Conclusão por Áreas de RH</h4>
-                <div style="position: relative; height: 240px; width: 100%;">
+                <h4><i class="fas fa-chart-bar" style="color: var(--primary-color);"></i> Volume de Ações Salvas por Módulo</h4>
+                <div style="position: relative; height: 260px; width: 100%;">
                     <canvas id="modulesBarChart"></canvas>
                 </div>
             </div>
@@ -119,364 +108,272 @@
         <div id="hub-modulos" class="workspace-section active">
             <div style="margin-bottom: 25px;">
                 <h2 style="font-size: 22px; margin-bottom: 5px; color: var(--text-color);"><i class="fas fa-users-cog"></i> Painel Central de Recursos Humanos</h2>
-                <p style="font-size: 14px; color: var(--text-muted);">Selecione abaixo um dos 24 módulos especializados para gerir o pessoal, contratos, processamento salarial e desenvolvimento.</p>
+                <p style="font-size: 14px; color: var(--text-muted);">Qualquer registo ou alteração efetuada em qualquer um dos 24 módulos atualizará automaticamente o gráfico dinâmico acima.</p>
             </div>
 
-            <div class="modules-grid">
-                <!-- Módulos de 1 a 12 -->
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-user-plus"></i></div><span class="module-badge">Módulo 01</span></div>
-                        <div class="module-body"><h3>Gestão de Pessoal & Colaboradores</h3><p>Registo inicial, listagem geral de funcionários, cargos, funções e contactos atualizados.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('pessoal')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-file-contract"></i></div><span class="module-badge">Módulo 02</span></div>
-                        <div class="module-body"><h3>Contratos & Admissões</h3><p>Emissão de contratos de trabalho (efetivo, prestação de serviços, estagiários) e arquivo legal.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('contratos')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-money-check-alt"></i></div><span class="module-badge">Módulo 03</span></div>
-                        <div class="module-body"><h3>Processamento Salarial (Folha)</h3><p>Cálculo de vencimentos base, subsídios, descontos da Segurança Social e emissão de folhas.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('salarios')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-clock"></i></div><span class="module-badge">Módulo 04</span></div>
-                        <div class="module-body"><h3>Controlo de Assiduidade & Ponto</h3><p>Registo diário de entradas, saídas, horas extras, atrasos e verificação de presenças.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('assiduidade')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-calendar-minus"></i></div><span class="module-badge">Módulo 05</span></div>
-                        <div class="module-body"><h3>Gestão de Férias & Licenças</h3><p>Planeamento anual de mapas de férias, pedidos de licença médica e faltas justificadas.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('ferias')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-graduation-cap"></i></div><span class="module-badge">Módulo 06</span></div>
-                        <div class="module-body"><h3>Formação & Capacitação</h3><p>Programas de desenvolvimento profissional, formações internas e certificados.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('formacao')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-star"></i></div><span class="module-badge">Módulo 07</span></div>
-                        <div class="module-body"><h3>Avaliação de Desempenho</h3><p>Métricas de produtividade, KPIs por departamento e avaliações periódicas.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('desempenho')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-hard-hat"></i></div><span class="module-badge">Módulo 08</span></div>
-                        <div class="module-body"><h3>Segurança & Saúde no Trabalho</h3><p>Registo de EPIs entregues, relatórios de acidentes e conformidade com normas.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('sst')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-user-tie"></i></div><span class="module-badge">Módulo 09</span></div>
-                        <div class="module-body"><h3>Recrutamento & Seleção</h3><p>Publicação de vagas, triagem de currículos e agendamento de entrevistas.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('recrutamento')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-file-invoice"></i></div><span class="module-badge">Módulo 10</span></div>
-                        <div class="module-body"><h3>Declarações & Documentos</h3><p>Emissão automatizada de declarações de serviço e comprovativos de vencimento.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('declaracoes')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-chart-line"></i></div><span class="module-badge">Módulo 11</span></div>
-                        <div class="module-body"><h3>Relatórios & Indicadores (KPIs)</h3><p>Estatísticas globais de rotatividade (turnover), custos com pessoal e demografia.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('relatorios')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-gavel"></i></div><span class="module-badge">Módulo 12</span></div>
-                        <div class="module-body"><h3>Processos Disciplinares</h3><p>Registo de ocorrências, advertências escritas, suspensões e inquéritos.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('disciplinar')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <!-- Módulos de 13 a 24 -->
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-medkit"></i></div><span class="module-badge">Módulo 13</span></div>
-                        <div class="module-body"><h3>Benefícios & Seguros</h3><p>Gestão de seguros de saúde, subsídios de alimentação, transportes e regalias sociais.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('beneficios')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-sitemap"></i></div><span class="module-badge">Módulo 14</span></div>
-                        <div class="module-body"><h3>Plano de Cargos & Salários</h3><p>Definição de tabelas salariais, progressão na carreira e descritivos de funções.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('cargossalarios')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-smile"></i></div><span class="module-badge">Módulo 15</span></div>
-                        <div class="module-body"><h3>Clima Organizacional</h3><p>Inquéritos de satisfação interna, caixa de sugestões e análise do ambiente de trabalho.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('clima')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-hands-helping"></i></div><span class="module-badge">Módulo 16</span></div>
-                        <div class="module-body"><h3>Onboarding & Integração</h3><p>Checklist de acolhimento para novos colaboradores, entrega de kit boas-vindas e tutoria.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('onboarding')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-user-graduate"></i></div><span class="module-badge">Módulo 17</span></div>
-                        <div class="module-body"><h3>Gestão de Estágios</h3><p>Parcerias com universidades, contratos de estágio profissional e acompanhamento de tutores.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('estagios')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-bullhorn"></i></div><span class="module-badge">Módulo 18</span></div>
-                        <div class="module-body"><h3>Comunicação Interna</h3><p>Envio de circulares, avisos gerais da direção, boletins informativos e mural de anúncios.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('comunicacao')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-network-wired"></i></div><span class="module-badge">Módulo 19</span></div>
-                        <div class="module-body"><h3>Organograma & Equipas</h3><p>Visualização da estrutura hierárquica da empresa, departamentos e chefias diretas.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('organograma')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-business-time"></i></div><span class="module-badge">Módulo 20</span></div>
-                        <div class="module-body"><h3>Banco de Horas & Extras</h3><p>Controlo de compensação de horas de trabalho, banco de horas e aprovação de extensões.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('bancohoras')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-plane-departure"></i></div><span class="module-badge">Módulo 21</span></div>
-                        <div class="module-body"><h3>Deslocações & Viagens</h3><p>Aprovação de missões de serviço, ajudas de custo e reembolso de despesas de viagem.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('viagens')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-user-slash"></i></div><span class="module-badge">Módulo 22</span></div>
-                        <div class="module-body"><h3>Offboarding & Desligamentos</h3><p>Gestão de demissões, entrevistas de saída (exit interview), termos de quitação e acertos finais.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('offboarding')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-hands"></i></div><span class="module-badge">Módulo 23</span></div>
-                        <div class="module-body"><h3>Responsabilidade Social & Eventos</h3><p>Organização de eventos corporativos, ações de team building e iniciativas comunitárias.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('social')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
-
-                <div class="module-card">
-                    <div>
-                        <div class="module-header"><div class="module-icon"><i class="fas fa-balance-scale"></i></div><span class="module-badge">Módulo 24</span></div>
-                        <div class="module-body"><h3>Auditoria & Conformidade Legal</h3><p>Verificação de conformidade com a Lei Geral do Trabalho, auditorias internas e arquivo legal.</p></div>
-                    </div>
-                    <div class="module-footer"><button class="module-action-btn" onclick="abrirModulo('auditoria')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button></div>
-                </div>
+            <div class="modules-grid" id="modulesGridContainer">
+                <!-- Gerado dinamicamente via Script para garantir cobertura total dos 24 módulos -->
             </div>
         </div>
 
         <!-- SEÇÕES DE TRABALHO PARA CADA MÓDULO -->
-        <!-- Seção 1: Pessoal -->
-        <div id="secao-pessoal" class="workspace-section">
+        <div id="secao-workspace-generica" class="workspace-section">
             <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
             <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
-                    <h3><i class="fas fa-users"></i> Gestão de Pessoal e Colaboradores</h3>
-                    <button onclick="openNewTaskModal()" class="btn-primary-custom" style="width: auto; padding: 8px 16px; font-size: 13px;"><i class="fas fa-plus"></i> Novo Colaborador</button>
+                <h3 id="workspaceTitle"><i class="fas fa-folder-open"></i> Módulo</h3>
+                <p id="workspaceDesc" style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;"></p>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <input type="text" id="novoRegistoInput" placeholder="Descreva a ação, tarefa ou documento a salvar..." style="flex: 1; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size: 14px;">
+                    <button onclick="salvarAcaoNoModulo()" class="btn-primary-custom" style="width: auto; padding: 10px 20px;"><i class="fas fa-plus"></i> Registar & Salvar no Módulo</button>
                 </div>
+
+                <h4 style="font-size: 14px; margin-bottom: 10px; color: var(--text-color);">Histórico de Ações Salvas neste Módulo:</h4>
                 <div style="overflow-x: auto;">
                     <table class="data-table">
                         <thead>
                             <tr>
-                                <th>ID Colaborador</th>
-                                <th>Nome Completo</th>
-                                <th>Cargo / Função</th>
-                                <th>Tipo de Contrato</th>
+                                <th>ID Registo</th>
+                                <th>Descrição da Atividade</th>
+                                <th>Data / Hora</th>
                                 <th>Estado</th>
-                                <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="rhTableBody">
-                            <tr>
-                                <td>#RH-001</td>
-                                <td>Eduardo Gabriel</td>
-                                <td>Gestor de TI & Software</td>
-                                <td>Efetivo</td>
-                                <td><span class="badge in-progress">Ativo</span></td>
-                                <td><button onclick="completeTask(this)" class="btn-action">Atualizar</button></td>
-                            </tr>
+                        <tbody id="moduloTabelaDados">
+                            <!-- Preenchido dinamicamente -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- Seções Genéricas para os Outros Módulos -->
-        <script>
-            const modulosNomes = {
-                'contratos': 'Contratos & Admissões',
-                'salarios': 'Processamento Salarial (Folha)',
-                'assiduidade': 'Controlo de Assiduidade & Ponto',
-                'ferias': 'Gestão de Férias & Licenças',
-                'formacao': 'Formação & Capacitação',
-                'desempenho': 'Avaliação de Desempenho',
-                'sst': 'Segurança & Saúde no Trabalho',
-                'recrutamento': 'Recrutamento & Seleção',
-                'declaracoes': 'Declarações & Documentos',
-                'relatorios': 'Relatórios & Indicadores (KPIs)',
-                'disciplinar': 'Processos Disciplinares',
-                'beneficios': 'Benefícios & Seguros',
-                'cargossalarios': 'Plano de Cargos & Salários',
-                'clima': 'Clima Organizacional',
-                'onboarding': 'Onboarding & Integração',
-                'estagios': 'Gestão de Estágios',
-                'comunicacao': 'Comunicação Interna',
-                'organograma': 'Organograma & Equipas',
-                'bancohoras': 'Banco de Horas & Extras',
-                'viagens': 'Deslocações & Viagens',
-                'offboarding': 'Offboarding & Desligamentos',
-                'social': 'Responsabilidade Social & Eventos',
-                'auditoria': 'Auditoria & Conformidade Legal'
-            };
-
-            document.addEventListener("DOMContentLoaded", () => {
-                const container = document.querySelector('.container');
-                for (const [key, value] of Object.entries(modulosNomes)) {
-                    if(!document.getElementById('secao-' + key)) {
-                        const div = document.createElement('div');
-                        div.id = 'secao-' + key;
-                        div.className = 'workspace-section';
-                        div.innerHTML = `
-                            <button class="back-hub-btn" onclick="voltarAoHub()"><i class="fas fa-arrow-left"></i> Voltar à Grelha de Módulos</button>
-                            <div class="management-card" style="background:var(--bg-color); border:1px solid var(--border-color); padding:25px; border-radius:12px;">
-                                <h3><i class="fas fa-folder-open"></i> Módulo: ${value}</h3>
-                                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">Área de gestão especializada para ${value} na APSAN, LDA.</p>
-                                <button onclick="mostrarAvisoModulo('${value}')" class="btn-primary-custom"><i class="fas fa-cogs"></i> Executar Ação no Módulo</button>
-                            </div>
-                        `;
-                        container.appendChild(div);
-                    }
-                }
-
-                // Inicializar Gráficos Chart.js (Estilo Excel Dashboard)
-                const ctxLine = document.getElementById('progressionLineChart').getContext('2d');
-                new Chart(ctxLine, {
-                    type: 'line',
-                    data: {
-                        labels: ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'],
-                        datasets: [{
-                            label: 'Progresso de Execução de Tarefas (%)',
-                            data: [15, 28, 42, 55, 60, 68, 75, 82, 88, 92, 96, 100],
-                            borderColor: '#0056b3',
-                            backgroundColor: 'rgba(0, 86, 179, 0.1)',
-                            borderWidth: 2,
-                            fill: true,
-                            tension: 0.3
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: { y: { beginAtZero: true, max: 100 } }
-                    }
-                });
-
-                const ctxBar = document.getElementById('modulesBarChart').getContext('2d');
-                new Chart(ctxBar, {
-                    type: 'bar',
-                    data: {
-                        labels: ['Pessoal', 'Contratos', 'Salários', 'Assiduidade', 'Outros'],
-                        datasets: [{
-                            label: 'Módulos Concluídos',
-                            data: [24, 20, 22, 24, 18],
-                            backgroundColor: ['#0056b3', '#28a745', '#ffc107', '#17a2b8', '#6c757d']
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: { legend: { display: false } },
-                        scales: { y: { beginAtZero: true, max: 24 } }
-                    }
-                });
-            });
-        </script>
-
-    </div>
-
-    <!-- Modal Novo Colaborador -->
-    <div id="taskModal" class="modal-overlay">
-        <div class="modal-box">
-            <button class="modal-close" onclick="closeNewTaskModal()">&times;</button>
-            <h3>Adicionar Novo Colaborador</h3>
-            <form onsubmit="addNewCollab(event); return false;" style="margin-top: 15px;">
-                <div class="form-group" style="text-align: left;">
-                    <label>Nome Completo</label>
-                    <input type="text" id="collabName" placeholder="Nome do funcionário..." required style="text-align: left; font-size: 14px;">
-                </div>
-                <div class="form-group" style="text-align: left;">
-                    <label>Cargo / Função</label>
-                    <input type="text" id="collabRole" placeholder="Ex: Assistente, Gestor..." required style="text-align: left; font-size: 14px;">
-                </div>
-                <div class="form-group" style="text-align: left;">
-                    <label>Tipo de Contrato</label>
-                    <select id="collabContract" style="width: 100%; padding: 10px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
-                        <option value="Efetivo">Efetivo</option>
-                        <option value="Prestação de Serviços">Prestação de Serviços</option>
-                        <option value="Estágio">Estágio</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-primary-custom">Guardar Colaborador</button>
-            </form>
-        </div>
     </div>
 
     <script>
+        // Dados dos 24 Módulos
+        const modulosData = [
+            { id: 'pessoal', nome: 'Gestão de Pessoal', icon: 'fas fa-user-plus', desc: 'Registo inicial, listagem geral de funcionários, cargos e funções.' },
+            { id: 'contratos', nome: 'Contratos & Admissões', icon: 'fas fa-file-contract', desc: 'Emissão de contratos de trabalho e arquivo legal.' },
+            { id: 'salarios', nome: 'Processamento Salarial', icon: 'fas fa-money-check-alt', desc: 'Cálculo de vencimentos base, subsídios e descontos.' },
+            { id: 'assiduidade', nome: 'Controlo de Assiduidade', icon: 'fas fa-clock', desc: 'Registo diário de entradas, saídas e horas extras.' },
+            { id: 'ferias', nome: 'Gestão de Férias', icon: 'fas fa-calendar-minus', desc: 'Planeamento anual de mapas de férias e licenças.' },
+            { id: 'formacao', nome: 'Formação & Capacitação', icon: 'fas fa-graduation-cap', desc: 'Programas de desenvolvimento e certificados.' },
+            { id: 'desempenho', nome: 'Avaliação de Desempenho', icon: 'fas fa-star', desc: 'Métricas de produtividade e KPIs por departamento.' },
+            { id: 'sst', nome: 'Segurança & Saúde', icon: 'fas fa-hard-hat', desc: 'Registo de EPIs e relatórios de acidentes.' },
+            { id: 'recrutamento', nome: 'Recrutamento & Seleção', icon: 'fas fa-user-tie', desc: 'Publicação de vagas e triagem de currículos.' },
+            { id: 'declaracoes', nome: 'Declarações & Documentos', icon: 'fas fa-file-invoice', desc: 'Emissão automatizada de declarações de serviço.' },
+            { id: 'relatorios', nome: 'Relatórios & KPIs', icon: 'fas fa-chart-line', desc: 'Estatísticas globais de rotatividade e custos.' },
+            { id: 'disciplinar', nome: 'Processos Disciplinares', icon: 'fas fa-gavel', desc: 'Registo de ocorrências e advertências escritas.' },
+            { id: 'beneficios', nome: 'Benefícios & Seguros', icon: 'fas fa-medkit', desc: 'Gestão de seguros de saúde e regalias sociais.' },
+            { id: 'cargossalarios', nome: 'Plano de Cargos', icon: 'fas fa-sitemap', desc: 'Definição de tabelas salariais e progressão.' },
+            { id: 'clima', nome: 'Clima Organizacional', icon: 'fas fa-smile', desc: 'Inquéritos de satisfação interna e sugestões.' },
+            { id: 'onboarding', nome: 'Onboarding', icon: 'fas fa-hands-helping', desc: 'Checklist de acolhimento para novos colaboradores.' },
+            { id: 'estagios', nome: 'Gestão de Estágios', icon: 'fas fa-user-graduate', desc: 'Parcerias com universidades e contratos.' },
+            { id: 'comunicacao', nome: 'Comunicação Interna', icon: 'fas fa-bullhorn', desc: 'Envio de circulares e avisos da direção.' },
+            { id: 'organograma', nome: 'Organograma & Equipas', icon: 'fas fa-network-wired', desc: 'Estrutura hierárquica e chefias diretas.' },
+            { id: 'bancohoras', nome: 'Banco de Horas', icon: 'fas fa-business-time', desc: 'Controlo de compensação de horas de trabalho.' },
+            { id: 'viagens', nome: 'Deslocações & Viagens', icon: 'fas fa-plane-departure', desc: 'Missões de serviço e ajudas de custo.' },
+            { id: 'offboarding', nome: 'Offboarding', icon: 'fas fa-user-slash', desc: 'Gestão de demissões e entrevistas de saída.' },
+            { id: 'social', nome: 'Responsabilidade Social', icon: 'fas fa-hands', desc: 'Organização de eventos e team building.' },
+            { id: 'auditoria', nome: 'Auditoria & Conformidade', icon: 'fas fa-balance-scale', desc: 'Verificação com a Lei Geral do Trabalho.' }
+        ];
+
+        // Estado global de dados salvos por módulo para alimentar o gráfico em tempo real
+        let dadosModulosEstado = {};
+        modulosData.forEach(m => {
+            dadosModulosEstado[m.id] = {
+                nome: m.nome,
+                registos: [
+                    { id: '#REG-01', descricao: `Registo inicial padrão em ${m.nome}`, data: '08/08/2026 11:16', estado: 'Salvo' }
+                ]
+            };
+        });
+
+        let moduloAtivoAtual = null;
+        let chartLineInstance = null;
+        let chartBarInstance = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            renderizarGrelhaModulos();
+            inicializarGraficos();
+            atualizarEstatisticasGlobais();
+        });
+
+        function renderizarGrelhaModulos() {
+            const grid = document.getElementById('modulesGridContainer');
+            grid.innerHTML = '';
+            modulosData.forEach((mod, index) => {
+                const card = document.createElement('div');
+                card.className = 'module-card';
+                card.innerHTML = `
+                    <div>
+                        <div class="module-header">
+                            <div class="module-icon"><i class="${mod.icon}"></i></div>
+                            <span class="module-badge">Módulo ${index + 1 < 10 ? '0' + (index + 1) : index + 1}</span>
+                        </div>
+                        <div class="module-body">
+                            <h3>${mod.nome}</h3>
+                            <p>${mod.desc}</p>
+                        </div>
+                    </div>
+                    <div class="module-footer">
+                        <button class="module-action-btn" onclick="abrirModuloWorkspace('${mod.id}')">Aceder & Gerir <i class="fas fa-arrow-right"></i></button>
+                        <span style="font-size: 11px; color: var(--text-muted);" id="contador-${mod.id}">1 itens</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function abrirModuloWorkspace(id) {
+            moduloAtivoAtual = modulosData.find(m => m.id === id);
+            document.getElementById('hub-modulos').classList.remove('active');
+            const sec = document.getElementById('secao-workspace-generica');
+            sec.classList.add('active');
+
+            document.getElementById('workspaceTitle').innerHTML = `<i class="${moduloAtivoAtual.icon}"></i> Módulo: ${moduloAtivoAtual.nome}`;
+            document.getElementById('workspaceDesc').textContent = moduloAtivoAtual.desc;
+            document.getElementById('novoRegistoInput').value = '';
+
+            recarregarTabelaModulo();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function voltarAoHub() {
+            document.getElementById('secao-workspace-generica').classList.remove('active');
+            document.getElementById('hub-modulos').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function salvarAcaoNoModulo() {
+            const input = document.getElementById('novoRegistoInput');
+            const texto = input.value.trim();
+            if(!texto) {
+                showToast("Aviso", "Por favor, insira a descrição da atividade a salvar.");
+                return;
+            }
+
+            const lista = dadosModulosEstado[moduloAtivoAtual.id].registos;
+            const novoId = `#REG-0${lista.length + 1}`;
+            const agora = new Date().toLocaleDateString('pt-BR') + ' ' + new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+
+            lista.unshift({
+                id: novoId,
+                descricao: texto,
+                data: agora,
+                estado: 'Salvo com Sucesso'
+            });
+
+            input.value = '';
+            recarregarTabelaModulo();
+            atualizarContadorCardModulo(moduloAtivoAtual.id);
+            atualizarGraficosDinamicos();
+            atualizarEstatisticasGlobais();
+
+            showToast("Sucesso", `Atividade salva em ${moduloAtivoAtual.nome} e registada no gráfico.`);
+        }
+
+        function recarregarTabelaModulo() {
+            const tbody = document.getElementById('moduloTabelaDados');
+            tbody.innerHTML = '';
+            const lista = dadosModulosEstado[moduloAtivoAtual.id].registos;
+            lista.forEach(reg => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${reg.id}</td>
+                    <td>${reg.descricao}</td>
+                    <td>${reg.data}</td>
+                    <td><span class="badge" style="background: #d4edda; color: #155724; padding: 3px 8px; border-radius: 4px; font-size: 11px;">${reg.estado}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function atualizarContadorCardModulo(id) {
+            const contadorEl = document.getElementById(`contador-${id}`);
+            if(contadorEl) {
+                const qtd = dadosModulosEstado[id].registos.length;
+                contadorEl.textContent = `${qtd} ${qtd === 1 ? 'item' : 'itens'}`;
+            }
+        }
+
+        function atualizarEstatisticasGlobais() {
+            let total = 0;
+            Object.keys(dadosModulosEstado).forEach(k => {
+                total += dadosModulosEstado[k].registos.length;
+            });
+            document.getElementById('statTotalRegistos').textContent = total;
+        }
+
+        function inicializarGraficos() {
+            const labels = modulosData.map(m => m.nome.length > 12 ? m.nome.substring(0, 12) + '...' : m.nome);
+            const dataCounts = modulosData.map(m => dadosModulosEstado[m.id].registos.length);
+
+            const ctxLine = document.getElementById('progressionLineChart').getContext('2d');
+            chartLineInstance = new Chart(ctxLine, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Volume de Atividades Salvas',
+                        data: dataCounts,
+                        borderColor: '#0056b3',
+                        backgroundColor: 'rgba(0, 86, 179, 0.1)',
+                        borderWidth: 2.5,
+                        fill: true,
+                        tension: 0.35,
+                        pointBackgroundColor: '#0056b3',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { 
+                        y: { beginAtZero: true, ticks: { stepSize: 1 } },
+                        x: { ticks: { font: { size: 10 }, maxRotation: 45, minRotation: 45 } }
+                    }
+                }
+            });
+
+            const ctxBar = document.getElementById('modulesBarChart').getContext('2d');
+            chartBarInstance = new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Itens por Módulo',
+                        data: dataCounts,
+                        backgroundColor: '#0056b3',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { 
+                        y: { beginAtZero: true, ticks: { stepSize: 1 } },
+                        x: { ticks: { font: { size: 10 }, maxRotation: 45, minRotation: 45 } }
+                    }
+                }
+            });
+        }
+
+        function atualizarGraficosDinamicos() {
+            const dataCounts = modulosData.map(m => dadosModulosEstado[m.id].registos.length);
+            
+            if(chartLineInstance) {
+                chartLineInstance.data.datasets[0].data = dataCounts;
+                chartLineInstance.update();
+            }
+            if(chartBarInstance) {
+                chartBarInstance.data.datasets[0].data = dataCounts;
+                chartBarInstance.update();
+            }
+        }
+
         function toggleTheme() {
             const body = document.body;
             const themeIcon = document.getElementById('themeIcon');
@@ -487,52 +384,6 @@
                 body.setAttribute('data-theme', 'light');
                 if (themeIcon) themeIcon.className = 'fas fa-moon';
             }
-        }
-
-        function abrirModulo(idModulo) {
-            document.querySelectorAll('.workspace-section').forEach(el => el.classList.remove('active'));
-            const alvo = document.getElementById('secao-' + idModulo);
-            if(alvo) {
-                alvo.classList.add('active');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }
-
-        function voltarAoHub() {
-            document.querySelectorAll('.workspace-section').forEach(el => el.classList.remove('active'));
-            document.getElementById('hub-modulos').classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function openNewTaskModal() { document.getElementById('taskModal').classList.add('active'); }
-        function closeNewTaskModal() { document.getElementById('taskModal').classList.remove('active'); }
-
-        function addNewCollab(event) {
-            if (event) event.preventDefault();
-            const name = document.getElementById('collabName').value;
-            const role = document.getElementById('collabRole').value;
-            const contract = document.getElementById('collabContract').value;
-            const tbody = document.getElementById('rhTableBody');
-            const rowCount = tbody.rows.length + 10;
-            const tr = document.createElement('tr');
-            tr.innerHTML = `<td>#RH-0${rowCount}</td><td>${name}</td><td>${role}</td><td>${contract}</td><td><span class="badge in-progress">Ativo</span></td><td><button onclick="completeTask(this)" class="btn-action">Atualizar</button></td>`;
-            tbody.insertBefore(tr, tbody.firstChild);
-            closeNewTaskModal();
-            showToast("Sucesso", "Novo colaborador registado.");
-            document.getElementById('collabName').value = '';
-            document.getElementById('collabRole').value = '';
-        }
-
-        function completeTask(btn) {
-            const row = btn.closest 'tr';
-            const statusBadge = row.querySelector('.badge');
-            if (statusBadge) { statusBadge.className = 'badge'; statusBadge.style.background = '#d4edda'; statusBadge.style.color = '#155724'; statusBadge.textContent = 'Atualizado'; }
-            btn.remove();
-            showToast("Atualizado", "Registo atualizado com sucesso.");
-        }
-
-        function mostrarAvisoModulo(nomeModulo) {
-            showToast("Módulo de RH", `Operação executada no módulo de ${nomeModulo} com sucesso.`);
         }
 
         function showToast(title, message) {
